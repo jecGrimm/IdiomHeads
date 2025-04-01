@@ -3,6 +3,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 1. Head detection
+- Scatter Plot feature vectors
+- Regression: Add weights and bias
+- Clustering
 2. Logit attribution
 3. Ablation
 4. Schreiben
@@ -13,4 +16,4 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Usage
 ### Environment
-conda activate idiom
+conda activate idiom -> python 3.12.7, geht nicht mit pytorch 1.11.0 (wie in transformer lens doku angegeben), stattdessen mit pytorch generell installiert

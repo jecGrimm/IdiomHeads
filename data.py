@@ -1,6 +1,6 @@
 import re 
 
-class Data:
+class EPIE_Data:
     def __init__(self):
         formal_idioms_labels = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Labels.txt")
         translated_sentences = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/translated_sentences.txt")
@@ -61,10 +61,28 @@ class Data:
         '''
         cleaned_sents = []
         for sent in sent_list:
-            space_matches = set(re.findall(r"(‘ | ['’\.,]| $)", sent))
+            space_matches = set(re.findall(r"(‘ | ['’\.,?!]| $)", sent))
             del_space_matches = {space_match:space_match.replace(' ', '') for space_match in space_matches}
 
             for space_match, del_space in del_space_matches.items():
                 sent = sent.replace(space_match, del_space)
-                cleaned_sents.append(sent)
+            cleaned_sents.append(sent)
         return cleaned_sents
+    
+    def get_idiom_toks(self, tokenized_sent: list, tags: list):
+        '''
+        This method extracts the idiom tokens of a sentence.
+
+        @params 
+            tokenized_sent: tokenized sentence
+            tags: tags of the words 
+        @returns list of idiom tokens in the sentence
+        '''
+        return [tokenized_sent[i] for i in range(len(tokenized_sent)) if "IDIOM" in tags[i]]
+    
+if __name__ == "__main__":
+    epie = EPIE_Data()
+    idx = 881
+    idiom_sent = epie.formal_sents[idx]
+    tokenized_idiom_sent = epie.tokenized_formal_sents[idx]
+    print(tokenized_idiom_sent)
