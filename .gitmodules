@@ -1,0 +1,6 @@
+[submodule "EPIE_Corpus"]
+	path = EPIE_Corpus
+	url = git@github.com:jecGrimm/EPIE_Corpus.git
+[submodule "TransformerLens-intro"]
+	path = TransformerLens-intro
+	url = git@github.com:jecGrimm/TransformerLens-intro.git
