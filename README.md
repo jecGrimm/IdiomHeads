@@ -14,6 +14,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Notebook übertragen
 - Environment
 
+
+
 ## Usage
 ### Environment
 conda activate idiom -> python 3.12.7, geht nicht mit pytorch 1.11.0 (wie in transformer lens doku angegeben), stattdessen mit pytorch generell installiert

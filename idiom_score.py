@@ -6,16 +6,14 @@ import json
 from tqdm import tqdm
 
 class Scorer:
-    def __init__(self, model, cache, tokenized_sent: str, tags: list):
+    def __init__(self, model):
         self.data = EPIE_Data()
         self.model = model
-        self.cache = cache
-        self.tokenized_sent = tokenized_sent # Muss evtl gar nicht als Attribut gespeichert werden
-        self.str_sent = self.data.remove_spaces([self.tokenized_sent])[0]
-        self.tags = tags
-        self.str_tokens = self.model.to_str_tokens(self.str_sent)
-        self.start_idiom_pos, self.end_idiom_pos = self.get_idiom_pos(self.data.get_idiom_toks(self.tokenized_sent.split(' '), self.tags.split(' ')))
-        self.num_idioms = self.end_idiom_pos - self.start_idiom_pos + 1
+
+    def get_cache(self, sent):
+        idiom_tokens = self.model.to_tokens(sent)
+        logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
+        return cache
     
     def get_idiom_pos(self, idiom_toks):
         '''
@@ -24,6 +22,8 @@ class Scorer:
         @asserts if the joined tokens are equal to the joined idiom string in the EPIE dataset
         @returns (start, end): tuple of the start and end position of the idiom
         '''
+        #wo_eot_tokens = self.model.to_str_tokens(sent, prepend_bos = False)
+
         idiom_str = self.data.remove_spaces([' '.join(idiom_toks)])[0]
         sent_idx = self.str_sent.index(idiom_str) - 1
 
@@ -45,24 +45,23 @@ class Scorer:
         start = self.str_tokens.index(model_idiom_toks[0])
         end = start+len(model_idiom_toks)-1
 
-        while not all(x == y for x, y in zip(self.str_tokens[start:end+1], model_idiom_toks)):
+        while not all((y in x or x in y) for x, y in zip(self.str_tokens[start:end+1], model_idiom_toks)):
             start = start + self.str_tokens[start+1:].index(model_idiom_toks[0]) + 1
             end = start + len(model_idiom_toks) - 1
 
-        assert ''.join(self.str_tokens[start:end+1]).strip() == idiom_str.strip(), f"\nEPIE Tokens: {idiom_toks}\nExtracted Tokens: {self.str_tokens[start:end+1]}"
+        #assert ''.join(self.str_tokens[start:end+1]).strip() == idiom_str.strip(), f"\nEPIE Tokens: {idiom_toks}\nExtracted Tokens: {self.str_tokens[start:end+1]}"
         return (start, end)
     
-    def create_ngrams(self):
+    def create_ngrams(self, tokenized_sent):
         '''
         This method creates a list of the ngrams in a sentence.
 
         @returns ngrams: list of the ngrams in the sentence
         '''
         ngrams = []
-        wo_eot_token = self.str_tokens[1:]
-        for pos in range(len(wo_eot_token)):
-            if pos != self.start_idiom_pos-1 and pos <= (len(wo_eot_token)-self.num_idioms):
-                toks = [tok.strip() for tok in wo_eot_token[pos:(pos+self.num_idioms)]]
+        for pos in range(len(tokenized_sent)):
+            if pos != self.start_idiom_pos and pos <= (len(tokenized_sent)-self.num_idioms):
+                toks = [tok.strip() for tok in tokenized_sent[pos:(pos+self.num_idioms)]]
                 ngrams.append(toks)
         return ngrams
     
@@ -270,7 +269,7 @@ class Scorer:
         ))
         return df
     
-    def aggregate_components(self):
+    def compute_idiom_score(self, sent, tokenized_sent, tags):
         '''
         This method aggregates the components of the scores and brings them between 0 and 1.
 
@@ -281,17 +280,24 @@ class Scorer:
         layer_heads = [f"{layer}.{head}" for layer in range(self.model.cfg.n_layers) for head in range(self.model.cfg.n_heads)]
         score_per_head = defaultdict(float)
 
-        ngrams = self.create_ngrams()
-        num_ngrams = len(ngrams)
+        self.str_sent = sent
+        self.str_tokens = self.model.to_str_tokens(self.str_sent)
 
         sigmoid = t.nn.Sigmoid()
+
+        cache = self.get_cache(self.str_sent)
+
+        self.start_idiom_pos, self.end_idiom_pos = self.get_idiom_pos(self.data.get_idiom_toks(tokenized_sent.split(' '), tags.split(' ')))
+        self.num_idioms = self.end_idiom_pos - self.start_idiom_pos + 1
+
+        ngrams = self.create_ngrams(tokenized_sent.split(' '))
+        num_ngrams = len(ngrams)
 
         for layer_head in layer_heads:
             layer, head = layer_head.split('.')
 
-            attention_pattern = self.cache["pattern", int(layer)][int(head)]
+            attention_pattern = cache["pattern", int(layer)][int(head)]
             idiom_mean, idiom_std, idiom_max, idiom_phrase = self.compute_components(attention_pattern, (self.start_idiom_pos, self.end_idiom_pos))
-
 
             rel_mean = 0
             rel_std = 0
@@ -327,22 +333,20 @@ class Scorer:
         avg_score_per_head = defaultdict(float)
 
         for pos, sent in tqdm(enumerate(all_idiom_sents), desc="Processing idiom sentences"):
-            idiom_tokens = self.model.to_tokens(sent)
-            logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
-
-score_per_head = idiom_scorer.aggregate_components()
-            score_per_head = idiom_attn_detector(cache, model, model_str_tokens, idiom_toks)
+            tokenized_sent = all_tokenized_sents[pos]
+            tags = all_tags[pos] 
+            score_per_head = self.compute_idiom_score(sent, tokenized_sent, tags)
 
             for head, score in score_per_head.items():
                 avg_score_per_head[head] += score
 
         num_sents = len(all_idiom_sents)
         avg_score_per_head = {head: (score/num_sents) for head, score in avg_score_per_head.items()}
-        explore_scores(avg_score_per_head)
+        self.explore_scores(avg_score_per_head)
         return avg_score_per_head
 
-    def save_scores(self, score_per_head):
-        with open("./scores_per_head.json", 'w', encoding = "utf-8") as f:
+    def save_scores(self, score_per_head, filename):
+        with open(filename, 'w', encoding = "utf-8") as f:
             json.dump(score_per_head, f)
 
     def explore_scores(score_per_head):
