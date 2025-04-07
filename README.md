@@ -4,10 +4,16 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 ## Todos
 1. Head detection
 - Formal scores
-    - fix idiom pos ngram 50 formal 
-    - every score speichern und erst dann avg nehmen
     - schneller machen
         - Huggingface
+        - sigmoid nicht über einzelne scores
+        - alles als Matrix
+        - 3 er test cpu
+        - fit to GPU
+        - 3er test GPU colab
+        - lrz server GPU
+        - 3er test GPU lrz
+        - full lrz
 - translated scores
 - static scores
 - literal scores
@@ -29,6 +35,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Readme
 - Notebook übertragen
 - Environment
+- submodule merge-tokenizers entfernen
 
 ### Optional
 - Scatter Plot feature vectors
@@ -39,5 +46,26 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 
 ## Usage
+### Installation
+Clone and add submodules:<br> 
+`git clone --recurse-submodules git@github.com:jecGrimm/GartenlaubeExtractor.git`
+
+If the repository has already been cloned without initializing the submodules, please run <br>
+`git submodule update --init --recursive` <br>
+to add the submodules afterwards. Without this command, the directory `TransformerLens-intro` and `EPIE_Corpus` are empty.
+
 ### Environment
 conda activate idiom -> python 3.12.7, geht nicht mit pytorch 1.11.0 (wie in transformer lens doku angegeben), stattdessen mit pytorch generell installiert
+
+Schritte neu aufsetzen ohne conda environment file:
+conda create -n idiom python==3.12.7
+conda activate idiom
+`conda install pytorch torchdata torchvision -c pytorch -y`
+pip install -r conda_requirements.txt
+pip install merge-tokenizers
+
+Wenn Fehlermeldung kommt, dass torchvision:nms nicht vorhanden ist: 
+conda remove torchvision
+`conda install pytorch torchdata torchvision -c pytorch -y`
+
+

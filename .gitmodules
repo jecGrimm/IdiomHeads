@@ -4,3 +4,6 @@
 [submodule "TransformerLens-intro"]
 	path = TransformerLens-intro
 	url = git@github.com:jecGrimm/TransformerLens-intro.git
+[submodule "merge-tokenizers"]
+	path = merge-tokenizers
+	url = https://github.com/symanto-research/merge-tokenizers.git

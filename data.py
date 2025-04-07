@@ -1,4 +1,5 @@
 import re 
+from datasets import Dataset
 
 class EPIE_Data:
     def __init__(self):
@@ -80,9 +81,17 @@ class EPIE_Data:
         '''
         return [tokenized_sent[i] for i in range(len(tokenized_sent)) if "IDIOM" in tags[i]]
     
+    def create_hf_dataset(self, sents: list, tokenized_sents: list, tags: list):
+        data = {
+            "sentence": sents,
+            "tokenized": [sent.split(' ') for sent in tokenized_sents],
+            "tags": [sent_tags.split(' ') for sent_tags in tags]
+        }
+        hf_dataset = Dataset.from_dict(data)
+        return hf_dataset
+
+    
 if __name__ == "__main__":
     epie = EPIE_Data()
-    idx = 881
-    idiom_sent = epie.formal_sents[idx]
-    tokenized_idiom_sent = epie.tokenized_formal_sents[idx]
-    print(tokenized_idiom_sent)
+    
+    print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))
