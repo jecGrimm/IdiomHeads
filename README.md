@@ -67,4 +67,11 @@ Wenn Fehlermeldung kommt, dass torchvision:nms nicht vorhanden ist:
 conda remove torchvision
 `conda install pytorch torchdata torchvision -c pytorch -y`
 
+Mit conda yml file: 
+conda env create -f environment.yml (kommt ein pip Fehler, dass torchaudio nicht geht)
+conda activate idiom
+`conda install pytorch torchdata torchvision -c pytorch -y` (kommt Nachricht, dass alles schon installiert ist, funzt aber trotzdem)
+pip install transformer-lens
+pip install merge-tokenizers
+
 
