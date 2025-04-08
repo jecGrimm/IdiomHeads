@@ -5,7 +5,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - Formal scores
     - schneller machen
-        - 3er test GPU colab
         - lrz server GPU
         - 3er test GPU lrz
         - full lrz
@@ -35,6 +34,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Environment
 - submodule merge-tokenizers entfernen
 - move explore functions from scorer to plot 
+- Update requirements and yml-file
 
 ### Optional
 - Scatter Plot feature vectors

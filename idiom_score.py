@@ -254,7 +254,7 @@ class Scorer:
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
 
-        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase))
+        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase)).to(self.device)
 
     def create_component_table(self):
         '''
