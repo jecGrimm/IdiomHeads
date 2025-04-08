@@ -14,11 +14,12 @@ class Scorer:
         #self.data = EPIE_Data()
         self.model = model
         self.aligner = PythonGreedyCoverageAligner()
+        self.device = "cuda" if t.cuda.is_available() else "cpu"
 
     def get_cache(self, sent):
         idiom_tokens = self.model.to_tokens(sent)
         logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
-        return cache
+        return cache.to(self.device)
 
     def create_feature_tensor(self, sent, tokenized_sent, tags):
         cache = self.get_cache(sent)
@@ -28,10 +29,11 @@ class Scorer:
         idiom_pos = self.get_idiom_pos(aligned_positions, tags)
 
         num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
-        ngram_positions = self.get_ngram_positions(num_idioms, tokenized_sent, aligned_positions)
+        #ngram_positions = self.get_ngram_positions(num_idioms, tokenized_sent, aligned_positions, idiom_pos)
+        #ngram_positions = self.create_ngrams(model_str_tokens, num_idioms, idiom_pos)
+        ngram_positions = self.get_ngram_pos(model_str_tokens, num_idioms, idiom_pos)
 
-
-        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads)
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 8).to(self.device) # 8 features (4 idiom feats, 4 ngram feats)
         #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
@@ -39,7 +41,7 @@ class Scorer:
                 idiom_features = self.compute_components(attention_pattern, idiom_pos)
                 ngram_features = self.compute_ngram_features(attention_pattern, ngram_positions, idiom_pos, idiom_features)
 
-                layer_head_features[layer][head] = t.vstack(idiom_features, ngram_features)
+                layer_head_features[layer][head] = t.hstack((idiom_features, ngram_features))
 
         return layer_head_features
     
@@ -49,12 +51,18 @@ class Scorer:
         return t.sigmoid(t.sum(feature_tensor, dim = -1))
     
     def create_data_score_tensor(self, hf_dataset):
-        data_scores_tensor = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads)
-        hf_dataset.map(lambda elem: t.stack((data_scores_tensor, self.create_score_tensor(elem["sentence"], elem["tokenized"], elem["tags"]))))
-        # TODO: TEST check if data_scores_tensor correct, go through pipeline
+        data_scores_tensor = t.zeros(len(hf_dataset), self.model.cfg.n_layers, self.model.cfg.n_heads).to(self.device)
 
-    def get_ngram_positions(self, num_idioms, tokenized_sent, aligned_positions):
-        ngrams = self.create_ngrams(tokenized_sent, num_idioms)
+        for i in range(len(hf_dataset)):
+            elem = hf_dataset[i]
+            data_scores_tensor[i] = self.create_score_tensor(elem["sentence"], elem["tokenized"], elem["tags"])
+        return data_scores_tensor
+
+    def get_ngram_positions(self, num_idioms, tokenized_sent, aligned_positions, idiom_pos):
+        """
+        @deprecated Use get_ngram_pos instead
+        """
+        ngrams = self.create_ngrams(tokenized_sent, num_idioms, idiom_pos)
         ngram_positions = dict()
         for ngram in ngrams:
             ngram_positions[self.get_idiom_pos(aligned_positions, tokenized_sent)] = ngram
@@ -62,11 +70,12 @@ class Scorer:
 
 
     def compute_ngram_features(self, attention_pattern, ngram_positions, idiom_pos, idiom_features):
-        ngram_features = t.tensor()
-        for ngram_pos, ngram in ngram_positions.items():
-            ngram_features = t.vstack(ngram_features, self.compute_components(attention_pattern, ngram_pos))
+        ngram_features = t.zeros(idiom_features.size(0)).to(self.device)
+        #for ngram_pos, ngram in ngram_positions.items():
+        for ngram_pos in ngram_positions:
+            ngram_features = t.vstack((ngram_features, self.compute_components(attention_pattern, ngram_pos)))
 
-        return t.sum(idiom_features >= ngram_features, dim=0)/ngram_features.size(0)
+        return t.sum(idiom_features >= ngram_features[1:], dim=0)/ngram_features[1:].size(0)
 
 
     def get_idiom_pos(self, aligned_positions, tags: list):
@@ -82,20 +91,12 @@ class Scorer:
         assert(start and end)
         return (start, end)
     
-    def get_ngram_pos(self, aligned_positions, ngram: list, tokenized_sent: list):
-        epie_ngram_pos = []
-        for tok in ngram:
-            epie_ngram_pos.append(tokenized_sent.index(tok))
-
-        start = None
-        end = None
-        for epie_pos, model_positions in aligned_positions:
-            if epie_pos == epie_ngram_pos[0]:
-                start = model_positions[0]
-            elif epie_pos == epie_ngram_pos[-1]:
-                end = model_positions[-1]
-        assert(start and end)
-        return (start, end)
+    def get_ngram_pos(self, model_str_tokens, num_idioms, idiom_pos):
+        ngrams = []
+        for pos in range(len(model_str_tokens)):
+            if pos != idiom_pos[0] and pos <= (len(model_str_tokens)-num_idioms):
+                ngrams.append((pos, pos+num_idioms-1))
+        return ngrams
 
     def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):
         aligned = self.aligner.align(
@@ -103,17 +104,17 @@ class Scorer:
         )
         return list(aligned[0])
     
-    def create_ngrams(self, tokenized_sent, num_idioms):
+    def create_ngrams(self, model_str_tokens, num_idioms, idiom_pos):
         '''
         This method creates a list of the ngrams in a sentence.
 
         @returns ngrams: list of the ngrams in the sentence
         '''
-        ngrams = []
-        for pos in range(len(tokenized_sent)):
-            if pos != self.start_idiom_pos and pos <= (len(tokenized_sent)-num_idioms):
-                toks = [tok.strip() for tok in tokenized_sent[pos:(pos+num_idioms)]]
-                ngrams.append(toks)
+        ngrams = dict()
+        for pos in range(len(model_str_tokens)):
+            if pos != idiom_pos[0] and pos <= (len(model_str_tokens)-num_idioms):
+                toks = [tok.strip() for tok in model_str_tokens[pos:(pos+num_idioms)]]
+                ngrams[(pos, pos+num_idioms-1)] = toks
         return ngrams
     
     def get_idiom_combinations(self, idiom_positions, sent_positions):
@@ -141,7 +142,7 @@ class Scorer:
             combined_positions: list of position tuples
         @returns tensor with the values of the given positions 
         '''
-        return t.tensor([attention_pattern[combined_positions[i][0]][combined_positions[i][1]] for i in range(len(combined_positions))])
+        return t.tensor([attention_pattern[combined_positions[i][0]][combined_positions[i][1]] for i in range(len(combined_positions))]).to(self.device)
     
     def max_idiom_toks(self, argmax_list: list, idiom_pos):
         '''
@@ -246,8 +247,8 @@ class Scorer:
         @param attention_pattern: attention scores for one head and one sentence
         @returns mean on the scores attending to idiom tokens, standard deviation of the mean, probability of an idiom token being the maximum score of the row/column, fraction of idiom tokens within the max idiom_len-scores
         '''
-        idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1)
-        sent_positions = t.arange(attention_pattern.size(-1))
+        idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1).to(self.device)
+        sent_positions = t.arange(attention_pattern.size(-1)).to(self.device)
 
         idiom_attention = self.extract_tensor(attention_pattern, self.get_idiom_combinations(idiom_positions, sent_positions))
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
@@ -407,6 +408,9 @@ class Scorer:
         with open(filename, 'w', encoding = "utf-8") as f:
             json.dump(score_per_head, f)
 
+    def save_tensor(self, tensor, filename):
+        t.save(tensor, filename)
+
     def explore_scores(score_per_head):
         print(f"Maximum head: {max(score_per_head, key=lambda k:score_per_head.get(k))} - {max(score_per_head.values())}")
         print(f"Minimum head: {min(score_per_head, key=lambda k:score_per_head.get(k))} - {min(score_per_head.values())}")
@@ -414,14 +418,18 @@ class Scorer:
         print(f"Sorted highest to lowest: {[(head, score_per_head.get(head)) for head in sorted(score_per_head, key = lambda k:score_per_head.get(k), reverse = True)]}")
         print(f"Sorted lowest to highest: {[(head, score_per_head.get(head)) for head in sorted(score_per_head, key = lambda k:score_per_head.get(k))]}")
 
+    def explore_tensor(self, score_tensor):
+        print(f"The score of the first sentence for the layer 0 and head 0 is:\n{score_tensor[0][0][0]}")
+
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")
     epie = EPIE_Data()
-    #formal_data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
-
     scorer = Scorer(model)
-    #formal_data.map(scorer.compute_scores_per_head_batched, batched=True)
 
-    scorer.get_cache(epie.formal_sents[0])
+    # formal_data = epie.create_hf_dataset(epie.formal_sents[:3], epie.tokenized_formal_sents[:3], epie.tags_formal[:3])
+    # formal_scores = scorer.create_data_score_tensor(formal_data)
 
+    loaded_scores = t.load("./scores/test_formal.pt", weights_only = False).to(scorer.device)
+    #assert(len(loaded_scores) == len(formal_data))  
+    scorer.explore_tensor(loaded_scores)
     

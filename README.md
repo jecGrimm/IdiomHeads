@@ -5,11 +5,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - Formal scores
     - schneller machen
-        - Huggingface
-        - sigmoid nicht über einzelne scores
-        - alles als Matrix
-        - 3 er test cpu
-        - fit to GPU
         - 3er test GPU colab
         - lrz server GPU
         - 3er test GPU lrz
@@ -22,6 +17,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - boxplot
     - heatmap
     - histogram
+    - average
+    - std
+    - per head
 2. Logit attribution
 3. Ablation
 4. Schreiben
@@ -36,6 +34,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Notebook übertragen
 - Environment
 - submodule merge-tokenizers entfernen
+- move explore functions from scorer to plot 
 
 ### Optional
 - Scatter Plot feature vectors
