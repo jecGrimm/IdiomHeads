@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-#SBATCH --job-name=small_detect_idiom_gpu
-#SBATCH --comment="Test the idiom scorer on a GPU"
+#SBATCH --job-name=formal_detect_idiom
+#SBATCH --comment="Detect idiom heads for formal idiom occurences"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=j.grimm@campus.lmu.de
 #SBATCH --chdir=/home/g/grimmj/IdiomHeads

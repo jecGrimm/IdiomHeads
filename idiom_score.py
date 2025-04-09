@@ -54,6 +54,7 @@ class Scorer:
         data_scores_tensor = t.zeros(len(hf_dataset), self.model.cfg.n_layers, self.model.cfg.n_heads).to(self.device)
 
         for i in range(len(hf_dataset)):
+            print(f"Processing element {i}")
             elem = hf_dataset[i]
             data_scores_tensor[i] = self.create_score_tensor(elem["sentence"], elem["tokenized"], elem["tags"])
         return data_scores_tensor
@@ -88,7 +89,7 @@ class Scorer:
                 start = model_positions[0]
             elif epie_pos == epie_idiom_pos[-1]:
                 end = model_positions[-1]
-        assert(start and end)
+        assert start != None and end != None
         return (start, end)
     
     def get_ngram_pos(self, model_str_tokens, num_idioms, idiom_pos):
@@ -426,10 +427,15 @@ if __name__ == "__main__":
     epie = EPIE_Data()
     scorer = Scorer(model)
 
-    # formal_data = epie.create_hf_dataset(epie.formal_sents[:3], epie.tokenized_formal_sents[:3], epie.tags_formal[:3])
+    formal_data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
     # formal_scores = scorer.create_data_score_tensor(formal_data)
 
-    loaded_scores = t.load("./scores/test_formal.pt", weights_only = False).to(scorer.device)
-    #assert(len(loaded_scores) == len(formal_data))  
-    scorer.explore_tensor(loaded_scores)
+    for i in range(len(formal_data)):
+        model_str_tokens = model.to_str_tokens(formal_data["sentence"][i])
+        aligned_positions = scorer.align_tokens(formal_data["sentence"][i], formal_data["tokenized"][i], model_str_tokens)
+        idiom_pos = scorer.get_idiom_pos(aligned_positions, formal_data["tags"][i])
+
+    # loaded_scores = t.load("./scores/test_formal.pt", weights_only = False).to(scorer.device)
+    # #assert(len(loaded_scores) == len(formal_data))  
+    # scorer.explore_tensor(loaded_scores)
     

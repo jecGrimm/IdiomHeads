@@ -4,10 +4,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 ## Todos
 1. Head detection
 - Formal scores
-    - schneller machen
-        - lrz server GPU
-        - 3er test GPU lrz
-        - full lrz
+   - full lrz
 - translated scores
 - static scores
 - literal scores
@@ -53,7 +50,7 @@ If the repository has already been cloned without initializing the submodules, p
 `git submodule update --init --recursive` <br>
 to add the submodules afterwards. Without this command, the directory `TransformerLens-intro` and `EPIE_Corpus` are empty.
 
-### Environment
+### Installation
 conda activate idiom -> python 3.12.7, geht nicht mit pytorch 1.11.0 (wie in transformer lens doku angegeben), stattdessen mit pytorch generell installiert
 
 Schritte neu aufsetzen ohne conda environment file:
@@ -73,5 +70,9 @@ conda activate idiom
 `conda install pytorch torchdata torchvision -c pytorch -y` (kommt Nachricht, dass alles schon installiert ist, funzt aber trotzdem)
 pip install transformer-lens
 pip install merge-tokenizers
+
+### SLURM
+ssh grimmj@remote.cip.ifi.lmu.de
+sbatch --partition=NvidiaAll script.sh
 
 
