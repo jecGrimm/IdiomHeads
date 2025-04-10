@@ -6,12 +6,15 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Formal scores
    - full lrz
 - translated scores
+    - full lrz 
 - plots: 
     - line
+        - full data
     - boxplot
+
     - heatmap
     - histogram
-    - average
+        - full data
     - std
 2. Logit attribution
 3. Ablation
@@ -75,6 +78,9 @@ pip install merge-tokenizers
 
 ### SLURM
 ssh grimmj@remote.cip.ifi.lmu.de
-sbatch --partition=NvidiaAll script.sh
+sbatch --partition=NvidiaAll ./scripts/detect_formal.sh
+
+See jobs: sacct
+Cancel jobs: scancel <jobnumber>
 
 
