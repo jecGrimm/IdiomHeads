@@ -6,8 +6,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Formal scores
    - full lrz
 - translated scores
-- static scores
-- literal scores
 - plots: 
     - line
     - boxplot
@@ -15,17 +13,19 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - histogram
     - average
     - std
-    - per head
 2. Logit attribution
 3. Ablation
-4. Schreiben
+4. zweites Modell
+5. Schreiben
+- Neues Template
+- Selbstständigkeitserklärung
 - Deutsches Abstract
 - Related Work
 - Experiment
 - Evaluation
 - Discussion
 - Conclusion
-5. Code cleanup
+6. Code cleanup
 - Readme
 - Notebook übertragen
 - Environment
@@ -39,6 +39,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Clustering
 - Loss für static Idiomsätze
 - Token for whole idiom in vocabulary
+- static scores
+- literal scores
 
 
 ## Usage
