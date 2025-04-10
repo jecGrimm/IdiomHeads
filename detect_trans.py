@@ -19,7 +19,7 @@ epie = EPIE_Data()
 scorer = Scorer(model)
 print(f"Running on device: {scorer.device}")
 
-trans_data = epie.create_hf_dataset(epie.trans_sents, epie.tokenized_trans_sents, epie.tags_formal)
+trans_data = epie.create_hf_dataset(epie.trans_formal_sents, epie.tokenized_trans_formal_sents, epie.tags_formal)
 trans_scores = scorer.create_data_score_tensor(trans_data)
 
 scorer.explore_tensor(trans_scores)

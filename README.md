@@ -9,13 +9,15 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - full lrz 
 - plots: 
     - line
-        - full data
+        - 1.4b
     - boxplot
-
+        - 1.4b
     - heatmap
+        - 14m
+        - 1.4b
     - histogram
-        - full data
-    - std
+        - 14m
+        - 1.4b
 2. Logit attribution
 3. Ablation
 4. zweites Modell
@@ -79,6 +81,7 @@ pip install merge-tokenizers
 ### SLURM
 ssh grimmj@remote.cip.ifi.lmu.de
 sbatch --partition=NvidiaAll ./scripts/detect_formal.sh
+sbatch --partition=NvidiaAll ./scripts/detect_small.sh
 
 See jobs: sacct
 Cancel jobs: scancel <jobnumber>

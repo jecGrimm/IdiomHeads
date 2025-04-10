@@ -14,7 +14,7 @@ def plot_attention_heads(model, cache, str_tokens):
         display(cv.attention.attention_patterns(tokens=str_tokens, attention=attention_pattern, attention_head_names=[f"L{layer}H{i}" for i in range(16)]))
 
 def create_df_from_dict(score_per_head: dict):
-    return pd.DataFrame({"layer_heads": list(score_per_head.keys()), "scores": list(score_per_head.values())})
+    return pd.DataFrame({"layer.head": list(score_per_head.keys()), "scores": list(score_per_head.values())}).set_index("layer.head")
 
 def create_df_from_tensor(tensor):
     return pd.DataFrame(tensor.numpy())
@@ -30,9 +30,9 @@ def plot_score_hist(scores):
     #plt.gca().spines[['top', 'right',]].set_visible(False)
     plt.savefig("./plots/score_hist.png")   
 
-def plot_dict_box(scores, filename):
+def plot_box_per_head(scores, filename = None):
     df = create_df_from_dict(scores)
-    df.plot.box()
+    df['scores'].apply(lambda x: pd.Series(x)).T.boxplot(figsize=(10,10),rot=45)
 
     save_plot(filename)
 
@@ -50,7 +50,7 @@ def plot_tensor_hist(tensor, filename = None):
     
     save_plot(filename)
 
-def plot_tensor_box(tensor, filename = None):
+def plot_box_avg(tensor, filename = None):
     print(tensor.size())
     #flattened_tensor = tensor.view(tensor.size(0)*tensor.size(1))
     #print(flattened_tensor.size())
@@ -65,7 +65,7 @@ def plot_tensor_box(tensor, filename = None):
 def get_mean_sentence_tensor(tensor):
     return t.mean(tensor, dim = 0)
 
-def save_plot(filename: None):
+def save_plot(filename = None):
     if filename:
         plt.savefig(filename) 
     else:
@@ -77,7 +77,7 @@ def get_lh_sentence_scores(tensor):
     sent_last = t.einsum("ijk->jki", tensor)
     for layer in range(tensor.size(1)):
         for head in range(tensor.size(2)):
-            scores[f"{layer}.{head}"] = sent_last[layer][head]
+            scores[f"{layer}.{head}"] = sent_last[layer][head].numpy()
     # 0.0: 0.9061, 0.9297, 0.9173
     # 0.1: 0.8422, 0.9493, 0.9504
     # 1.0: 0.9554, 0.8907, 0.8849
@@ -91,5 +91,5 @@ if __name__ == "__main__":
     # plot_score_hist(df)
     loaded_tensor = t.load("./scores/test_formal.pt")
     scores_dict = get_lh_sentence_scores(loaded_tensor)
-    plot_dict_box(scores_dict)
+    plot_box_per_head(scores_dict, "./plots/pythia_14m_head_box.png")
     #plot_tensor_box(get_mean_tensor(loaded_tensor))

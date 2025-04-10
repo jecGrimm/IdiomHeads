@@ -8,4 +8,4 @@
 #SBATCH --output=/home/g/grimmj/IdiomHeads/scripts/output/slurm.%j.%N.out
 #SBATCH --ntasks=1
 
-python3 -u detect_small.py
+python3 -u small_detect_idiom.py
