@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=formal_detect_idiom
+#SBATCH --job-name=formal_idiom_score
 #SBATCH --comment="Compute idiom scores for formal idiom occurences"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=j.grimm@campus.lmu.de

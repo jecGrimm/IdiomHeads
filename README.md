@@ -8,8 +8,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - push remote scores
 - translated scores
     - full lrz: 
-        - pull remote
-        - start job
+        - push remote scores
 - plots: 
     - line
         - 1.4b
@@ -20,6 +19,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - histogram
         - 1.4b
 - other score
+    - klasse -> relativieren mit idiom score?
     - idiom score
     - trans score
     - plot scatter to see correlation

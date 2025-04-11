@@ -2,7 +2,7 @@ from transformer_lens import (
     HookedTransformer,
 )
 from data import EPIE_Data
-from idiom_score import Scorer
+from idiom_score import IdiomScorer
 import os
 import torch as t
 import argparse
@@ -32,7 +32,7 @@ if not os.path.isdir(f"./scores/{model_name.split('/')[-1]}"):
 
 model: HookedTransformer = HookedTransformer.from_pretrained(model_name)
 epie = EPIE_Data()
-scorer = Scorer(model)
+scorer = IdiomScorer(model)
 print(f"Running on device {scorer.device}.")
 
 for i in range(len(data_split)):

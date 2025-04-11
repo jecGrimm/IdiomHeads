@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=trans_detect_idiom
+#SBATCH --job-name=trans_idiom_score
 #SBATCH --comment="Compute idiom scores for translated occurences"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=j.grimm@campus.lmu.de

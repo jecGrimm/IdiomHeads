@@ -9,7 +9,7 @@ from transformer_lens import (
 )
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 
-class Scorer:
+class IdiomScorer:
     def __init__(self, model):
         #self.data = EPIE_Data()
         self.model = model
@@ -435,7 +435,7 @@ class Scorer:
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")
     epie = EPIE_Data()
-    scorer = Scorer(model)
+    scorer = IdiomScorer(model)
 
     formal_data = epie.create_hf_dataset(epie.trans_formal_sents[4:10], epie.tokenized_trans_formal_sents[4:10], epie.tags_formal[4:10])
     # formal_scores = scorer.create_data_score_tensor(formal_data)

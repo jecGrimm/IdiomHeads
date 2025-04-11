@@ -2,7 +2,7 @@ from transformer_lens import (
     HookedTransformer,
 )
 from data import EPIE_Data
-from idiom_score import Scorer
+from idiom_score import IdiomScorer
 import os
 import argparse
 
@@ -16,7 +16,7 @@ model_name = parser.parse_args().model_name
 model: HookedTransformer = HookedTransformer.from_pretrained(model_name)
 
 epie = EPIE_Data()
-scorer = Scorer(model)
+scorer = IdiomScorer(model)
 print(f"Running on device: {scorer.device}")
 
 trans_data = epie.create_hf_dataset(epie.trans_formal_sents, epie.tokenized_trans_formal_sents, epie.tags_formal)
