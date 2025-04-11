@@ -92,6 +92,7 @@ pip install merge-tokenizers
 ssh grimmj@remote.cip.ifi.lmu.de
 sbatch --partition=NvidiaAll ./scripts/detect_formal.sh
 sbatch --partition=NvidiaAll ./scripts/detect_small.sh
+sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
 
 See jobs: sacct
 Cancel jobs: scancel <jobnumber>
