@@ -9,7 +9,7 @@ import argparse
 import timeit
 
 parser = argparse.ArgumentParser(prog='idiom head detector')
-parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-14m")
+parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-1.4b")
 parser.add_argument('--data', '-d', help='list of data split that should be processed', nargs='*', default=["formal"], type=str)
 parser.add_argument('--start', '-s', help='start index (inclusive)', default = 0, type=int)
 parser.add_argument('--end', '-e', help='end index (exclusive)', default = None)
@@ -42,17 +42,16 @@ for i in range(len(data_split)):
     elif split == "trans":
         data = epie.create_hf_dataset(epie.trans_formal_sents[start:end], epie.tokenized_trans_formal_sents[start:end], epie.tags_formal[start:end])
     else:
-        raise Exception(f"Split {split} (optional argument -d) not in the dataset, please choose either formal or trans")
+        raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
     if batch_sizes[i] == None:
-        batch_size = int(len(data)/3)
+        batch_size = 8
     else:
         batch_size = int(batch_sizes[i])
     
-    data.map(lambda batch: scorer.create_data_score_tensor(batch), batched=True, batch_size = batch_size)
+    ckp_file = f"./scores/{model_name.split('/')[-1]}/{split}_{start}_{end}_ckp.pt"
+    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
 
     t.save(scorer.scores, f"./scores/{model_name.split('/')[-1]}/{split}_{start}_{end}.pt")
-    #scorer.save_tensor(f"./scores/{model_name.split('/')[-1]}/{split}_{start}_{end}.pt")
-

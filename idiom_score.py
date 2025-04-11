@@ -15,6 +15,7 @@ class Scorer:
         self.model = model
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
+        self.scores = None
 
     def get_cache(self, sent):
         idiom_tokens = self.model.to_tokens(sent)
@@ -33,11 +34,11 @@ class Scorer:
         #ngram_positions = self.create_ngrams(model_str_tokens, num_idioms, idiom_pos)
         ngram_positions = self.get_ngram_pos(model_str_tokens, num_idioms, idiom_pos)
 
-        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 8).to(self.device) # 8 features (4 idiom feats, 4 ngram feats)
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
         #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
-                attention_pattern = cache["pattern", layer][head]
+                attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
                 idiom_features = self.compute_components(attention_pattern, idiom_pos)
                 ngram_features = self.compute_ngram_features(attention_pattern, ngram_positions, idiom_pos, idiom_features)
 
@@ -50,14 +51,20 @@ class Scorer:
 
         return t.sigmoid(t.sum(feature_tensor, dim = -1))
     
-    def create_data_score_tensor(self, hf_dataset):
-        data_scores_tensor = t.zeros(len(hf_dataset), self.model.cfg.n_layers, self.model.cfg.n_heads).to(self.device)
+    def create_data_score_tensor(self, batch, ckp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device)
 
-        for i in range(len(hf_dataset)):
-            print(f"Processing element {i}")
-            elem = hf_dataset[i]
-            data_scores_tensor[i] = self.create_score_tensor(elem["sentence"], elem["tokenized"], elem["tags"])
-        return data_scores_tensor
+        for i in range(len(batch["sentence"])):
+            #print(f"Processing element {i}")
+            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+        batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
+
+        if self.scores != None:
+            self.scores = t.cat((self.scores, batch_scores), dim = 0)
+        else:
+            self.scores = batch_scores  
+
+        t.save(self.scores, ckp_file)      
 
     def get_ngram_positions(self, num_idioms, tokenized_sent, aligned_positions, idiom_pos):
         """
@@ -71,7 +78,7 @@ class Scorer:
 
 
     def compute_ngram_features(self, attention_pattern, ngram_positions, idiom_pos, idiom_features):
-        ngram_features = t.zeros(idiom_features.size(0)).to(self.device)
+        ngram_features = t.zeros(idiom_features.size(0), dtype=t.float16, device=self.device)
         #for ngram_pos, ngram in ngram_positions.items():
         for ngram_pos in ngram_positions:
             ngram_features = t.vstack((ngram_features, self.compute_components(attention_pattern, ngram_pos)))
@@ -89,6 +96,9 @@ class Scorer:
                 start = model_positions[0]
             elif epie_pos == epie_idiom_pos[-1]:
                 end = model_positions[-1]
+        
+        if end == None:
+            end = aligned_positions[-1][-1][-1]
         assert start != None and end != None
         return (start, end)
     
@@ -143,7 +153,7 @@ class Scorer:
             combined_positions: list of position tuples
         @returns tensor with the values of the given positions 
         '''
-        return t.tensor([attention_pattern[combined_positions[i][0]][combined_positions[i][1]] for i in range(len(combined_positions))]).to(self.device)
+        return t.tensor([attention_pattern[combined_positions[i][0]][combined_positions[i][1]] for i in range(len(combined_positions))], dtype=t.float16, device=self.device)
     
     def max_idiom_toks(self, argmax_list: list, idiom_pos):
         '''
@@ -248,14 +258,14 @@ class Scorer:
         @param attention_pattern: attention scores for one head and one sentence
         @returns mean on the scores attending to idiom tokens, standard deviation of the mean, probability of an idiom token being the maximum score of the row/column, fraction of idiom tokens within the max idiom_len-scores
         '''
-        idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1).to(self.device)
+        idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1, device=self.device)
         sent_positions = t.arange(attention_pattern.size(-1)).to(self.device)
 
         idiom_attention = self.extract_tensor(attention_pattern, self.get_idiom_combinations(idiom_positions, sent_positions))
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
 
-        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase)).to(self.device)
+        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase), dtype=t.float16, device = self.device)
 
     def create_component_table(self):
         '''
@@ -419,15 +429,15 @@ class Scorer:
         print(f"Sorted highest to lowest: {[(head, score_per_head.get(head)) for head in sorted(score_per_head, key = lambda k:score_per_head.get(k), reverse = True)]}")
         print(f"Sorted lowest to highest: {[(head, score_per_head.get(head)) for head in sorted(score_per_head, key = lambda k:score_per_head.get(k))]}")
 
-    def explore_tensor(self, score_tensor):
-        print(f"The score of the first sentence for the layer 0 and head 0 is:\n{score_tensor[0][0][0]}")
+    def explore_tensor(self):
+        print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")
 
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")
     epie = EPIE_Data()
     scorer = Scorer(model)
 
-    formal_data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
+    formal_data = epie.create_hf_dataset(epie.trans_formal_sents[4:10], epie.tokenized_trans_formal_sents[4:10], epie.tags_formal[4:10])
     # formal_scores = scorer.create_data_score_tensor(formal_data)
 
     for i in range(len(formal_data)):

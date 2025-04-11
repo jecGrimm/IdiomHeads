@@ -5,25 +5,31 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - Formal scores
    - full lrz
+        - push remote scores
 - translated scores
-    - full lrz 
+    - full lrz: 
+        - pull remote
+        - start job
 - plots: 
     - line
         - 1.4b
     - boxplot
         - 1.4b
     - heatmap
-        - 14m
         - 1.4b
     - histogram
-        - 14m
         - 1.4b
+- other score
+    - idiom score
+    - trans score
+    - plot scatter to see correlation
 2. Logit attribution
 3. Ablation
+    - loss
+    - nwg
 4. zweites Modell
 5. Schreiben
-- Neues Template
-- Selbstständigkeitserklärung
+- Selbstständigkeitserklärung -> auch digital unterschreiben?
 - Deutsches Abstract
 - Related Work
 - Experiment
@@ -37,6 +43,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - submodule merge-tokenizers entfernen
 - move explore functions from scorer to plot 
 - Update requirements and yml-file
+- Plot title
+- unnötige Funktionen ins Archiv
+- Wichtige Plots in main Funktion aufrufen
 
 ### Optional
 - Scatter Plot feature vectors
@@ -46,6 +55,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Token for whole idiom in vocabulary
 - static scores
 - literal scores
+- trans scores: momentan nur für idiom_pos, sollte aber eigl die gesamte Idiomübersetzung verwenden
 
 
 ## Usage

@@ -4,7 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import json
 import torch as t
-# %pip install einops
+import plotly.express as px
+
 # %pip install jaxtyping
 # %pip install git+https://github.com/callummcdougall/CircuitsVis.git#subdirectory=python
 
@@ -30,25 +31,27 @@ def plot_score_hist(scores):
     #plt.gca().spines[['top', 'right',]].set_visible(False)
     plt.savefig("./plots/score_hist.png")   
 
-def plot_box_per_head(scores, filename = None):
+def plot_box_per_head(tensor, filename = None):
+    scores = get_lh_sentence_scores(tensor)
     df = create_df_from_dict(scores)
     df['scores'].apply(lambda x: pd.Series(x)).T.boxplot(figsize=(10,10),rot=45)
 
-    save_plot(filename)
+    save_plt(filename)
 
 def plot_tensor_line(tensor, filename = None):
-    df = create_df_from_tensor(tensor)
-    df.plot.line()
-    
-    save_plot(filename)
+    mean_tensor = get_mean_sentence_tensor(tensor)
+    df = create_df_from_tensor(mean_tensor)
+    df.plot.line(title="Average idiom score per head and layer", xlabel = "Layer", ylabel = "Mean idiom score")
+    plt.legend(title = "Head")
+    save_plt(filename)
 
 def plot_tensor_hist(tensor, filename = None):
-    flattened_tensor = tensor.view(tensor.size(0)*tensor.size(1))
-    print(tensor.view(tensor.size(0)*tensor.size(1)).size())
-    df = create_df_from_tensor(flattened_tensor)
-    df.plot.hist()
+    mean_tensor = get_mean_sentence_tensor(tensor)
+    len = mean_tensor.size(0) * mean_tensor.size(1)
+    df = create_df_from_tensor(mean_tensor.view(len))
+    df.plot.hist(title="Distribution of the mean idiom scores", legend = False, xlabel="Mean idiom score")
     
-    save_plot(filename)
+    save_plt(filename)
 
 def plot_box_avg(tensor, filename = None):
     print(tensor.size())
@@ -60,18 +63,27 @@ def plot_box_avg(tensor, filename = None):
     print(df)
     df.plot.box()
     
-    save_plot(filename)
+    save_plt(filename)
+
+def plot_heatmap(tensor, filename = None):
+    mean_tensor = get_mean_sentence_tensor(tensor)
+    #print(mean_tensor[0][0])
+    fig = px.imshow(mean_tensor, labels=dict(x="Head", y="Layer"))
+
+    if filename:
+        fig.write_image(filename)
+    else:
+        fig.show()
 
 def get_mean_sentence_tensor(tensor):
     return t.mean(tensor, dim = 0)
 
-def save_plot(filename = None):
+def save_plt(filename = None):
     if filename:
         plt.savefig(filename) 
     else:
         plt.show()
 
-# TODO: reshape tensor to get the values in form: layer.head = [sentence scores]
 def get_lh_sentence_scores(tensor):
     scores = dict()
     sent_last = t.einsum("ijk->jki", tensor)
@@ -83,13 +95,22 @@ def get_lh_sentence_scores(tensor):
     # 1.0: 0.9554, 0.8907, 0.8849
     return scores
     
+def get_lh_mean_scores(tensor):
+    scores = dict()
+    sent_last = t.einsum("ijk->jki", tensor)
+    for layer in range(tensor.size(1)):
+        for head in range(tensor.size(2)):
+            scores[f"{layer}.{head}"] = t.mean(sent_last[layer][head]).numpy()
+    # 0.0: 0.9061, 0.9297, 0.9173
+    # 0.1: 0.8422, 0.9493, 0.9504
+    # 1.0: 0.9554, 0.8907, 0.8849
+    return scores
+    
 if __name__ == "__main__":
-    # with open("./scores_per_head.json", 'r', encoding="utf-8") as f:
-    #     score_per_head = json.load(f)
-
-    # df = create_df(score_per_head)
-    # plot_score_hist(df)
     loaded_tensor = t.load("./scores/test_formal.pt")
-    scores_dict = get_lh_sentence_scores(loaded_tensor)
-    plot_box_per_head(scores_dict, "./plots/pythia_14m_head_box.png")
-    #plot_tensor_box(get_mean_tensor(loaded_tensor))
+
+    #plot_heatmap(loaded_tensor, "./plots/pythia_14m_mean_heat.png")
+    #plot_line_mean_head(loaded_tensor)
+    #plot_tensor_line(loaded_tensor, filename = "./plots/pythia_14m_mean_line.png")
+    plot_tensor_hist(loaded_tensor, filename="./plots/pythia_14m_mean_hist.png")
+    
