@@ -17,7 +17,7 @@ class LiteralScorer:
         self.scores = None
 
     def create_data_score_tensor(self, batch, ckp_file):
-        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device)
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
             #print(f"Processing element {i}")
@@ -98,12 +98,7 @@ class LiteralScorer:
             sent_positions: tensor with the positions of all tokens in the sentence
         @returns idiom_combinations: list of position tuples of the scores attending to idiom tokens
         '''
-        literal_combinations = []
-        for i in sent_positions:
-            for j in sent_positions:
-                if i >= j and i not in idiom_positions and j in idiom_positions:
-                    literal_combinations.append((i, j))
-        return literal_combinations
+        return [(i, j) for i in sent_positions for j in sent_positions if i >= j and i not in idiom_positions and j not in idiom_positions]
     
     def extract_tensor(self, attention_pattern, combined_positions: list):
         '''
@@ -179,12 +174,21 @@ class LiteralScorer:
 
             max_indices = t.tensor(sorted_ids[:pos-num_idioms_row+1], device = self.device)
 
-            literal_fraction = 0
-            for max_index in max_indices:
-                if max_index < idiom_pos[0] or max_index > idiom_pos[1]:
-                    literal_fraction += 1
-            literal_fractions.append(literal_fraction / len(max_indices))
-        return sum(literal_fractions)/len(literal_fractions)
+            if len(max_indices) != 0:
+                literal_fraction = 0
+                for max_index in max_indices:
+                    if max_index < idiom_pos[0] or max_index > idiom_pos[1]:
+                        literal_fraction += 1
+                literal_fractions.append(literal_fraction / len(max_indices))
+
+        if len(literal_fractions) != 0:
+            return sum(literal_fractions)/len(literal_fractions)
+        else:
+            return 0.0
+        
+    def explore_tensor(self):
+        print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")
+
     
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")

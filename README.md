@@ -12,17 +12,37 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - plots: 
     - line
         - 1.4b
+            - formal idiom
+            - trans idiom
+            - formal literal
+            - trans literal
     - boxplot
         - 1.4b
+            - formal idiom
+            - trans idiom
+            - formal literal
+            - trans literal
     - heatmap
         - 1.4b
+            - formal idiom
+            - trans idiom
+            - formal literal
+            - trans literal
     - histogram
         - 1.4b
-- other score
-    - klasse -> relativieren mit idiom score?
-    - idiom score
+            - formal idiom
+            - trans idiom
+            - formal literal
+            - trans literal
+- literal score
+    - formal score
+        - full
     - trans score
+        - test 
+        - full
     - plot scatter to see correlation
+        - test
+        - full
 2. Logit attribution
 3. Ablation
     - loss
@@ -46,6 +66,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Plot title
 - unnötige Funktionen ins Archiv
 - Wichtige Plots in main Funktion aufrufen
+- literal score relativieren mit idiom score?
+- idiom score mit generellem ngram-Score relativieren oder den einzelnen Features?
 
 ### Optional
 - Scatter Plot feature vectors
@@ -93,6 +115,8 @@ ssh grimmj@remote.cip.ifi.lmu.de
 sbatch --partition=NvidiaAll ./scripts/detect_formal.sh
 sbatch --partition=NvidiaAll ./scripts/detect_small.sh
 sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
+
+NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 
 See jobs: sacct
 Cancel jobs: scancel <jobnumber>

@@ -2,13 +2,12 @@ from transformer_lens import (
     HookedTransformer,
 )
 from data import EPIE_Data
-from idiom_score import IdiomScorer
+from literal_score import LiteralScorer
 import os
 import torch as t
 import argparse
-import timeit
 
-parser = argparse.ArgumentParser(prog='idiom head detector')
+parser = argparse.ArgumentParser(prog='compute literal score')
 parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-1.4b")
 parser.add_argument('--data', '-d', help='list of data split that should be processed', nargs='*', default=["formal"], type=str)
 parser.add_argument('--start', '-s', help='start index (inclusive)', default = 0, type=int)
@@ -27,15 +26,15 @@ batch_sizes = parser.parse_args().batch_size
 if not os.path.isdir("./scores"):
     os.mkdir("./scores")
 
-if not os.path.isdir("./scores/idiom_scores"):
-    os.mkdir("./scores/idiom_scores")
+if not os.path.isdir("./scores/literal_scores"):
+    os.mkdir("./scores/literal_scores")
 
-if not os.path.isdir(f"./scores/idiom_scores/{model_name.split('/')[-1]}"):
-    os.mkdir(f"./scores/idiom_scores/{model_name.split('/')[-1]}")
+if not os.path.isdir(f"./scores/literal_scores/{model_name.split('/')[-1]}"):
+    os.mkdir(f"./scores/literal_scores/{model_name.split('/')[-1]}")
 
 model: HookedTransformer = HookedTransformer.from_pretrained(model_name)
 epie = EPIE_Data()
-scorer = IdiomScorer(model)
+scorer = LiteralScorer(model)
 print(f"Running on device {scorer.device}.")
 
 for i in range(len(data_split)):
@@ -52,9 +51,9 @@ for i in range(len(data_split)):
     else:
         batch_size = int(batch_sizes[i])
     
-    ckp_file = f"./scores/idiom_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}_ckp.pt"
+    ckp_file = f"./scores/literal_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}_ckp.pt"
     data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
 
-    t.save(scorer.scores, f"./scores/idiom_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}.pt")
+    t.save(scorer.scores, f"./scores/literal_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}.pt")
