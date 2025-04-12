@@ -118,6 +118,7 @@ sbatch --partition=NvidiaAll ./scripts/detect_small.sh
 sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
 sbatch --partition=NvidiaAll ./scripts/literal_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
+sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 
