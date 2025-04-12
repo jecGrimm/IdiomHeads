@@ -48,7 +48,7 @@ for i in range(len(data_split)):
     data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
 
     if batch_sizes[i] == None:
-        batch_size = 3
+        batch_size = 1
     else:
         batch_size = int(batch_sizes[i])
     

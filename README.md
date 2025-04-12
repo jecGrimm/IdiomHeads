@@ -133,7 +133,7 @@ pythia 14m
     - mean
         - b3: 4,55s/ex
 - trans idiom
-    - b 8: 623 s
+    - b 8: 1721 s/ex
 
 pythia 1.4b
 - formal literal
