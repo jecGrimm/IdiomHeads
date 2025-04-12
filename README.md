@@ -136,7 +136,12 @@ pythia 14m
     - b 8: 1721 s/ex
 
 pythia 1.4b
-- formal literal
-    - b 3: cuda oom 
+- formal 
+    - literal
+        - b 3: cuda oom 
+    - mean
+        - b3: cuda oom
+        - b1: cudo oom
 - trans literal
     - b 8: cuda oom
+

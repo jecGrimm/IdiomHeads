@@ -289,19 +289,12 @@ class IdiomScorer:
         heads = self.model.cfg.n_heads
 
         for i in range(len(batch["sentence"])):
-            #print(f"Processing element {i}")
-            #batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
             sent = batch["sentence"][i]
-            #tokenized_sent = batch["tokenized"][i]
-            #tags = batch["tags"][i]
+
             idiom_pos = batch["idiom_pos"][i]
             cache = self.get_cache(sent)
             activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
             n_idiom = idiom_pos[1] - idiom_pos[0] + 1
-            #idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1, device=self.device)
-            #sent_positions = t.arange(activation_matrix.size(-1)).to(self.device)
-
-            # q idiom
 
             q_idiom = activation_matrix[:, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
             k_idiom = activation_matrix[:, :, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
