@@ -488,6 +488,7 @@ if __name__ == "__main__":
 
     data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
     # data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched = True)
+    # print(len(scorer.idiom_positions))
     # scorer.store_all_idiom_pos("formal")
     # formal_scores = scorer.create_data_score_tensor(formal_data)
 
