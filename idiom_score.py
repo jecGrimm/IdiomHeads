@@ -8,30 +8,45 @@ from transformer_lens import (
     HookedTransformer,
 )
 from merge_tokenizers import PythonGreedyCoverageAligner, types
+import os
 
 class IdiomScorer:
-    def __init__(self, model):
+    def __init__(self, model, split: str = "formal"):
         #self.data = EPIE_Data()
         self.model = model
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.scores = None
+        self.idiom_positions = self.load_all_idiom_pos(split)
+
+    def get_all_idiom_pos(self, batch):
+        for i in range(len(batch["sentence"])):
+            sent = batch["sentence"][i]
+            model_str_tokens= self.model.to_str_tokens(sent)
+            aligned_positions = self.align_tokens(sent, batch["tokenized"][i], model_str_tokens)
+            self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
+
+    def store_all_idiom_pos(self, split):
+        with open(f"{split}_idiom_pos.json", 'w', encoding = "utf-8") as f:
+            json.dump(self.idiom_positions, f)    
+
+    def load_all_idiom_pos(self, split):
+        if os.path.isfile(f"{split}_idiom_pos.json"):
+            with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+                return json.load(f) 
+        else:
+            return [] 
 
     def get_cache(self, sent):
         idiom_tokens = self.model.to_tokens(sent)
         logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
         return cache.to(self.device)
 
-    def create_feature_tensor(self, sent, tokenized_sent, tags):
+    def create_feature_tensor(self, sent, tokenized_sent, tags, idiom_pos):
         cache = self.get_cache(sent)
+        num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
 
         model_str_tokens= self.model.to_str_tokens(sent)
-        aligned_positions = self.align_tokens(sent, tokenized_sent, model_str_tokens)
-        idiom_pos = self.get_idiom_pos(aligned_positions, tags)
-
-        num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
-        #ngram_positions = self.get_ngram_positions(num_idioms, tokenized_sent, aligned_positions, idiom_pos)
-        #ngram_positions = self.create_ngrams(model_str_tokens, num_idioms, idiom_pos)
         ngram_positions = self.get_ngram_pos(model_str_tokens, num_idioms, idiom_pos)
 
         layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
@@ -56,7 +71,7 @@ class IdiomScorer:
 
         for i in range(len(batch["sentence"])):
             #print(f"Processing element {i}")
-            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i], batch["idiom_pos"][i])
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
@@ -267,6 +282,40 @@ class IdiomScorer:
 
         return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase), dtype=t.float16, device = self.device)
 
+    def compute_mean_batched(self, batch, ckp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, dtype=t.float16, device = self.device)
+
+        layers = self.model.cfg.n_layers
+        heads = self.model.cfg.n_heads
+
+        for i in range(len(batch["sentence"])):
+            #print(f"Processing element {i}")
+            #batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+            sent = batch["sentence"][i]
+            #tokenized_sent = batch["tokenized"][i]
+            #tags = batch["tags"][i]
+            idiom_pos = batch["idiom_pos"][i]
+            cache = self.get_cache(sent)
+            activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
+            n_idiom = idiom_pos[1] - idiom_pos[0] + 1
+            #idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1, device=self.device)
+            #sent_positions = t.arange(activation_matrix.size(-1)).to(self.device)
+
+            # q idiom
+
+            q_idiom = activation_matrix[:, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
+            k_idiom = activation_matrix[:, :, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
+            batch_scores[i] = t.mean(t.cat((q_idiom, k_idiom), dim = -1), dim = -1)
+            #idiom_attention = self.extract_tensor(activation_matrix, self.get_idiom_combinations(idiom_positions, sent_positions))
+        #batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
+
+        if self.scores != None:
+            self.scores = t.cat((self.scores, batch_scores), dim = 0) # TODO: check if correct
+        else:
+            self.scores = batch_scores  
+
+        t.save(self.scores, ckp_file)
+
     def create_component_table(self):
         '''
         This method creates a dataframe containing the score components
@@ -437,13 +486,15 @@ if __name__ == "__main__":
     epie = EPIE_Data()
     scorer = IdiomScorer(model)
 
-    formal_data = epie.create_hf_dataset(epie.trans_formal_sents[4:10], epie.tokenized_trans_formal_sents[4:10], epie.tags_formal[4:10])
+    data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
+    # data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched = True)
+    # scorer.store_all_idiom_pos("formal")
     # formal_scores = scorer.create_data_score_tensor(formal_data)
 
-    for i in range(len(formal_data)):
-        model_str_tokens = model.to_str_tokens(formal_data["sentence"][i])
-        aligned_positions = scorer.align_tokens(formal_data["sentence"][i], formal_data["tokenized"][i], model_str_tokens)
-        idiom_pos = scorer.get_idiom_pos(aligned_positions, formal_data["tags"][i])
+    # for i in range(len(formal_data)):
+    #     model_str_tokens = model.to_str_tokens(formal_data["sentence"][i])
+    #     aligned_positions = scorer.align_tokens(formal_data["sentence"][i], formal_data["tokenized"][i], model_str_tokens)
+    #     idiom_pos = scorer.get_idiom_pos(aligned_positions, formal_data["tags"][i])
 
     # loaded_scores = t.load("./scores/test_formal.pt", weights_only = False).to(scorer.device)
     # #assert(len(loaded_scores) == len(formal_data))  

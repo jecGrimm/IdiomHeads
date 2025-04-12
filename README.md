@@ -78,6 +78,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - static scores
 - literal scores
 - trans scores: momentan nur für idiom_pos, sollte aber eigl die gesamte Idiomübersetzung verwenden
+- idiom positions in data class verschieben
 
 
 ## Usage
@@ -115,11 +116,26 @@ ssh grimmj@remote.cip.ifi.lmu.de
 sbatch --partition=NvidiaAll ./scripts/detect_formal.sh
 sbatch --partition=NvidiaAll ./scripts/detect_small.sh
 sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
-sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
+sbatch --partition=NvidiaAll ./scripts/literal_formal.sh
+sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 
 See jobs: sacct
 Cancel jobs: scancel <jobnumber>
 
+## Zeiten
+pythia 14m 
+- formal 
+    - idiom 
+        - b 3: 42,78s/ex
+    - mean
+        - b3: 4,55s/ex
+- trans idiom
+    - b 8: 623 s
 
+pythia 1.4b
+- formal literal
+    - b 3: cuda oom 
+- trans literal
+    - b 8: cuda oom

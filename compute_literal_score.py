@@ -46,6 +46,8 @@ for i in range(len(data_split)):
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
+    data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
+    
     if batch_sizes[i] == None:
         batch_size = 8
     else:
