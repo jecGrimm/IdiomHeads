@@ -144,6 +144,7 @@ pythia 1.4b
     - mean
         - b3: cuda oom
         - b1: cudo oom
+        - b1, GPU: 5s/ex-29s/ex (extract tensor per attention pattern)
 - trans literal
     - b 8: cuda oom
 
