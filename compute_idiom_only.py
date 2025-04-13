@@ -6,7 +6,6 @@ from idiom_score import IdiomScorer
 import os
 import torch as t
 import argparse
-from transformers import BitsAndBytesConfig
 
 parser = argparse.ArgumentParser(prog='idiom head detector')
 parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-1.4b")
@@ -33,11 +32,7 @@ if not os.path.isdir("./components/idiom_components"):
 if not os.path.isdir(f"./components/idiom_components/{model_name.split('/')[-1]}"):
     os.mkdir(f"./components/idiom_components/{model_name.split('/')[-1]}")
 
-if t.cuda.is_available():
-    quantization_config = BitsAndBytesConfig(load_in_4bit=True)
-    model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="float16", device_map="auto", quantization_config=quantization_config)
-else:
-    model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
+model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
 
 model.eval()
 epie = EPIE_Data()

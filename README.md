@@ -121,6 +121,7 @@ sbatch --partition=NvidiaAll ./scripts/literal_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
+sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

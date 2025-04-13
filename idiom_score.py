@@ -44,9 +44,6 @@ class IdiomScorer:
 
     def create_idiom_features(self, sent, idiom_pos):
         cache = self.get_cache(sent)
-        num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
-
-        model_str_tokens= self.model.to_str_tokens(sent)
 
         layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
         #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
