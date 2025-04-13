@@ -132,7 +132,7 @@ pythia 14m
         - b 3: 42,78s/ex
     - mean
         - b3: 4,55s/ex
-        - b1, GPU: 12s/ex
+        - b1, GPU: 12s/ex, 1.2s/ex (extract tensor per attention pattern)
         - b1: 4.04s/ex
 - trans idiom
     - b 8: 1721 s/ex
