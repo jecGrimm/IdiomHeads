@@ -39,10 +39,31 @@ class IdiomScorer:
 
     def get_cache(self, sent):
         idiom_tokens = self.model.to_tokens(sent)
-        logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
+        _, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
         return cache.to(self.device)
 
-    def create_feature_tensor(self, sent, tokenized_sent, tags, idiom_pos):
+    def create_idiom_features(self, sent, idiom_pos):
+        cache = self.get_cache(sent)
+        num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
+
+        model_str_tokens= self.model.to_str_tokens(sent)
+
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
+        #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
+        for layer in range(self.model.cfg.n_layers):
+            for head in range(self.model.cfg.n_heads):
+                attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
+                layer_head_features[layer][head] = self.compute_components(attention_pattern, idiom_pos)
+
+                del attention_pattern
+                t.cuda.empty_cache()
+        
+        del cache
+        t.cuda.empty_cache()
+
+        return layer_head_features
+
+    def create_feature_tensor(self, sent, idiom_pos):
         cache = self.get_cache(sent)
         num_idioms = idiom_pos[-1] - idiom_pos[0] + 1
 
@@ -55,23 +76,32 @@ class IdiomScorer:
             for head in range(self.model.cfg.n_heads):
                 attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
                 idiom_features = self.compute_components(attention_pattern, idiom_pos)
-                ngram_features = self.compute_ngram_features(attention_pattern, ngram_positions, idiom_pos, idiom_features)
+                ngram_features = self.compute_ngram_features(attention_pattern, ngram_positions, idiom_features)
 
                 layer_head_features[layer][head] = t.hstack((idiom_features, ngram_features))
 
+                del attention_pattern
+                del idiom_features
+                del ngram_features
+                t.cuda.empty_cache()
+        
+        del cache
+        t.cuda.empty_cache()
+
         return layer_head_features
     
-    def create_score_tensor(self, sent, tokenized_sent, tags):
-        feature_tensor = self.create_feature_tensor(sent, tokenized_sent, tags)
+    def create_score_tensor(self, sent, idiom_pos):
+        """ @deprecated, can use feature_tensor imidiately
+        """
+        feature_tensor = self.create_feature_tensor(sent, idiom_pos)
 
         return t.sigmoid(t.sum(feature_tensor, dim = -1))
     
-    def create_data_score_tensor(self, batch, ckp_file):
-        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device)
+    def create_idiom_score_tensor(self, batch, ckp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
-            #print(f"Processing element {i}")
-            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i], batch["idiom_pos"][i])
+            batch_scores[i] = self.create_idiom_features(batch["sentence"][i], batch["idiom_pos"][i])
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
@@ -79,7 +109,27 @@ class IdiomScorer:
         else:
             self.scores = batch_scores  
 
-        t.save(self.scores, ckp_file)      
+        del batch_scores
+        t.cuda.empty_cache()
+
+        t.save(self.scores, ckp_file)    
+
+    def create_data_score_tensor(self, batch, ckp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device)
+
+        for i in range(len(batch["sentence"])):
+            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["idiom_pos"][i])
+        batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
+
+        if self.scores != None:
+            self.scores = t.cat((self.scores, batch_scores), dim = 0)
+        else:
+            self.scores = batch_scores  
+
+        del batch_scores
+        t.cuda.empty_cache()
+
+        t.save(self.scores, ckp_file)    
 
     def get_ngram_positions(self, num_idioms, tokenized_sent, aligned_positions, idiom_pos):
         """
@@ -92,7 +142,7 @@ class IdiomScorer:
         return ngram_positions
 
 
-    def compute_ngram_features(self, attention_pattern, ngram_positions, idiom_pos, idiom_features):
+    def compute_ngram_features(self, attention_pattern, ngram_positions, idiom_features):
         ngram_features = t.zeros(idiom_features.size(0), dtype=t.float16, device=self.device)
         #for ngram_pos, ngram in ngram_positions.items():
         for ngram_pos in ngram_positions:
@@ -279,6 +329,10 @@ class IdiomScorer:
         idiom_attention = self.extract_tensor(attention_pattern, self.get_idiom_combinations(idiom_positions, sent_positions))
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
+
+        del idiom_positions
+        del sent_positions
+        t.cuda.empty_cache()
 
         return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase), dtype=t.float16, device = self.device)
 

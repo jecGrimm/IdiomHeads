@@ -5,7 +5,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - Formal scores
    - full lrz
-        - push remote scores
+    - pip install bitsandbytes accelerate
+    - flash attention 2 : pip install flash-attn, set cuda home variable (https://huggingface.co/docs/transformers/perf_infer_gpu_one?bnb=4-bit#bitsandbytes)
 - translated scores
     - full lrz: 
         - push remote scores
@@ -119,6 +120,7 @@ sbatch --partition=NvidiaAll ./scripts/compute_trans.sh
 sbatch --partition=NvidiaAll ./scripts/literal_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
+sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 
@@ -130,10 +132,13 @@ pythia 14m
 - formal 
     - idiom 
         - b 3: 42,78s/ex
+        - b 1: 2.86 - 43,53s/ex (delete tensors), 3.89 - 132.81 (load model with float16)
     - mean
         - b3: 4,55s/ex
         - b1, GPU: 12s/ex, 1.2s/ex (extract tensor per attention pattern)
-        - b1: 4.04s/ex
+        - b1: 4.04s/ex, 2.72s/ex (del tensors, load model as float 16)
+    - idiom feats
+        - b1: 1.08s/ex, 1,57s/ex (load model with float16)
 - trans idiom
     - b 8: 1721 s/ex
 
@@ -144,7 +149,7 @@ pythia 1.4b
     - mean
         - b3: cuda oom
         - b1: cudo oom
-        - b1, GPU: 5s/ex-29s/ex (extract tensor per attention pattern)
+        - b1, GPU: 5s/ex-41s/ex (extract tensor per attention pattern)
 - trans literal
     - b 8: cuda oom
 
