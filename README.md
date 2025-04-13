@@ -138,7 +138,7 @@ pythia 14m
         - b3: 4,55s/ex
         - b1, GPU: 12s/ex, 1.2s/ex (extract tensor per attention pattern)
         - b1: 4.04s/ex, 2.72s/ex (del tensors, load model as float 16)
-    - idiom feats
+    - idiom only
         - b1: 1.08s/ex, 1,57s/ex (load model with float16)
 - trans idiom
     - b 8: 1721 s/ex
@@ -151,6 +151,8 @@ pythia 1.4b
         - b3: cuda oom
         - b1: cudo oom
         - b1, GPU: 5s/ex-41s/ex (extract tensor per attention pattern)
+    - idiom only
+        - b1: 1.21s/ex (load model with float16)
 - trans literal
     - b 8: cuda oom
 
