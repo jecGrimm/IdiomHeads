@@ -283,7 +283,7 @@ class IdiomScorer:
         return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase), dtype=t.float16, device = self.device)
 
     def compute_mean_batched(self, batch, ckp_file):
-        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, dtype=t.float16, device = self.device)
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 2, dtype=t.float16, device = self.device)
 
         layers = self.model.cfg.n_layers
         heads = self.model.cfg.n_heads
@@ -292,18 +292,27 @@ class IdiomScorer:
             sent = batch["sentence"][i]
 
             idiom_pos = batch["idiom_pos"][i]
-            cache = self.get_cache(sent)
-            activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
-            n_idiom = idiom_pos[1] - idiom_pos[0] + 1
+            idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1, device=self.device)
 
-            q_idiom = activation_matrix[:, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
-            k_idiom = activation_matrix[:, :, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
-            batch_scores[i] = t.mean(t.cat((q_idiom, k_idiom), dim = -1), dim = -1)
-            #idiom_attention = self.extract_tensor(activation_matrix, self.get_idiom_combinations(idiom_positions, sent_positions))
+            cache = self.get_cache(sent)
+            #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
+            for layer in range(layers):
+                for head in range(heads):
+                    attention_pattern = cache["pattern", layer][head]
+                    sent_positions = t.arange(attention_pattern.size(-1)).to(self.device)
+                    idiom_tensor = self.extract_tensor(attention_pattern, self.get_idiom_combinations(idiom_positions, sent_positions))
+                    batch_scores[i][layer][head] = t.tensor((t.mean(idiom_tensor), -t.std(idiom_tensor)), dtype=t.float16, device=self.device)
+
+            # n_idiom = idiom_pos[1] - idiom_pos[0] + 1
+
+            # q_idiom = activation_matrix[:, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
+            # k_idiom = activation_matrix[:, :, :, idiom_pos[0]:idiom_pos[1]+1].reshape(layers, heads, n_idiom * activation_matrix.size(2))
+            # batch_scores[i] = t.mean(t.cat((q_idiom, k_idiom), dim = -1), dim = -1)
+            # idiom_attention = self.extract_tensor(activation_matrix, self.get_idiom_combinations(idiom_positions, sent_positions))
         #batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
-            self.scores = t.cat((self.scores, batch_scores), dim = 0) # TODO: check if correct
+            self.scores = t.cat((self.scores, batch_scores), dim = 0)
         else:
             self.scores = batch_scores  
 
