@@ -8,35 +8,42 @@ from transformer_lens import (
     HookedTransformer,
 )
 from merge_tokenizers import PythonGreedyCoverageAligner, types
+import os
 
 class LiteralScorer:
-    def __init__(self, model):
+    def __init__(self, model, split: str = "formal"):
         self.model = model
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.scores = None
+        self.idiom_positions = self.load_all_idiom_pos(split)
+
+    def load_all_idiom_pos(self, split):
+        if os.path.isfile(f"{split}_idiom_pos.json"):
+            with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+                return json.load(f) 
+        else:
+            return [] 
 
     def create_data_score_tensor(self, batch, ckp_file):
         batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
-            #print(f"Processing element {i}")
-            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+            batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["idiom_pos"][i])
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
             self.scores = t.cat((self.scores, batch_scores), dim = 0)
         else:
             self.scores = batch_scores  
+        
+        del batch_scores
+        t.cuda.empty_cache()
 
         t.save(self.scores, ckp_file)  
 
-    def create_feature_tensor(self, sent, tokenized_sent, tags):
+    def create_feature_tensor(self, sent, idiom_pos):
         cache = self.get_cache(sent)
-
-        model_str_tokens= self.model.to_str_tokens(sent)
-        aligned_positions = self.align_tokens(sent, tokenized_sent, model_str_tokens)
-        idiom_pos = self.get_idiom_pos(aligned_positions, tags)
 
         layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device) # 4 features (4 idiom feats)
         for layer in range(self.model.cfg.n_layers):
@@ -44,11 +51,17 @@ class LiteralScorer:
                 attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
                 layer_head_features[layer][head] = self.compute_components(attention_pattern, idiom_pos)
 
+                del attention_pattern
+                t.cuda.empty_cache()
+
+        del cache
+        t.cuda.empty_cache()
+
         return layer_head_features
     
     def get_cache(self, sent):
         token_ids = self.model.to_tokens(sent)
-        logits, cache = self.model.run_with_cache(token_ids, remove_batch_dim=True)
+        _, cache = self.model.run_with_cache(token_ids, remove_batch_dim=True)
         return cache.to(self.device)
     
     def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):
@@ -87,6 +100,10 @@ class LiteralScorer:
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
 
+        del idiom_positions
+        del sent_positions
+        t.cuda.empty_cache()
+
         return t.tensor((t.mean(literal_attention), -t.std(literal_attention), max_tok, phrase), dtype=t.float16, device = self.device)
     
     def get_literal_combinations(self, idiom_positions, sent_positions):
@@ -122,6 +139,10 @@ class LiteralScorer:
         literal_argmax_q = t.cat((t.argmax(attention_pattern, dim = 0)[:9], t.argmax(attention_pattern, dim = 1)[13:]))
         q2k = self.max_idiom_toks(literal_argmax_k.tolist(), idiom_pos)
         k2q = self.max_idiom_toks(literal_argmax_q.tolist(), idiom_pos)
+
+        del literal_argmax_k
+        del literal_argmax_q
+        t.cuda.empty_cache()
 
         return (q2k + k2q)/2
     
@@ -180,6 +201,12 @@ class LiteralScorer:
                     if max_index < idiom_pos[0] or max_index > idiom_pos[1]:
                         literal_fraction += 1
                 literal_fractions.append(literal_fraction / len(max_indices))
+            
+            del max_indices
+            t.cuda.empty_cache()
+
+        del sorted_tensor
+        t.cuda.empty_cache()
 
         if len(literal_fractions) != 0:
             return sum(literal_fractions)/len(literal_fractions)

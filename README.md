@@ -3,6 +3,15 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 1. Head detection
+- literal score
+    - formal score
+        - full
+    - trans score
+        - test 
+        - full
+    - plot scatter to see correlation
+        - test
+        - full
 - plots: 
     - line
         - 1.4b
@@ -16,15 +25,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - 1.4b
             - formal literal
             - trans literal
-- literal score
-    - formal score
-        - full
-    - trans score
-        - test 
-        - full
-    - plot scatter to see correlation
-        - test
-        - full
 2. Logit attribution
 3. Ablation
     - loss
@@ -50,6 +50,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Wichtige Plots in main Funktion aufrufen
 - literal score relativieren mit idiom score?
 - idiom score mit generellem ngram-Score relativieren oder den einzelnen Features?
+- literal und idiom score methoden gleich benennen
+- score überklasse
 
 ### Optional
 - Scatter Plot feature vectors
@@ -123,6 +125,8 @@ pythia 14m
         - b1: 4.04s/ex, 2.72s/ex (del tensors, load model as float 16)
     - idiom only
         - b1: 1.08s/ex, 1,57s/ex (load model with float16)
+    - literal only
+        - b1: 2.88a/ex (load model with bfloat16, delete cache)
 - trans idiom
     - b 8: 1721 s/ex
 
