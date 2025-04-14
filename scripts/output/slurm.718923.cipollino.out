@@ -1,0 +1,28 @@
+slurmstepd-cipollino: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-cipollino: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/importlib/metadata/__init__.py", line 397, in from_name
+    return next(cls.discover(name=name))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_only.py", line 37, in <module>
+    quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/utils/quantization_config.py", line 400, in __init__
+    self.post_init()
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/utils/quantization_config.py", line 458, in post_init
+    if self.load_in_4bit and not version.parse(importlib.metadata.version("bitsandbytes")) >= version.parse(
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/importlib/metadata/__init__.py", line 889, in version
+    return distribution(distribution_name).version
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/importlib/metadata/__init__.py", line 862, in distribution
+    return Distribution.from_name(distribution_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/importlib/metadata/__init__.py", line 399, in from_name
+    raise PackageNotFoundError(name)
+importlib.metadata.PackageNotFoundError: No package metadata was found for bitsandbytes

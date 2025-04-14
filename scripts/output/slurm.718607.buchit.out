@@ -1,0 +1,173 @@
+slurmstepd-buchit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-buchit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device: cuda
+Processing element 0
+Processing element 1
+Processing element 2
+Processing element 3
+Processing element 4
+Processing element 5
+Processing element 6
+Processing element 7
+Processing element 8
+Processing element 9
+Processing element 10
+Processing element 11
+Processing element 12
+Processing element 13
+Processing element 14
+Processing element 15
+Processing element 16
+Processing element 17
+Processing element 18
+Processing element 19
+Processing element 20
+Processing element 21
+Processing element 22
+Processing element 23
+Processing element 24
+Processing element 25
+Processing element 26
+Processing element 27
+Processing element 28
+Processing element 29
+Processing element 30
+Processing element 31
+Processing element 32
+Processing element 33
+Processing element 34
+Processing element 35
+Processing element 36
+Processing element 37
+Processing element 38
+Processing element 39
+Processing element 40
+Processing element 41
+Processing element 42
+Processing element 43
+Processing element 44
+Processing element 45
+Processing element 46
+Processing element 47
+Processing element 48
+Processing element 49
+Processing element 50
+Processing element 51
+Processing element 52
+Processing element 53
+Processing element 54
+Processing element 55
+Processing element 56
+Processing element 57
+Processing element 58
+Processing element 59
+Processing element 60
+Processing element 61
+Processing element 62
+Processing element 63
+Processing element 64
+Processing element 65
+Processing element 66
+Processing element 67
+Processing element 68
+Processing element 69
+Processing element 70
+Processing element 71
+Processing element 72
+Processing element 73
+Processing element 74
+Processing element 75
+Processing element 76
+Processing element 77
+Processing element 78
+Processing element 79
+Processing element 80
+Processing element 81
+Processing element 82
+Processing element 83
+Processing element 84
+Processing element 85
+Processing element 86
+Processing element 87
+Processing element 88
+Processing element 89
+Processing element 90
+Processing element 91
+Processing element 92
+Processing element 93
+Processing element 94
+Processing element 95
+Processing element 96
+Processing element 97
+Processing element 98
+Processing element 99
+Processing element 100
+Processing element 101
+Processing element 102
+Processing element 103
+Processing element 104
+Processing element 105
+Processing element 106
+Processing element 107
+Processing element 108
+Processing element 109
+Processing element 110
+Processing element 111
+Processing element 112
+Processing element 113
+Processing element 114
+Processing element 115
+Processing element 116
+Processing element 117
+Processing element 118
+Processing element 119
+Processing element 120
+Processing element 121
+Processing element 122
+Processing element 123
+Processing element 124
+Processing element 125
+Processing element 126
+Processing element 127
+Processing element 128
+Processing element 129
+Processing element 130
+Processing element 131
+Processing element 132
+Processing element 133
+Processing element 134
+Processing element 135
+Processing element 136
+Processing element 137
+Processing element 138
+Processing element 139
+Processing element 140
+Processing element 141
+Processing element 142
+Processing element 143
+Processing element 144
+Processing element 145
+Processing element 146
+Processing element 147
+Processing element 148
+Processing element 149
+Processing element 150
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/detect_idiom.py", line 23, in <module>
+    formal_scores = scorer.create_data_score_tensor(formal_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 59, in create_data_score_tensor
+    
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 49, in create_score_tensor
+    model_str_tokens= self.model.to_str_tokens(sent)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 42, in create_feature_tensor
+    logits, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 79, in compute_ngram_features
+    else:
+          
+RuntimeError: The size of tensor a (4) must match the size of tensor b (3) at non-singleton dimension 0

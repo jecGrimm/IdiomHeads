@@ -1,0 +1,11 @@
+slurmstepd-cipollino: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-cipollino: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device: cuda
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/detect_trans.py", line 22, in <module>
+    trans_data = epie.create_hf_dataset(epie.trans_sents, epie.tokenized_trans_sents, epie.tags_formal)
+                                        ^^^^^^^^^^^^^^^^
+AttributeError: 'EPIE_Data' object has no attribute 'trans_sents'

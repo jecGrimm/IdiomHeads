@@ -1,0 +1,23 @@
+slurmstepd-basalt: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-basalt: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device: cuda
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/detect_idiom.py", line 23, in <module>
+    formal_scores = scorer.create_data_score_tensor(formal_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 58, in create_data_score_tensor
+    data_scores_tensor[i] = self.create_score_tensor(elem["sentence"], elem["tokenized"], elem["tags"])
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 49, in create_score_tensor
+    feature_tensor = self.create_feature_tensor(sent, tokenized_sent, tags)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 29, in create_feature_tensor
+    idiom_pos = self.get_idiom_pos(aligned_positions, tags)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/idiom_score.py", line 91, in get_idiom_pos
+    assert(start and end)
+           ^^^^^^^^^^^^^
+AssertionError

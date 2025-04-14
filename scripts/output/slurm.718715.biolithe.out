@@ -1,0 +1,75 @@
+slurmstepd-biolithe: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-biolithe: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device cuda.
+Map:   0%|          | 0/2761 [00:00<?, ? examples/s]Map:   0%|          | 8/2761 [04:23<25:13:32, 32.99s/ examples]Map:   1%|          | 16/2761 [12:23<37:13:48, 48.83s/ examples]Map:   1%|          | 24/2761 [18:53<37:07:44, 48.84s/ examples]Map:   1%|          | 32/2761 [23:13<32:06:18, 42.35s/ examples]Map:   1%|▏         | 40/2761 [26:56<28:05:04, 37.16s/ examples]Map:   2%|▏         | 48/2761 [32:01<28:14:02, 37.46s/ examples]Map:   2%|▏         | 56/2761 [35:27<25:15:48, 33.62s/ examples]Map:   2%|▏         | 64/2761 [38:51<23:16:48, 31.07s/ examples]Map:   3%|▎         | 72/2761 [45:23<27:22:09, 36.64s/ examples]Map:   3%|▎         | 80/2761 [48:27<24:09:18, 32.44s/ examples]Map:   3%|▎         | 88/2761 [53:38<25:32:51, 34.41s/ examples]Map:   3%|▎         | 96/2761 [59:54<28:19:17, 38.26s/ examples]Map:   4%|▍         | 104/2761 [1:14:21<43:55:07, 59.51s/ examples]Map:   4%|▍         | 112/2761 [1:21:43<42:49:42, 58.20s/ examples]Map:   4%|▍         | 120/2761 [1:29:34<42:51:37, 58.42s/ examples]Map:   5%|▍         | 128/2761 [1:35:58<40:25:34, 55.27s/ examples]Map:   5%|▍         | 136/2761 [1:58:48<65:44:15, 90.15s/ examples]Map:   5%|▌         | 144/2761 [2:03:39<53:46:21, 73.97s/ examples]Map:   6%|▌         | 152/2761 [2:09:02<46:17:30, 63.88s/ examples]/home/g/grimmj/IdiomHeads/literal_score.py:90: UserWarning: std(): degrees of freedom is <= 0. Correction should be strictly less than the reduction factor (input numel divided by output numel). (Triggered internally at /opt/conda/conda-bld/pytorch_1729647378361/work/aten/src/ATen/native/ReduceOps.cpp:1823.)
+  return t.tensor((t.mean(literal_attention), -t.std(literal_attention), max_tok, phrase), dtype=t.float16, device = self.device)
+Map:   6%|▌         | 160/2761 [2:14:08<40:36:35, 56.21s/ examples]Map:   6%|▌         | 168/2761 [2:17:48<34:15:34, 47.56s/ examples]Map:   6%|▋         | 176/2761 [2:20:45<28:41:48, 39.96s/ examples]Map:   7%|▋         | 184/2761 [2:22:58<23:34:55, 32.94s/ examples]Map:   7%|▋         | 192/2761 [2:33:36<33:31:14, 46.97s/ examples]Map:   7%|▋         | 200/2761 [2:41:17<35:41:54, 50.18s/ examples]Map:   8%|▊         | 208/2761 [2:48:05<35:45:37, 50.43s/ examples]Map:   8%|▊         | 216/2761 [2:54:30<35:09:10, 49.73s/ examples]Map:   8%|▊         | 224/2761 [2:57:42<29:37:02, 42.03s/ examples]Map:   8%|▊         | 232/2761 [3:08:23<37:32:27, 53.44s/ examples]Map:   9%|▊         | 240/2761 [3:13:36<34:26:08, 49.17s/ examples]Map:   9%|▉         | 248/2761 [3:18:16<31:20:49, 44.91s/ examples]Map:   9%|▉         | 256/2761 [3:26:01<33:59:40, 48.85s/ examples]Map:  10%|▉         | 264/2761 [3:29:22<28:56:57, 41.74s/ examples]Map:  10%|▉         | 272/2761 [3:34:25<28:03:53, 40.59s/ examples]Map:  10%|█         | 280/2761 [3:42:49<32:36:35, 47.32s/ examples]Map:  10%|█         | 288/2761 [3:44:40<25:37:00, 37.29s/ examples]Map:  11%|█         | 296/2761 [3:48:27<23:41:18, 34.60s/ examples]Map:  11%|█         | 304/2761 [3:51:32<21:16:03, 31.16s/ examples]Map:  11%|█▏        | 312/2761 [4:03:59<33:53:44, 49.83s/ examples]Map:  12%|█▏        | 320/2761 [4:12:22<36:27:02, 53.76s/ examples]Map:  12%|█▏        | 328/2761 [4:13:55<27:46:43, 41.10s/ examples]Map:  12%|█▏        | 336/2761 [4:24:07<34:50:38, 51.73s/ examples]Map:  12%|█▏        | 344/2761 [4:28:22<30:44:20, 45.78s/ examples]Map:  13%|█▎        | 352/2761 [4:39:59<38:55:29, 58.17s/ examples]Map:  13%|█▎        | 360/2761 [4:45:00<34:40:27, 51.99s/ examples]Map:  13%|█▎        | 368/2761 [4:51:45<34:18:37, 51.62s/ examples]Map:  14%|█▎        | 376/2761 [4:54:27<27:56:19, 42.17s/ examples]Map:  14%|█▍        | 384/2761 [5:03:58<33:39:01, 50.96s/ examples]Map:  14%|█▍        | 392/2761 [5:10:07<32:34:07, 49.49s/ examples]Map:  14%|█▍        | 400/2761 [5:13:56<28:20:59, 43.23s/ examples]Map:  15%|█▍        | 408/2761 [5:25:27<36:43:24, 56.19s/ examples]Map:  15%|█▌        | 416/2761 [5:31:19<34:13:07, 52.53s/ examples]Map:  15%|█▌        | 424/2761 [5:36:34<31:31:59, 48.57s/ examples]Map:  16%|█▌        | 432/2761 [5:39:20<26:00:56, 40.21s/ examples]Map:  16%|█▌        | 440/2761 [5:42:28<22:41:57, 35.21s/ examples]Map:  16%|█▌        | 448/2761 [5:56:46<36:31:15, 56.84s/ examples]Map:  17%|█▋        | 456/2761 [5:59:37<29:34:06, 46.18s/ examples]Map:  17%|█▋        | 464/2761 [6:05:46<29:27:03, 46.16s/ examples]Map:  17%|█▋        | 472/2761 [6:10:32<27:21:47, 43.04s/ examples]Map:  17%|█▋        | 480/2761 [6:13:12<22:53:47, 36.14s/ examples]Map:  18%|█▊        | 488/2761 [6:23:03<29:58:11, 47.47s/ examples]Map:  18%|█▊        | 496/2761 [6:34:38<37:17:56, 59.28s/ examples]Map:  18%|█▊        | 504/2761 [6:39:50<33:20:53, 53.19s/ examples]Map:  19%|█▊        | 512/2761 [6:44:58<30:29:16, 48.80s/ examples]Map:  19%|█▉        | 520/2761 [6:46:54<23:58:14, 38.51s/ examples]Map:  19%|█▉        | 528/2761 [6:52:50<24:59:48, 40.30s/ examples]Map:  19%|█▉        | 536/2761 [7:00:37<28:16:08, 45.74s/ examples]Map:  20%|█▉        | 544/2761 [7:06:25<27:44:58, 45.06s/ examples]Map:  20%|█▉        | 552/2761 [7:10:55<25:33:27, 41.65s/ examples]Map:  20%|██        | 560/2761 [7:15:51<24:37:28, 40.28s/ examples]Map:  21%|██        | 568/2761 [7:22:30<26:16:46, 43.14s/ examples]Map:  21%|██        | 576/2761 [7:24:28<21:01:22, 34.64s/ examples]Map:  21%|██        | 584/2761 [7:26:26<17:19:37, 28.65s/ examples]Map:  21%|██▏       | 592/2761 [7:31:40<19:10:47, 31.83s/ examples]Map:  22%|██▏       | 600/2761 [7:36:52<20:23:56, 33.98s/ examples]Map:  22%|██▏       | 608/2761 [7:45:53<26:21:39, 44.08s/ examples]Map:  22%|██▏       | 616/2761 [7:54:57<30:31:54, 51.24s/ examples]Map:  23%|██▎       | 624/2761 [8:01:07<29:32:25, 49.76s/ examples]Map:  23%|██▎       | 632/2761 [8:05:44<26:44:37, 45.22s/ examples]Map:  23%|██▎       | 640/2761 [8:14:13<29:54:10, 50.75s/ examples]Map:  23%|██▎       | 648/2761 [8:26:49<37:28:30, 63.85s/ examples]Map:  24%|██▍       | 656/2761 [8:34:59<36:52:36, 63.07s/ examples]Map:  24%|██▍       | 664/2761 [8:40:52<33:26:41, 57.42s/ examples]Map:  24%|██▍       | 672/2761 [8:47:15<31:38:14, 54.52s/ examples]Map:  25%|██▍       | 680/2761 [8:48:26<23:36:58, 40.85s/ examples]Map:  25%|██▍       | 680/2761 [8:49:37<27:00:49, 46.73s/ examples]
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_literal_score.py", line 55, in <module>
+    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3079, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3519, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3469, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3392, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/compute_literal_score.py", line 55, in <lambda>
+    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 24, in create_data_score_tensor
+    batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 35, in create_feature_tensor
+    cache = self.get_cache(sent)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 51, in get_cache
+    logits, cache = self.model.run_with_cache(token_ids, remove_batch_dim=True)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 694, in run_with_cache
+    out, cache_dict = super().run_with_cache(
+                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/hook_points.py", line 569, in run_with_cache
+    model_out = self(*model_args, **model_kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 612, in forward
+    residual = block(
+               ^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/components/transformer_block.py", line 160, in forward
+    self.attn(
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/components/abstract_attention.py", line 207, in forward
+    q = self.hook_rot_q(self.apply_rotary(q, kv_cache_pos_offset, attention_mask))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/components/abstract_attention.py", line 585, in apply_rotary
+    return torch.cat([x_rotated, x_pass], dim=-1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 7.75 GiB of which 4.19 MiB is free. Including non-PyTorch memory, this process has 7.57 GiB memory in use. Of the allocated memory 7.43 GiB is allocated by PyTorch, and 31.07 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

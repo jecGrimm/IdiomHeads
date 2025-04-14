@@ -1,0 +1,23 @@
+slurmstepd-cancalit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-cancalit: error: Setting TMPDIR to /tmp
+WARNING:root:float16 models may not work on CPU. Consider using a GPU or bfloat16.
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_only.py", line 38, in <module>
+    model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="float16", device_map="auto", quantization_config=quantization_config)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 1359, in from_pretrained
+    state_dict = loading.get_pretrained_state_dict(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/loading_from_pretrained.py", line 1856, in get_pretrained_state_dict
+    hf_model = AutoModelForCausalLM.from_pretrained(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4034, in from_pretrained
+    dispatch_model(model, **device_map_kwargs)
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/accelerate/big_modeling.py", line 499, in dispatch_model
+    model.to(device)
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/modeling_utils.py", line 2883, in to
+    raise ValueError(
+ValueError: `.to` is not supported for `4-bit` or `8-bit` bitsandbytes models. Please use the model as it is, since the model has already been set to the correct devices and casted to the correct `dtype`.

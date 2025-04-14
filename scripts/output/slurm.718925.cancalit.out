@@ -1,0 +1,8 @@
+slurmstepd-cancalit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-cancalit: error: Setting TMPDIR to /tmp
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/pythia-14m into HookedTransformer
+Running on device cuda.
+Map:   0%|          | 0/10 [00:00<?, ? examples/s]Map:  10%|█         | 1/10 [00:00<00:08,  1.10 examples/s]Map:  20%|██        | 2/10 [00:01<00:04,  1.91 examples/s]Map:  30%|███       | 3/10 [00:01<00:02,  2.66 examples/s]Map:  40%|████      | 4/10 [00:05<00:10,  1.71s/ examples]Map:  50%|█████     | 5/10 [00:06<00:07,  1.46s/ examples]Map:  60%|██████    | 6/10 [00:06<00:04,  1.02s/ examples]Map:  70%|███████   | 7/10 [00:06<00:02,  1.19 examples/s]Map:  80%|████████  | 8/10 [00:07<00:01,  1.33 examples/s]Map:  90%|█████████ | 9/10 [00:07<00:00,  1.74 examples/s]Map: 100%|██████████| 10/10 [00:08<00:00,  1.58 examples/s]Map: 100%|██████████| 10/10 [00:08<00:00,  1.21 examples/s]
+The score of the first sentence for the layer 0 and head 0 is:
+0.6044921875

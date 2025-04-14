@@ -1,0 +1,7 @@
+slurmstepd-diamiktit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-diamiktit: error: Setting TMPDIR to /tmp
+Loaded pretrained model EleutherAI/pythia-14m into HookedTransformer
+Running on device cuda.
+Map:   0%|          | 0/10 [00:00<?, ? examples/s]Map:  10%|█         | 1/10 [00:00<00:07,  1.24 examples/s]Map:  20%|██        | 2/10 [00:00<00:03,  2.27 examples/s]Map:  30%|███       | 3/10 [00:01<00:02,  3.01 examples/s]Map:  40%|████      | 4/10 [00:04<00:09,  1.66s/ examples]Map:  50%|█████     | 5/10 [00:05<00:07,  1.42s/ examples]Map:  60%|██████    | 6/10 [00:06<00:03,  1.01 examples/s]Map:  70%|███████   | 7/10 [00:06<00:02,  1.23 examples/s]Map:  80%|████████  | 8/10 [00:07<00:01,  1.38 examples/s]Map:  90%|█████████ | 9/10 [00:07<00:00,  1.80 examples/s]Map: 100%|██████████| 10/10 [00:07<00:00,  1.64 examples/s]Map: 100%|██████████| 10/10 [00:07<00:00,  1.26 examples/s]
+The score of the first sentence for the layer 0 and head 0 is:
+tensor([ 0.0909, -0.1592], device='cuda:0', dtype=torch.float16)

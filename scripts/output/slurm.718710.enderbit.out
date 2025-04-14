@@ -1,0 +1,6 @@
+slurmstepd-enderbit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-enderbit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_score.py", line 1, in <module>
+    from transformer_lens import (
+ModuleNotFoundError: No module named 'transformer_lens'

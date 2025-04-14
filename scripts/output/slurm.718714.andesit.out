@@ -1,0 +1,70 @@
+slurmstepd-andesit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-andesit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device cuda.
+Map:   0%|          | 0/2761 [00:00<?, ? examples/s]Map:   0%|          | 3/2761 [00:22<5:49:48,  7.61s/ examples]Map:   0%|          | 6/2761 [04:00<35:05:21, 45.85s/ examples]Map:   0%|          | 9/2761 [04:50<24:52:36, 32.54s/ examples]Map:   0%|          | 12/2761 [09:56<45:47:59, 59.98s/ examples]Map:   1%|          | 15/2761 [11:21<37:01:25, 48.54s/ examples]Map:   1%|          | 18/2761 [17:35<56:41:40, 74.41s/ examples]Map:   1%|          | 21/2761 [18:04<40:33:09, 53.28s/ examples]Map:   1%|          | 24/2761 [19:35<34:56:23, 45.96s/ examples]Map:   1%|          | 27/2761 [20:47<29:39:08, 39.04s/ examples]Map:   1%|          | 30/2761 [23:44<34:16:51, 45.19s/ examples]Map:   1%|          | 33/2761 [24:12<25:58:18, 34.27s/ examples]Map:   1%|▏         | 36/2761 [25:16<22:59:13, 30.37s/ examples]Map:   1%|▏         | 39/2761 [25:36<17:29:21, 23.13s/ examples]Map:   2%|▏         | 42/2761 [30:07<32:50:32, 43.48s/ examples]Map:   2%|▏         | 45/2761 [32:24<33:16:17, 44.10s/ examples]Map:   2%|▏         | 48/2761 [33:15<27:04:23, 35.92s/ examples]Map:   2%|▏         | 51/2761 [36:17<32:39:47, 43.39s/ examples]Map:   2%|▏         | 54/2761 [36:29<23:43:24, 31.55s/ examples]Map:   2%|▏         | 57/2761 [37:17<20:12:59, 26.92s/ examples]Map:   2%|▏         | 60/2761 [39:51<25:38:49, 34.18s/ examples]Map:   2%|▏         | 63/2761 [40:41<21:40:06, 28.91s/ examples]Map:   2%|▏         | 66/2761 [42:54<25:09:50, 33.61s/ examples]Map:   2%|▏         | 69/2761 [43:32<20:23:08, 27.26s/ examples]Map:   3%|▎         | 72/2761 [47:54<33:49:25, 45.28s/ examples]Map:   3%|▎         | 75/2761 [49:10<29:20:35, 39.33s/ examples]Map:   3%|▎         | 78/2761 [50:26<26:11:40, 35.15s/ examples]Map:   3%|▎         | 81/2761 [51:07<21:19:02, 28.64s/ examples]Map:   3%|▎         | 84/2761 [52:49<22:29:21, 30.24s/ examples]Map:   3%|▎         | 87/2761 [55:10<26:13:11, 35.30s/ examples]Map:   3%|▎         | 90/2761 [55:51<21:25:11, 28.87s/ examples]Map:   3%|▎         | 93/2761 [58:25<26:20:11, 35.54s/ examples]Map:   3%|▎         | 96/2761 [1:01:33<32:21:19, 43.71s/ examples]Map:   3%|▎         | 96/2761 [1:01:34<28:29:08, 38.48s/ examples]
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_literal_score.py", line 55, in <module>
+    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3079, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3519, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3469, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3392, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/compute_literal_score.py", line 55, in <lambda>
+    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 24, in create_data_score_tensor
+    batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["tokenized"][i], batch["tags"][i])
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 35, in create_feature_tensor
+    cache = self.get_cache(sent)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/literal_score.py", line 51, in get_cache
+    logits, cache = self.model.run_with_cache(token_ids, remove_batch_dim=True)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 694, in run_with_cache
+    out, cache_dict = super().run_with_cache(
+                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/hook_points.py", line 569, in run_with_cache
+    model_out = self(*model_args, **model_kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 612, in forward
+    residual = block(
+               ^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/components/transformer_block.py", line 160, in forward
+    self.attn(
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/components/abstract_attention.py", line 289, in forward
+    z.reshape(z.shape[0], z.shape[1], self.cfg.d_head * self.cfg.n_heads),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.00 MiB. GPU 0 has a total capacity of 7.79 GiB of which 1.50 MiB is free. Process 994682 has 470.00 MiB memory in use. Including non-PyTorch memory, this process has 7.15 GiB memory in use. Of the allocated memory 7.03 GiB is allocated by PyTorch, and 9.36 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
