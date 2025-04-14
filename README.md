@@ -5,26 +5,17 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - literal score
     - formal score
+        - test gpu
         - full
     - trans score
-        - test 
+        - test gpu
         - full
     - plot scatter to see correlation
-        - test
         - full
 - plots: 
-    - line
-        - 1.4b
-            - formal literal
-            - trans literal
-    - heatmap
-        - 1.4b
-            - formal literal
-            - trans literal
-    - histogram
-        - 1.4b
-            - formal literal
-            - trans literal
+    - 1.4b
+        - formal literal
+        - trans literal
 2. Logit attribution
 3. Ablation
     - loss
@@ -65,6 +56,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - idiom positions in data class verschieben
 - line single plot: alle layer anzeigen
 - hist plot: alle Zahlen anzeigen
+- alle plots in plot all
+- Liegen die Scores wegen Sigmoid alle so bei 0.5?
 
 
 ## Usage
@@ -107,6 +100,7 @@ sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
+sbatch --partition=NvidiaAll ./scripts/literal_only.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 
