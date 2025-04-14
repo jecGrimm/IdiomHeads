@@ -3,36 +3,17 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 1. Head detection
-- Formal scores
-   - full lrz
-    - pip install bitsandbytes accelerate
-    - flash attention 2 : pip install flash-attn, set cuda home variable (https://huggingface.co/docs/transformers/perf_infer_gpu_one?bnb=4-bit#bitsandbytes)
-- translated scores
-    - full lrz: 
-        - push remote scores
 - plots: 
     - line
         - 1.4b
-            - formal idiom
-            - trans idiom
-            - formal literal
-            - trans literal
-    - boxplot
-        - 1.4b
-            - formal idiom
-            - trans idiom
             - formal literal
             - trans literal
     - heatmap
         - 1.4b
-            - formal idiom
-            - trans idiom
             - formal literal
             - trans literal
     - histogram
         - 1.4b
-            - formal idiom
-            - trans idiom
             - formal literal
             - trans literal
 - literal score
@@ -80,6 +61,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - literal scores
 - trans scores: momentan nur für idiom_pos, sollte aber eigl die gesamte Idiomübersetzung verwenden
 - idiom positions in data class verschieben
+- line single plot: alle layer anzeigen
+- hist plot: alle Zahlen anzeigen
 
 
 ## Usage
