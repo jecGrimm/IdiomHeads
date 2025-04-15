@@ -2,7 +2,6 @@ from IPython.display import display
 import circuitsvis as cv
 import pandas as pd
 import matplotlib.pyplot as plt
-import json
 import torch as t
 import plotly.express as px
 import argparse
@@ -48,7 +47,7 @@ def plot_box_per_head(tensor, filename = None):
 def plot_tensor_line(tensor, filename = None):
     mean_tensor = get_mean_sentence_tensor(tensor)
     df = create_df_from_tensor(mean_tensor)
-    df.plot.line(title="Average idiom score per head and layer", xlabel = "Layer", ylabel = "Mean idiom score", xticks = np.arange(mean_tensor.size(0)), colormap = "tab20")
+    df.plot.line(title="Average idiom score per head and layer", xlabel = "Layer", ylabel = "Mean idiom score", xticks = np.arange(mean_tensor.size(0)), yticks = np.arange(0.51, 0.62, 0.01), colormap = "tab20", figsize=(25, 25))
     plt.legend(title = "Head")
     save_plt(filename)
 
@@ -56,7 +55,7 @@ def plot_line_std(tensor, filename = None):
     std_tensor = t.std(tensor, dim=0)
     df = create_df_from_tensor(std_tensor)
     #print("std:", std_tensor.size())
-    df.plot.line(title="Standard deviation of the idiom score per head and layer", xlabel = "Layer", ylabel = "Standard deviation of the idiom score", xticks = np.arange(std_tensor.size(0)), colormap = "tab20")
+    df.plot.line(title="Standard deviation of the idiom score per head and layer", xlabel = "Layer", ylabel = "Standard deviation of the idiom score", xticks = np.arange(std_tensor.size(0)), colormap = "tab20", figsize=(25, 25))
     plt.legend(title = "Head")
     save_plt(filename)
 
@@ -64,7 +63,7 @@ def plot_tensor_hist(tensor, filename = None):
     mean_tensor = get_mean_sentence_tensor(tensor)
     len = mean_tensor.size(0) * mean_tensor.size(1)
     df = create_df_from_tensor(mean_tensor.view(len))
-    df.plot.hist(title="Distribution of the mean idiom scores", legend = False, xlabel="Mean idiom score")
+    df.plot.hist(title="Distribution of the mean idiom scores", legend = False, xlabel="Mean idiom score", yticks = range(0, 120, 10))
     
     save_plt(filename)
 
@@ -140,6 +139,7 @@ def explore_scores(tensor, filename = None, model_name = None):
     output = ""
     # MEAN
     mean_scores = get_lh_mean_scores(tensor)
+    output += f"\nAverage score: {t.mean(tensor)}"
     output += f"\nMaximum mean: {max(mean_scores, key=lambda k:mean_scores.get(k))} - {max(mean_scores.values())}"
     output += f"\nMinimum mean: {min(mean_scores, key=lambda k:mean_scores.get(k))} - {min(mean_scores.values())}"
 
@@ -210,20 +210,28 @@ def get_dist(score_list):
             head_count["fourth"] += 1
     return layer_count, head_count
 
+def get_head_info(layer_head, tensor):
+    mean_scores = get_lh_mean_scores(tensor)
+    ranked_mean = list(create_df_from_dict(mean_scores).sort_values(by="scores", ascending = False).index)
+    std_scores = get_lh_std_scores(tensor)
+
+    print(f"\nHead: {layer_head}\n\tScore: {mean_scores[layer_head]}\n\tStd: {std_scores[layer_head]}\n\tRank: {ranked_mean.index(layer_head)+1}")
+
+
 def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
     path = f"./plots/{model_name}"
     if filename and model_name:
-        # plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
-        # plot_line_std(tensor, f"{path}/std_line_{filename}.png")
+        plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
+        plot_line_std(tensor, f"{path}/std_line_{filename}.png")
         # plot_heatmap(tensor, f"{path}/heat_{filename}.png")
         # plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
-        explore_scores(tensor, filename, model_name)
+        # explore_scores(tensor, filename, model_name)
     else:
         plot_tensor_line(tensor)
-        plot_line_std(tensor)
-        plot_heatmap(tensor)
-        plot_tensor_hist(tensor)
-        explore_scores(tensor)
+        # plot_line_std(tensor)
+        # plot_heatmap(tensor)
+        #plot_tensor_hist(tensor)
+        # explore_scores(tensor)
 
     if scatter_file != None:
         device = "cuda" if t.cuda.is_available() else "cpu"
@@ -256,8 +264,11 @@ if __name__ == "__main__":
 
     loaded_tensor = t.load(tensor_file, map_location=t.device(device))
     print(f"Loaded tensor with size: {loaded_tensor.size()}")
-    plot_all(loaded_tensor, img_file, model_name)
-
+    #plot_all(loaded_tensor, img_file, model_name)
+    get_head_info("1.1", loaded_tensor)
+    get_head_info("1.4", loaded_tensor)
+    get_head_info("1.6", loaded_tensor)
+    get_head_info("3.2", loaded_tensor)
 
 
     

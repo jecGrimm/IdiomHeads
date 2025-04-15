@@ -5,10 +5,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - literal score
     - formal score
-        - test gpu
         - full
     - trans score
-        - test gpu
         - full
     - plot scatter to see correlation
         - full
@@ -17,6 +15,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - formal literal
         - trans literal
 2. Logit attribution
+- Für die Idiom Positions oder den gesamten Satz berechnen?
+- center WU
 3. Ablation
     - loss
     - nwg
@@ -58,7 +58,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - hist plot: alle Zahlen anzeigen
 - alle plots in plot all
 - Liegen die Scores wegen Sigmoid alle so bei 0.5?
-
+- Experimente mit pythia-14m vergleichen
+- cache: to token rausnehmen
+- model mit from_pretrained_no_processing laden und überprüfen, ob das die Scores ändert
 
 ## Usage
 ### Installation

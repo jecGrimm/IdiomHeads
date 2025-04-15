@@ -1,4 +1,5 @@
 
+Average score: 0.5498046875
 Maximum mean: 2.15 - 0.60302734375
 Minimum mean: 16.9 - 0.5126953125
 Mean top 10: [('2.15', array(0.603, dtype=float16)), ('3.4', array(0.5986, dtype=float16)), ('0.13', array(0.5977, dtype=float16)), ('0.10', array(0.597, dtype=float16)), ('1.14', array(0.5938, dtype=float16)), ('0.2', array(0.5933, dtype=float16)), ('5.15', array(0.5933, dtype=float16)), ('1.1', array(0.5923, dtype=float16)), ('1.4', array(0.5923, dtype=float16)), ('1.6', array(0.591, dtype=float16))]
