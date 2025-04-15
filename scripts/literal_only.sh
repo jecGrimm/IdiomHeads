@@ -8,4 +8,4 @@
 #SBATCH --output=/home/g/grimmj/IdiomHeads/scripts/output/slurm.%j.%N.out
 #SBATCH --ntasks=1
 
-python3 -u compute_literal_only.py -m "EleutherAI/pythia-14m" -e 3 -d formal trans
+python3 -u compute_literal_only.py -d formal trans

@@ -121,8 +121,12 @@ pythia 14m
         - b1: 1.08s/ex, 1,57s/ex (load model with float16)
     - literal only
         - b1: 2.88a/ex (load model with bfloat16, delete cache)
-- trans idiom
-    - b 8: 1721 s/ex
+        - b1, GPU: 1.3s/ex
+- trans 
+    - idiom
+        - b 8: 1721 s/ex
+    - literal only
+        - b1: 2.2s/ex
 
 pythia 1.4b
 - formal 
@@ -134,6 +138,8 @@ pythia 1.4b
         - b1, GPU: 5s/ex-41s/ex (extract tensor per attention pattern)
     - idiom only
         - b1: 1.21s/ex (load model with float16)
+    literal 
+        - 
 - trans literal
     - b 8: cuda oom
 
