@@ -6,6 +6,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - komponenten
     - full
     - plots
+        - full
 - literal score
     - formal score
         - full

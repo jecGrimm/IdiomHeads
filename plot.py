@@ -353,10 +353,10 @@ def plot_all_components(full_tensor, filename = None, model_name = None):
             explore_scores(tensor, filename, model_name)
 
         else:
-            # plot_tensor_line(tensor, title = f"Average {comp} (component) per head and layer", ylabel=comp)
-            # plot_line_std(tensor, title = f"Standard deviation of the {comp} (component) per head and layer", ylabel=comp)
-            # plot_heatmap(tensor, title = f"{comp[0].upper()}{comp[1:]} (component)")
-            # plot_tensor_hist(tensor, title = f"Distribution of the {comp} (component)", xlabel=comp)
+            plot_tensor_line(tensor, title = f"Average {comp} (component) per head and layer", ylabel=comp)
+            plot_line_std(tensor, title = f"Standard deviation of the {comp} (component) per head and layer", ylabel=comp)
+            plot_heatmap(tensor, title = f"{comp[0].upper()}{comp[1:]} (component)")
+            plot_tensor_hist(tensor, title = f"Distribution of the {comp} (component)", xlabel=comp)
             explore_scores(tensor)
 
     if orig_filename and model_name:
