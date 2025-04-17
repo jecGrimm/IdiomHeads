@@ -65,7 +65,7 @@ for i in range(len(data_split)):
     # print(scorer.components[0])
     # print(scorer.components[0].size())
 
-    t.save(scorer.scores, f"./scores/idiom_components/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}.pt")
+    t.save(scorer.scores, f"./scores/idiom_scores/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}.pt")
     
     scorer.scores = None
     scorer.components = None

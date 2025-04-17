@@ -66,7 +66,7 @@ for i in range(len(data_split)):
 
     scorer.explore_tensor()
 
-    t.save(scorer.scores, f"./scores/literal_components/{model_name.split('/')[-1]}/literal_only_{split}_{start}_{end}.pt")
+    t.save(scorer.scores, f"./scores/literal_scores/{model_name.split('/')[-1]}/literal_only_{split}_{start}_{end}.pt")
 
     scorer.scores = None
     scorer.components = None

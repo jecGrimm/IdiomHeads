@@ -4,7 +4,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 ## Todos
 1. Head detection
 - komponenten
-    - test
     - full
     - plots
 - literal score
@@ -112,6 +111,7 @@ sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_only.sh
+sbatch --partition=NvidiaAll ./scripts/idiom_only.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

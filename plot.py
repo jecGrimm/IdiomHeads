@@ -8,6 +8,8 @@ import argparse
 import os
 import numpy as np
 from collections import defaultdict
+from matplotlib.patches import Ellipse
+import matplotlib.transforms as transforms
 
 # %pip install jaxtyping
 # %pip install git+https://github.com/callummcdougall/CircuitsVis.git#subdirectory=python
@@ -44,26 +46,26 @@ def plot_box_per_head(tensor, filename = None):
 
     save_plt(filename)
 
-def plot_tensor_line(tensor, filename = None):
+def plot_tensor_line(tensor, filename = None, title = "Average score per head and layer", ylabel = "Mean score"):
     mean_tensor = get_mean_sentence_tensor(tensor)
     df = create_df_from_tensor(mean_tensor)
-    df.plot.line(title="Average idiom score per head and layer", xlabel = "Layer", ylabel = "Mean idiom score", xticks = np.arange(mean_tensor.size(0)), yticks = np.arange(0.51, 0.62, 0.01), colormap = "tab20", figsize=(25, 25))
+    df.plot.line(title= title, xlabel = "Layer", ylabel = ylabel, xticks = np.arange(mean_tensor.size(0)), yticks = np.arange(-1.0, 1.01, 0.1), colormap = "tab20", figsize=(25, 25))
     plt.legend(title = "Head")
     save_plt(filename)
 
-def plot_line_std(tensor, filename = None):
+def plot_line_std(tensor, filename = None, title = "Standard deviation of the score per head and layer", ylabel = "Standard deviation of the score"):
     std_tensor = t.std(tensor, dim=0)
     df = create_df_from_tensor(std_tensor)
     #print("std:", std_tensor.size())
-    df.plot.line(title="Standard deviation of the idiom score per head and layer", xlabel = "Layer", ylabel = "Standard deviation of the idiom score", xticks = np.arange(std_tensor.size(0)), colormap = "tab20", figsize=(25, 25))
+    df.plot.line(title=title, xlabel = "Layer", ylabel = ylabel, xticks = np.arange(std_tensor.size(0)), colormap = "tab20", figsize=(25, 25))
     plt.legend(title = "Head")
     save_plt(filename)
 
-def plot_tensor_hist(tensor, filename = None):
+def plot_tensor_hist(tensor, filename = None, title = "Distribution of the mean scores", xlabel = "Mean scores"):
     mean_tensor = get_mean_sentence_tensor(tensor)
     len = mean_tensor.size(0) * mean_tensor.size(1)
     df = create_df_from_tensor(mean_tensor.view(len))
-    df.plot.hist(title="Distribution of the mean idiom scores", legend = False, xlabel="Mean idiom score", yticks = range(0, 120, 10))
+    df.plot.hist(title=title, legend = False, xlabel=xlabel, yticks = range(0, 120, 10))
     
     save_plt(filename)
 
@@ -79,10 +81,10 @@ def plot_box_avg(tensor, filename = None):
     
     save_plt(filename)
 
-def plot_heatmap(tensor, filename = None):
+def plot_heatmap(tensor, filename = None, title = "Scores"):
     mean_tensor = get_mean_sentence_tensor(tensor)
     #print(mean_tensor[0][0])
-    fig = px.imshow(mean_tensor, labels=dict(x="Head", y="Layer"))
+    fig = px.imshow(mean_tensor, labels=dict(x="Head", y="Layer"), title = title)
 
     if filename:
         fig.write_image(filename)
@@ -98,6 +100,89 @@ def plot_scatter(idiom_tensor, literal_tensor, filename = None):
     df.plot.scatter(x='idiom_mean',y='literal_mean')
 
     save_plt(filename)
+
+def plot_scatter_components(comp_dict, filename = None):
+    df = pd.DataFrame()
+    #print("\ncomps:\n", comp_dict.keys())
+    for comp, tensor in comp_dict.items():
+        comp_lh = get_lh_mean_scores(tensor)
+        #print("\ncomp_lh\n", comp_lh)
+        comp_df = pd.DataFrame({"layer.head": list(comp_lh.keys()), comp: list(comp_lh.values())}).set_index("layer.head")
+        #print("\ncomp_df\n", comp_df)
+        if df.empty:
+            df = comp_df
+        else:
+            df = df.join(comp_df, on='layer.head')
+    
+    #print("\ndf\n", df)
+    #df = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values()), "literal_mean": list(literal_mean.values())}).set_index("layer.head")
+    #df = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values()), "literal_mean": list(literal_mean.values())})
+    #fig, axes = plt.subplots(nrows = 5, ncols = 5, constrained_layout=True, sharex=True, sharey=True, figsize=(15,15))
+    fig, axes = plt.subplots(nrows = 5, ncols = 5, constrained_layout=True, figsize=(20,20))
+    #plt.subplots_adjust(wspace=0.5, hspace=0.5)
+    #df.plot.scatter(x='Mean',y='Std', subplots=True, title = "Scatter plot of the components")
+    comps = list(comp_dict.keys())
+    for i in range(5):
+        for j in range(5):
+            axes[i,j].set_title(f"{comps[i]}/{comps[j]}")
+            axes[i,j].scatter(df[comps[i]],df[comps[j]])
+
+            # confidence_ellipse(df[comps[i]],df[comps[j]], axes[i, j], edgecolor='red')
+            # axes[i,j].scatter(0, 0, c='red', s=3)
+    save_plt(filename)
+
+def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
+    """
+    VON MATPLOTLIB DEMO https://matplotlib.org/stable/gallery/statistics/confidence_ellipse.html
+    Create a plot of the covariance confidence ellipse of *x* and *y*.
+
+    Parameters
+    ----------
+    x, y : array-like, shape (n, )
+        Input data.
+
+    ax : matplotlib.axes.Axes
+        The Axes object to draw the ellipse into.
+
+    n_std : float
+        The number of standard deviations to determine the ellipse's radiuses.
+
+    **kwargs
+        Forwarded to `~matplotlib.patches.Ellipse`
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+    """
+    if x.size != y.size:
+        raise ValueError("x and y must be the same size")
+
+    cov = np.cov(x, y)
+    pearson = cov[0, 1]/np.sqrt(cov[0, 0] * cov[1, 1])
+    # Using a special case to obtain the eigenvalues of this
+    # two-dimensional dataset.
+    ell_radius_x = np.sqrt(1 + pearson)
+    ell_radius_y = np.sqrt(1 - pearson)
+    ellipse = Ellipse((0, 0), width=ell_radius_x * 2, height=ell_radius_y * 2,
+                      facecolor=facecolor, **kwargs)
+
+    # Calculating the standard deviation of x from
+    # the squareroot of the variance and multiplying
+    # with the given number of standard deviations.
+    scale_x = np.sqrt(cov[0, 0]) * n_std
+    mean_x = np.mean(x)
+
+    # calculating the standard deviation of y ...
+    scale_y = np.sqrt(cov[1, 1]) * n_std
+    mean_y = np.mean(y)
+
+    transf = transforms.Affine2D() \
+        .rotate_deg(45) \
+        .scale(scale_x, scale_y) \
+        .translate(mean_x, mean_y)
+
+    ellipse.set_transform(transf + ax.transData)
+    return ax.add_patch(ellipse)
 
 def get_mean_sentence_tensor(tensor):
     return t.mean(tensor, dim = 0)
@@ -223,15 +308,15 @@ def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
     if filename and model_name:
         plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
         plot_line_std(tensor, f"{path}/std_line_{filename}.png")
-        # plot_heatmap(tensor, f"{path}/heat_{filename}.png")
-        # plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
-        # explore_scores(tensor, filename, model_name)
+        plot_heatmap(tensor, f"{path}/heat_{filename}.png")
+        plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
+        explore_scores(tensor, filename, model_name)
     else:
         plot_tensor_line(tensor)
-        # plot_line_std(tensor)
-        # plot_heatmap(tensor)
-        #plot_tensor_hist(tensor)
-        # explore_scores(tensor)
+        plot_line_std(tensor)
+        plot_heatmap(tensor)
+        plot_tensor_hist(tensor)
+        explore_scores(tensor)
 
     if scatter_file != None:
         device = "cuda" if t.cuda.is_available() else "cpu"
@@ -243,6 +328,42 @@ def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
         else:
             plot_scatter(loaded_tensor, scatter_tensor)
     
+def get_component_dict(tensor):
+    comp_dict = {
+        "Mean": tensor[:, :, :, 0],
+        "Std": tensor[:, :, :, 1],
+        "Max": tensor[:, :, :, 2],
+        "Phrase": tensor[:, :, :, 3],
+        "Contribution": tensor[:, :, :, 4] 
+    }
+    return comp_dict
+
+def plot_all_components(full_tensor, filename = None, model_name = None):
+    path = f"./plots/{model_name}"
+
+    comp_dict = get_component_dict(full_tensor)
+    orig_filename = filename
+    for comp, tensor in comp_dict.items():
+        if orig_filename and model_name:
+            filename = orig_filename + f"_{comp}"
+            plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png", title = f"Average {comp} (component) per head and layer", ylabel=comp)
+            plot_line_std(tensor, f"{path}/std_line_{filename}.png", title = f"Standard deviation of the {comp} (component) per head and layer", ylabel = comp)
+            plot_heatmap(tensor, f"{path}/heat_{filename}.png", title = f"{comp[0].upper()}{comp[1:]} (component)")
+            plot_tensor_hist(tensor, f"{path}/hist_{filename}.png", title = f"Distribution of the {comp} (component)", xlabel = comp)
+            explore_scores(tensor, filename, model_name)
+
+        else:
+            # plot_tensor_line(tensor, title = f"Average {comp} (component) per head and layer", ylabel=comp)
+            # plot_line_std(tensor, title = f"Standard deviation of the {comp} (component) per head and layer", ylabel=comp)
+            # plot_heatmap(tensor, title = f"{comp[0].upper()}{comp[1:]} (component)")
+            # plot_tensor_hist(tensor, title = f"Distribution of the {comp} (component)", xlabel=comp)
+            explore_scores(tensor)
+
+    if orig_filename and model_name:
+        plot_scatter_components(comp_dict, f"{path}/scatter_{orig_filename}_comp.png")
+    else:
+        plot_scatter_components(comp_dict)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
@@ -264,11 +385,16 @@ if __name__ == "__main__":
 
     loaded_tensor = t.load(tensor_file, map_location=t.device(device))
     print(f"Loaded tensor with size: {loaded_tensor.size()}")
-    #plot_all(loaded_tensor, img_file, model_name)
-    get_head_info("1.1", loaded_tensor)
-    get_head_info("1.4", loaded_tensor)
-    get_head_info("1.6", loaded_tensor)
-    get_head_info("3.2", loaded_tensor)
+
+    if tensor_file.endswith("_comp.pt"):
+        plot_all_components(loaded_tensor, img_file, model_name)
+    else:
+        plot_all(loaded_tensor, img_file, model_name, scatter_file)
+
+    # get_head_info("1.1", loaded_tensor)
+    # get_head_info("1.4", loaded_tensor)
+    # get_head_info("1.6", loaded_tensor)
+    # get_head_info("3.2", loaded_tensor)
 
 
     
