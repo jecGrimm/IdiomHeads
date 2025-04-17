@@ -3,6 +3,10 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 1. Head detection
+- komponenten
+    - test
+    - full
+    - plots
 - literal score
     - formal score
         - full
@@ -15,12 +19,15 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - formal literal
         - trans literal
 2. Logit attribution
-- Für die Idiom Positions oder den gesamten Satz berechnen?
-- center WU
+- MLP mit aufnehmen (llm_transparency hat funktionen wie get_attention_contribution oder get_mlp_contribution)
+- Überprüfen anhand von llm_transparency, ob ich die richtige Komponente benutze
 3. Ablation
-    - loss
-    - nwg
+    - einzelne Heads abschalten, die für Idiome sind
+    - Zusammenspiel von Heads abschalten, die für Idiome sind
+    - Auswirkung auf loss
+    - Auswirkung auf nwp
 4. zweites Modell
+    - BertIdiomClassifier: ist das auf EPIe trainiert? Gibt es dafür ein Paper?
 5. Schreiben
 - Selbstständigkeitserklärung -> auch digital unterschreiben?
 - Deutsches Abstract
@@ -61,6 +68,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Experimente mit pythia-14m vergleichen
 - cache: to token rausnehmen
 - model mit from_pretrained_no_processing laden und überprüfen, ob das die Scores ändert
+- Aktivierungen austauschen und schauen, was das mit der Prediction macht
+- Route im LLM-transparency-tool anschauen
 
 ## Usage
 ### Installation

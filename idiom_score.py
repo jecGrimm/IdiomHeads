@@ -6,18 +6,23 @@ import json
 from tqdm import tqdm
 from transformer_lens import (
     HookedTransformer,
+    head_detector
 )
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 import os
+import einops
 
 class IdiomScorer:
     def __init__(self, model, split: str = "formal"):
         #self.data = EPIE_Data()
         self.model = model
+        self.model.cfg.use_attn_result = True
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.scores = None
         self.idiom_positions = self.load_all_idiom_pos(split)
+        self.components = None
+        self.features = 5
 
     def get_all_idiom_pos(self, batch):
         for i in range(len(batch["sentence"])):
@@ -45,14 +50,16 @@ class IdiomScorer:
     def create_idiom_features(self, sent, idiom_pos):
         cache = self.get_cache(sent)
 
-        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
         #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
                 attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
-                layer_head_features[layer][head] = self.compute_components(attention_pattern, idiom_pos)
+                head_result = cache["result", layer][:, head, :].to(dtype=t.float16) # seq x heads x d_model
+                layer_head_features[layer][head] = self.compute_components(attention_pattern, head_result, idiom_pos)
 
                 del attention_pattern
+                del head_result
                 t.cuda.empty_cache()
         
         del cache
@@ -94,11 +101,17 @@ class IdiomScorer:
 
         return t.sigmoid(t.sum(feature_tensor, dim = -1))
     
-    def create_idiom_score_tensor(self, batch, ckp_file):
-        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device)
+    def create_idiom_score_tensor(self, batch, comp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
             batch_scores[i] = self.create_idiom_features(batch["sentence"][i], batch["idiom_pos"][i])
+        
+        if self.components != None:
+            self.components = t.cat((self.components, batch_scores), dim = 0)
+        else:
+            self.components = batch_scores 
+
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
@@ -109,13 +122,15 @@ class IdiomScorer:
         del batch_scores
         t.cuda.empty_cache()
 
-        t.save(self.scores, ckp_file)    
+        #t.save(self.scores, ckp_file)    
+        t.save(self.components, comp_file)    
 
     def create_data_score_tensor(self, batch, ckp_file):
         batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 8, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
             batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["idiom_pos"][i])
+        # NO COMPONENTS! 
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
@@ -127,6 +142,7 @@ class IdiomScorer:
         t.cuda.empty_cache()
 
         t.save(self.scores, ckp_file)    
+
 
     def get_ngram_positions(self, num_idioms, tokenized_sent, aligned_positions, idiom_pos):
         """
@@ -313,7 +329,7 @@ class IdiomScorer:
         k2q = self.compute_k_phrase_attention(attention_pattern, idiom_pos)
         return (q2k + k2q)/2
     
-    def compute_components(self, attention_pattern, idiom_pos):
+    def compute_components(self, attention_pattern, head_result, idiom_pos):
         '''
         This method computes the components of the idiom score for one head and one sentence.
 
@@ -326,12 +342,13 @@ class IdiomScorer:
         idiom_attention = self.extract_tensor(attention_pattern, self.get_idiom_combinations(idiom_positions, sent_positions))
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
+        contribution = self.get_attn_contribution(head_result, idiom_pos)
 
         del idiom_positions
         del sent_positions
         t.cuda.empty_cache()
 
-        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase), dtype=t.float16, device = self.device)
+        return t.tensor((t.mean(idiom_attention), -t.std(idiom_attention), max_tok, phrase, contribution), dtype=t.float16, device = self.device)
 
     def compute_mean_batched(self, batch, ckp_file):
         batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 2, dtype=t.float16, device = self.device)
@@ -534,12 +551,125 @@ class IdiomScorer:
     def explore_tensor(self):
         print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")
 
+    def get_attention_contributions(
+        self, 
+        resid_pre,#: t.Tensor #"batch pos d_model"
+        resid_mid,#: Float[torch.Tensor, "batch pos d_model"],
+        decomposed_attn,#: Float[torch.Tensor, "batch pos key_pos head d_model"],
+        distance_norm: int = 1,
+    ): #-> Tuple[
+       # Float[torch.Tensor, "batch pos key_pos head"],
+        #Float[torch.Tensor, "batch pos"],]
+        """
+        AUS LLMTransparencyTOOL
+        Returns a pair of
+        - a tensor of contributions of each token via each head
+        - the contribution of the residual stream.
+        """
+
+        # part dimensions | batch dimensions | vector dimension
+        # ----------------+------------------+-----------------
+        # key_pos, head   | batch, pos       | d_model
+        parts = einops.rearrange(
+            decomposed_attn,
+            "batch pos key_pos head d_model -> key_pos head batch pos d_model",
+        )
+        attn_contribution, residual_contribution = self.get_contributions_with_one_off_part(
+            parts, resid_pre, resid_mid, distance_norm
+        )
+        return (
+            einops.rearrange(
+                attn_contribution, "key_pos head batch pos -> batch pos key_pos head"
+            ),
+            residual_contribution,
+        )
+    
+    def get_contributions_with_one_off_part(
+        self,
+        parts,#: torch.Tensor,
+        one_off,#: torch.Tensor,
+        whole,#: torch.Tensor,
+        distance_norm: int = 1,
+        ): #-> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        AUS LLM TransparencyTOOL
+        Same as computing the contributions, but there is one additional part. That's useful
+        because we always have the residual stream as one of the parts.
+
+        See `get_contributions` documentation about `parts` and `whole` dimensions. The
+        `one_off` should have the same dimensions as `whole`.
+
+        Returns a pair consisting of
+        1. contributions tensor for the `parts`
+        2. contributions tensor for the `one_off` vector
+        """
+        assert one_off.shape == whole.shape
+
+        k = len(parts.shape) - len(whole.shape)
+        assert k >= 0
+
+        # Flatten the p_ dimensions, get contributions for the list, unflatten.
+        flat = parts.flatten(start_dim=0, end_dim=k - 1)
+        flat = t.cat([flat, one_off.unsqueeze(0)])
+        contributions = self.get_contributions(flat, whole, distance_norm)
+        parts_contributions, one_off_contributions = t.split(
+            contributions, flat.shape[0] - 1
+        )
+        return (
+            parts_contributions.unflatten(0, parts.shape[0:k]),
+            one_off_contributions[0],
+        )
+    
+    def get_contributions(
+        self, 
+        parts,#: torch.Tensor,
+        whole,#: torch.Tensor,
+        distance_norm: int = 1,
+    ):# -> torch.Tensor:
+        """
+        AUS LLMTRANSPARENCYTOOL
+        Compute contributions of the `parts` vectors into the `whole` vector.
+
+        Shapes of the tensors are as follows:
+        parts:  p_1 ... p_k, v_1 ... v_n, d
+        whole:               v_1 ... v_n, d
+        result: p_1 ... p_k, v_1 ... v_n
+
+        Here
+        * `p_1 ... p_k`: dimensions for enumerating the parts
+        * `v_1 ... v_n`: dimensions listing the independent cases (batching),
+        * `d` is the dimension to compute the distances on.
+
+        The resulting contributions will be normalized so that
+        for each v_: sum(over p_ of result(p_, v_)) = 1.
+        """
+        EPS = 1e-5
+
+        k = len(parts.shape) - len(whole.shape)
+        assert k >= 0
+        assert parts.shape[k:] == whole.shape
+        bc_whole = whole.expand(parts.shape)  # new dims p_1 ... p_k are added to the front
+
+        distance = t.nn.functional.pairwise_distance(parts, bc_whole, p=distance_norm)
+
+        whole_norm = t.norm(whole, p=distance_norm, dim=-1)
+        distance = (whole_norm - distance).clip(min=EPS)
+
+        sum = distance.sum(dim=tuple(range(k)), keepdim=True)
+
+        return distance / sum
+
+    def get_attn_contribution(self, head_result, idiom_pos):
+        # seq_len x dmodel
+        return t.mean(head_result[idiom_pos[0]:idiom_pos[1]+1])
+    
+
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")
-    epie = EPIE_Data()
-    scorer = IdiomScorer(model)
+    # epie = EPIE_Data()
+    # scorer = IdiomScorer(model)
 
-    data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
+    # data = epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal)
     # data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched = True)
     # print(len(scorer.idiom_positions))
     # scorer.store_all_idiom_pos("formal")
@@ -553,4 +683,11 @@ if __name__ == "__main__":
     # loaded_scores = t.load("./scores/test_formal.pt", weights_only = False).to(scorer.device)
     # #assert(len(loaded_scores) == len(formal_data))  
     # scorer.explore_tensor(loaded_scores)
+
+    #detect_scores = head_detector.detect_head(model, "‘Are not you going to spill the beans?", t.tril(t.ones(11, 11)))
+    model.cfg.use_attn_result = True
+    _, cache = model.run_with_cache("‘Are not you going to spill the beans?", remove_batch_dim = True)
+    head_detector.compute_head_attention_similarity_score(cache["pattern", 0][0], t.tril(t.zeros(11, 11)), exclude_bos = False, error_measure="abs")
+    # print(detect_scores)
+    # print(detect_scores.size())
     

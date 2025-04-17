@@ -21,16 +21,19 @@ start = parser.parse_args().start
 end = parser.parse_args().end
 if end:
     end = int(end)
+
 batch_sizes = parser.parse_args().batch_size
+while len(batch_sizes) < len(data_split):
+    batch_sizes.append(batch_sizes[-1])
 
-if not os.path.isdir("./components"):
-    os.mkdir("./components")
+if not os.path.isdir("./scores"):
+    os.mkdir("./scores")
 
-if not os.path.isdir("./components/idiom_components"):
-    os.mkdir("./components/idiom_components")
+if not os.path.isdir("./scores/idiom_components"):
+    os.mkdir("./scores/idiom_components")
 
-if not os.path.isdir(f"./components/idiom_components/{model_name.split('/')[-1]}"):
-    os.mkdir(f"./components/idiom_components/{model_name.split('/')[-1]}")
+if not os.path.isdir(f"./scores/idiom_components/{model_name.split('/')[-1]}"):
+    os.mkdir(f"./scores/idiom_components/{model_name.split('/')[-1]}")
 
 model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
 
@@ -54,11 +57,16 @@ for i in range(len(data_split)):
     else:
         batch_size = int(batch_sizes[i])
     
-    ckp_file = f"./components/idiom_components/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}_ckp.pt"
+    comp_file = f"./scores/idiom_components/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}_comp.pt"
     
-    #data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
-    data.map(lambda batch: scorer.create_idiom_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+    data.map(lambda batch: scorer.create_idiom_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
+    # print(scorer.components[0])
+    # print(scorer.components[0].size())
 
-    t.save(scorer.scores, f"./components/idiom_components/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}.pt")
+    t.save(scorer.scores, f"./scores/idiom_components/{model_name.split('/')[-1]}/idiom_only_{split}_{start}_{end}.pt")
+    
+    scorer.scores = None
+    scorer.components = None
+    t.cuda.empty_cache()

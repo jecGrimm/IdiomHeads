@@ -13,9 +13,12 @@ import os
 class LiteralScorer:
     def __init__(self, model, split: str = "formal"):
         self.model = model
+        self.model.cfg.use_attn_result = True
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.scores = None
+        self.components = None
+        self.features = 5
         self.idiom_positions = self.load_all_idiom_pos(split)
 
     def load_all_idiom_pos(self, split):
@@ -25,11 +28,17 @@ class LiteralScorer:
         else:
             return [] 
 
-    def create_data_score_tensor(self, batch, ckp_file):
-        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device)
+    def create_data_score_tensor(self, batch, comp_file):
+        batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
             batch_scores[i] = self.create_feature_tensor(batch["sentence"][i], batch["idiom_pos"][i])
+        
+        if self.components != None:
+            self.components = t.cat((self.components, batch_scores), dim = 0)
+        else:
+            self.components = batch_scores 
+        
         batch_scores = t.sigmoid(t.sum(batch_scores, dim = -1))
 
         if self.scores != None:
@@ -40,18 +49,21 @@ class LiteralScorer:
         del batch_scores
         t.cuda.empty_cache()
 
-        t.save(self.scores, ckp_file)  
+        #t.save(self.scores, ckp_file)  
+        t.save(self.components, comp_file)    
 
     def create_feature_tensor(self, sent, idiom_pos):
         cache = self.get_cache(sent)
 
-        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, 4, dtype=t.float16, device = self.device) # 4 features (4 idiom feats)
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device) # self.features features (self.features idiom feats)
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
                 attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
-                layer_head_features[layer][head] = self.compute_components(attention_pattern, idiom_pos)
+                head_result = cache["result", layer][:, head, :].to(dtype=t.float16) # seq x heads x d_model
+                layer_head_features[layer][head] = self.compute_components(attention_pattern, head_result, idiom_pos)
 
                 del attention_pattern
+                del head_result
                 t.cuda.empty_cache()
 
         del cache
@@ -86,7 +98,7 @@ class LiteralScorer:
         assert start != None and end != None
         return (start, end)
     
-    def compute_components(self, attention_pattern, idiom_pos):
+    def compute_components(self, attention_pattern, head_result, idiom_pos):
         '''
         This method computes the components of the idiom score for one head and one sentence.
 
@@ -99,12 +111,13 @@ class LiteralScorer:
         literal_attention = self.extract_tensor(attention_pattern, self.get_literal_combinations(idiom_positions, sent_positions))
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
+        contribution = self.get_attn_contribution(head_result, idiom_pos)
 
         del idiom_positions
         del sent_positions
         t.cuda.empty_cache()
 
-        return t.tensor((t.mean(literal_attention), -t.std(literal_attention), max_tok, phrase), dtype=t.float16, device = self.device)
+        return t.tensor((t.mean(literal_attention), -t.std(literal_attention), max_tok, phrase, contribution), dtype=t.float16, device = self.device)
     
     def get_literal_combinations(self, idiom_positions, sent_positions):
         '''
@@ -212,6 +225,10 @@ class LiteralScorer:
             return sum(literal_fractions)/len(literal_fractions)
         else:
             return 0.0
+
+    def get_attn_contribution(self, head_result, idiom_pos):
+        # seq_len x dmodel
+        return t.mean(t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:])))
         
     def explore_tensor(self):
         print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")

@@ -17,6 +17,7 @@ idiom_sent = epie.formal_sents[idx]
 tokenized_idiom_sent = epie.tokenized_formal_sents[idx]
 tags = epie.tags_formal[idx]
 print(idiom_sent)
+print(epie.trans_formal_sents[idx])
 # funktioniert so nicht mehr
 # idiom_tokens = pythia_14m.to_tokens(idiom_sent)
 # pythia_14m_logits, pythia_14m_cache = pythia_14m.run_with_cache(idiom_tokens, remove_batch_dim=True)
