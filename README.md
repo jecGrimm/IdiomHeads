@@ -114,6 +114,7 @@ sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_only.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only.sh
+sbatch --partition=NvidiaAll ./scripts/logit_attr.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

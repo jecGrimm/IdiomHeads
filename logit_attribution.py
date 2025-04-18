@@ -52,7 +52,7 @@ class LogitAttribution:
         if self.labels == None:
             self.labels = self.get_labels(batch["sentence"][0])
         
-        batch_split_attr = t.zeros(len(batch["sentence"]), 2, len(self.labels))
+        batch_split_attr = t.zeros(len(batch["sentence"]), 2, len(self.labels), device=self.device)
 
         for i in range(len(batch["sentence"])):
             sent_score = self.compute_logit_attr(batch["sentence"][i])
