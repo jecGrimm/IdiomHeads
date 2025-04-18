@@ -65,3 +65,29 @@
         
     #     assert(''.join(tokenized_sent.split()[epie_idiom_pos[0]:epie_idiom_pos[-1]+1]) == ' '.join(self.str_tokens[pos_matches[epie_idiom_pos[0]]: pos_matches[epie_idiom_pos[-1]]+1]).replace(' ', ''))
     #     return pos_matches[epie_idiom_pos[0]], pos_matches[epie_idiom_pos[-1]]
+
+# def logit_attribution(embed, l_results, W_U, tokens) -> t.Tensor:
+#     '''
+#     Inputs:
+#         embed (seq_len, d_model): the embeddings of the tokens (i.e. token + position embeddings)
+#         l1_results (seq_len, n_heads, d_model): the outputs of the attention heads at layer 1 (with head as one of the dimensions)
+#         l2_results (seq_len, n_heads, d_model): the outputs of the attention heads at layer 2 (with head as one of the dimensions)
+#         W_U (d_model, d_vocab): the unembedding matrix
+#     Returns:
+#         Tensor of shape (seq_len-1, n_components)
+#         represents the concatenation (along dim=-1) of logit attributions from:
+#             the direct path (position-1,1)
+#             layer 0 logits (position-1, n_heads)
+#             and layer 1 logits (position-1, n_heads)
+#     '''
+#     W_U_correct_tokens = W_U[:, tokens[1:]]
+
+#     direct_attributions = einsum("emb seq, seq emb -> seq", W_U_correct_tokens, embed[:-1])
+#     concats = [direct_attributions.unsqueeze(-1)]
+
+#     for l_result in l_results:
+#         concats.append(einsum("emb seq, seq nhead emb -> seq nhead", W_U_correct_tokens, l_result[:-1]))
+#     # l1_attributions = einsum("emb seq, seq nhead emb -> seq nhead", W_U_correct_tokens, l1_results[:-1])
+#     # l2_attributions = einsum("emb seq, seq nhead emb -> seq nhead", W_U_correct_tokens, l2_results[:-1])
+#     #return t.concat([direct_attributions.unsqueeze(-1), l1_attributions, l2_attributions], dim=-1)
+#     return t.concat(concats, dim=-1)

@@ -72,8 +72,7 @@ class LiteralScorer:
         return layer_head_features
     
     def get_cache(self, sent):
-        token_ids = self.model.to_tokens(sent)
-        _, cache = self.model.run_with_cache(token_ids, remove_batch_dim=True)
+        _, cache = self.model.run_with_cache(sent, remove_batch_dim=True)
         return cache.to(self.device)
     
     def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):

@@ -7,6 +7,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - full
     - plots
         - full
+    - sigmoid anpassen
 - literal score
     - formal score
         - full
@@ -29,8 +30,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 4. zweites Modell
     - BertIdiomClassifier: ist das auf EPIe trainiert? Gibt es dafür ein Paper?
 5. Schreiben
-- Selbstständigkeitserklärung -> auch digital unterschreiben?
-- Deutsches Abstract
+- Selbstständigkeitserklärung -> auch digital unterschreiben? Muss das die neue sein?
 - Related Work
 - Experiment
 - Evaluation
@@ -70,6 +70,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - model mit from_pretrained_no_processing laden und überprüfen, ob das die Scores ändert
 - Aktivierungen austauschen und schauen, was das mit der Prediction macht
 - Route im LLM-transparency-tool anschauen
+- MLP Pattern untersuchen
 
 ## Usage
 ### Installation
@@ -134,11 +135,15 @@ pythia 14m
     - literal only
         - b1: 2.88a/ex (load model with bfloat16, delete cache)
         - b1, GPU: 1.3s/ex
+    - logit 
+        - b1: 5.17s/ex
 - trans 
     - idiom
         - b 8: 1721 s/ex
     - literal only
         - b1: 2.2s/ex
+    - logit 
+        - b1: 8.15s/ex
 
 pythia 1.4b
 - formal 
@@ -151,7 +156,11 @@ pythia 1.4b
     - idiom only
         - b1: 1.21s/ex (load model with float16)
     literal 
-        - 
+        - b1:
+    - logit 
+        - b1: 
 - trans literal
     - b 8: cuda oom
+    - logit 
+        - b1: 
 

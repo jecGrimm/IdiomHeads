@@ -10,6 +10,7 @@ import numpy as np
 from collections import defaultdict
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
+from transformer_lens import utils
 
 # %pip install jaxtyping
 # %pip install git+https://github.com/callummcdougall/CircuitsVis.git#subdirectory=python
@@ -302,6 +303,25 @@ def get_head_info(layer_head, tensor):
 
     print(f"\nHead: {layer_head}\n\tScore: {mean_scores[layer_head]}\n\tStd: {std_scores[layer_head]}\n\tRank: {ranked_mean.index(layer_head)+1}")
 
+def imshow(tensor, xaxis="", yaxis="", caxis="", **kwargs):
+    return px.imshow(utils.to_numpy(tensor), color_continuous_midpoint=0.0, labels={"x":xaxis, "y":yaxis, "color":caxis}, **kwargs)
+
+def convert_tokens_to_string(model, tokens, batch_index=0):
+    '''
+    Helper function to convert tokens into a list of strings, for printing.
+    '''
+    if len(tokens.shape) == 2:
+        tokens = tokens[batch_index]
+    return [f"|{model.tokenizer.decode(tok)}|_{c}" for (c, tok) in enumerate(tokens)]
+
+def plot_logit_attribution_sentence(logit_attr: t.Tensor, tokens: t.Tensor, title: str = "", xlabels = None):
+    tokens = tokens.squeeze()
+    y_labels = convert_tokens_to_string(tokens)
+    return imshow(logit_attr.float(), x=xlabels,  y=y_labels, xaxis="Component", yaxis="Position", caxis="logit", title=title if title else None, height=25*len(tokens))
+
+def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels = None):
+    y_labels = ["Idiom", "Literal"]
+    return px.imshow(logit_attr.float(), title = title, x=x_labels, y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean logit attribution"}, color_continuous_midpoint=0.0)
 
 def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
     path = f"./plots/{model_name}"
