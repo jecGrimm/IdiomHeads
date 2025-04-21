@@ -1,5 +1,7 @@
 from transformer_lens import (
     HookedTransformer,
+    HookedEncoder,
+    loading_from_pretrained
 )
 from data import EPIE_Data
 from idiom_score import IdiomScorer
@@ -35,7 +37,10 @@ if not os.path.isdir("./scores/idiom_components"):
 if not os.path.isdir(f"./scores/idiom_components/{model_name.split('/')[-1]}"):
     os.mkdir(f"./scores/idiom_components/{model_name.split('/')[-1]}")
 
-model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
+if "bert" in model_name:
+    model: HookedEncoder = HookedEncoder() # TODO: FIX config fehlt 
+else:
+    model: HookedTransformer = HookedTransformer.from_pretrained(model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
 
 model.eval()
 epie = EPIE_Data()

@@ -319,9 +319,15 @@ def plot_logit_attribution_sentence(logit_attr: t.Tensor, tokens: t.Tensor, titl
     y_labels = convert_tokens_to_string(tokens)
     return imshow(logit_attr.float(), x=xlabels,  y=y_labels, xaxis="Component", yaxis="Position", caxis="logit", title=title if title else None, height=25*len(tokens))
 
-def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels = None):
+def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels = None, filename = None):
+    mean_logit_attr = get_mean_sentence_tensor(logit_attr)
     y_labels = ["Idiom", "Literal"]
-    return px.imshow(logit_attr.float(), title = title, x=x_labels, y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean logit attribution"}, color_continuous_midpoint=0.0)
+    fig = px.imshow(mean_logit_attr.float(), title = title, x=x_labels, y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean logit attribution"}, color_continuous_midpoint=0.0)
+    
+    if filename:
+        fig.write_image(filename)
+    else:
+        fig.show()
 
 def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
     path = f"./plots/{model_name}"

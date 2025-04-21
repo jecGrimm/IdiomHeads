@@ -73,7 +73,7 @@ class LogitAttribution:
 
         with t.inference_mode():
             _, lbls = cache.get_full_resid_decomposition(expand_neurons=False, return_labels=True)
-        print("\nComputing logit attribution for the following components:\n{lbls}")
+        print(f"\nComputing logit attribution for the following components:\n{lbls}")
         return lbls
         
     def explore_tensor(self):

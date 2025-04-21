@@ -2,7 +2,7 @@ import argparse
 class CLI:
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-1.4b")
+        parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "EleutherAI/pythia-1.4b")
         parser.add_argument('--data', '-d', help='list of data split that should be processed', nargs='*', default=["formal"], type=str)
         parser.add_argument('--start', '-s', help='start index (inclusive)', default = 0, type=int)
         parser.add_argument('--end', '-e', help='end index (exclusive)', default = None)
