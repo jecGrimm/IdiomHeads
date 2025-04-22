@@ -2,22 +2,57 @@ import torch as t
 import os
 import json
 import re
+from merge_tokenizers import PythonGreedyCoverageAligner, types
 
 class IdiomAwareness:
-  def __init__(self, model, split: str = "formal"):
+  def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json"):
     self.model = model
     self.device = t.device("cuda" if t.cuda.is_available() else "cpu")
     self.model.to(self.device)
     self.loss = None
-    self.idiom_positions = self.load_all_idiom_pos(split)
+    self.idiom_positions = self.load_all_idiom_pos(filename)
     self.num_correct = 0
     self.total = 0
     self.correct_answers = []
     self.incorrect_answers = []
+    self.aligner = PythonGreedyCoverageAligner()
 
-  def load_all_idiom_pos(self, split):
-      if os.path.isfile(f"{split}_idiom_pos.json"):
-          with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+  def get_all_idiom_pos(self, batch):
+    for i in range(len(batch["sentence"])):
+        sent = batch["sentence"][i]
+        model_str_tokens= self.model.to_str_tokens(sent)
+        aligned_positions = self.align_tokens(sent, batch["tokenized"][i], model_str_tokens)
+        self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
+
+  def get_idiom_pos(self, aligned_positions, tags: list):
+    epie_idiom_pos = [i for i in range(len(tags)) if "IDIOM" in tags[i]]
+
+    start = None
+    end = None
+    for epie_pos, model_positions in aligned_positions:
+        if epie_pos == epie_idiom_pos[0]:
+            start = model_positions[0]
+        elif epie_pos == epie_idiom_pos[-1]:
+            end = model_positions[-1]
+    
+    if end == None:
+        end = aligned_positions[-1][-1][-1]
+    assert start != None and end != None
+    return (start, end)
+    
+  def store_all_idiom_pos(self, filename):
+      with open(filename, 'w', encoding = "utf-8") as f:
+          json.dump(self.idiom_positions, f)    
+
+  def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):
+    aligned = self.aligner.align(
+        types.TokenizedSet(tokens=[tokenized_sent, model_str_tokens], text=sent)
+    )
+    return list(aligned[0])
+
+  def load_all_idiom_pos(self, filename):
+      if os.path.isfile(filename):
+          with open(filename, 'r', encoding = "utf-8") as f:
               return json.load(f) 
       else:
           return [] 

@@ -7,6 +7,7 @@ class CLI:
         parser.add_argument('--start', '-s', help='start index (inclusive)', default = 0, type=int)
         parser.add_argument('--end', '-e', help='end index (exclusive)', default = None)
         parser.add_argument('--batch_size', '-b', help='batch size', nargs='*', default = [None])
+        parser.add_argument('--idiom_file', '-i', help='File with the idiom positions', default = "pythia_formal_idiom_pos.json")
 
         self.full_model_name = parser.parse_args().model_name
         self.model_name = self.full_model_name.split('/')[-1]
@@ -20,6 +21,8 @@ class CLI:
         self.batch_sizes = parser.parse_args().batch_size
         while len(self.batch_sizes) < len(self.data_split):
             self.batch_sizes.append(self.batch_sizes[-1])
+
+        self.idiom_file = parser.parse_args().idiom_file
 
 if __name__ == "__main__":
     cli = CLI()

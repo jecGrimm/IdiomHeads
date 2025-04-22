@@ -13,14 +13,14 @@ import os
 import einops
 
 class IdiomScorer:
-    def __init__(self, model, split: str = "formal"):
+    def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json"):
         #self.data = EPIE_Data()
         self.model = model
         self.model.cfg.use_attn_result = True
         self.aligner = PythonGreedyCoverageAligner()
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.scores = None
-        self.idiom_positions = self.load_all_idiom_pos(split)
+        self.idiom_positions = self.load_all_idiom_pos(filename)
         self.components = None
         self.features = 5
 
@@ -31,13 +31,13 @@ class IdiomScorer:
             aligned_positions = self.align_tokens(sent, batch["tokenized"][i], model_str_tokens)
             self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
 
-    def store_all_idiom_pos(self, split):
-        with open(f"{split}_idiom_pos.json", 'w', encoding = "utf-8") as f:
+    def store_all_idiom_pos(self, filename):
+        with open(filename, 'w', encoding = "utf-8") as f:
             json.dump(self.idiom_positions, f)    
 
-    def load_all_idiom_pos(self, split):
-        if os.path.isfile(f"{split}_idiom_pos.json"):
-            with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+    def load_all_idiom_pos(self, filename):
+        if os.path.isfile(filename):
+            with open(filename, 'r', encoding = "utf-8") as f:
                 return json.load(f) 
         else:
             return [] 

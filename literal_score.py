@@ -11,7 +11,7 @@ from merge_tokenizers import PythonGreedyCoverageAligner, types
 import os
 
 class LiteralScorer:
-    def __init__(self, model, split: str = "formal"):
+    def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json"):
         self.model = model
         self.model.cfg.use_attn_result = True
         self.aligner = PythonGreedyCoverageAligner()
@@ -19,11 +19,11 @@ class LiteralScorer:
         self.scores = None
         self.components = None
         self.features = 5
-        self.idiom_positions = self.load_all_idiom_pos(split)
+        self.idiom_positions = self.load_all_idiom_pos(filename)
 
-    def load_all_idiom_pos(self, split):
-        if os.path.isfile(f"{split}_idiom_pos.json"):
-            with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+    def load_all_idiom_pos(self, filename):
+        if os.path.isfile(filename):
+            with open(filename, 'r', encoding = "utf-8") as f:
                 return json.load(f) 
         else:
             return [] 

@@ -3,18 +3,18 @@ import os
 import json
 
 class LogitAttribution:
-    def __init__(self, model, split = "formal"):
+    def __init__(self, model, filename = "pythia_formal_idiom_pos.json"):
         self.model = model
         self.model.cfg.use_attn_result = True
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.token_attr = None
         self.split_attr = None
-        self.idiom_positions = self.load_all_idiom_pos(split)
+        self.idiom_positions = self.load_all_idiom_pos(filename)
         self.labels = None
 
-    def load_all_idiom_pos(self, split):
-        if os.path.isfile(f"{split}_idiom_pos.json"):
-            with open(f"{split}_idiom_pos.json", 'r', encoding = "utf-8") as f:
+    def load_all_idiom_pos(self, filename):
+        if os.path.isfile(filename):
+            with open(filename, 'r', encoding = "utf-8") as f:
                 return json.load(f) 
         else:
             return [] 
