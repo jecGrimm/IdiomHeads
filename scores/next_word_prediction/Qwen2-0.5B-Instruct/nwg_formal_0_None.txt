@@ -1,0 +1,6 @@
+
+The model generated 911 correct answers.
+
+Accuracy: 33.00%
+Five correct outputs: ['‘You know, the panda who keeps an eye on', 'But I will also be keeping an eye on', '‘I will keep an eye on', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or keep an eye on", 'Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to keep an eye on']
+Five incorrect outputs: [("Struggling peasants they'd be for the most part, trying to keep body and soul -> together", "Struggling peasants they'd be for the most part, trying to keep body and soul in"), ("I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul -> together", "I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul in"), ('Nails, getting the taste of it, stopped being terrified and began to keep his eyes -> open', 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes on'), ('Keep her eyes -> open', 'Keep her eyes trained'), ('Keep your eyes -> open', 'Keep your eyes will')]

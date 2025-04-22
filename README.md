@@ -36,8 +36,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - Zusammenspiel von Heads abschalten, die für Idiome sind
     - Auswirkung auf loss
     - Auswirkung auf nwp
-4. zweites Modell
-    - Awareness
+4. zweites Modell: qwen
     - Head detection
     - logit attribution
     - ablation
