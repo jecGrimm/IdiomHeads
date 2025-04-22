@@ -93,5 +93,5 @@ class EPIE_Data:
     
 if __name__ == "__main__":
     epie = EPIE_Data()
-    
-    print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))
+    print(epie.trans_formal_sents[1497])
+    #print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))

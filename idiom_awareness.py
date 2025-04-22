@@ -54,35 +54,41 @@ class IdiomAwareness:
     return cleaned_sents
   
   def get_correct_toks(self, tags, toks):
-    correct_id = max([i for i in range(len(tags)) if "IDIOM" in tags[i]])
-    if correct_id >= len(toks):
-       correct_id = len(toks)-1
-    return self.remove_spaces([" ".join(toks[:correct_id])])[0], toks[correct_id]
+    if len(toks) > 1:
+      correct_id = max([i for i in range(len(tags)) if "IDIOM" in tags[i]])
+      if correct_id >= len(toks):
+        correct_id = len(toks)-1
+      return self.remove_spaces([" ".join(toks[:correct_id])])[0], toks[correct_id]
+    else:
+      return None, None
 
   def predict_next_word_batched(self, batch):
     self.total += len(batch["sentence"])
     for i in range(len(batch["sentence"])):
       prompt, correct_tok = self.get_correct_toks(batch["tags"][i], batch["tokenized"][i])
-      out_tensor = self.model.generate(prompt, max_new_tokens = 1, verbose = False, return_type = "tokens")
-      pred = self.model.to_str_tokens(out_tensor)[-1].strip()
 
-      if pred == correct_tok:
-        self.num_correct += 1
+      if prompt != None and correct_tok != None:
+        out_tensor = self.model.generate(prompt, max_new_tokens = 1, verbose = False, return_type = "tokens")
+        pred = self.model.to_str_tokens(out_tensor)[-1].strip()
 
-        if len(self.correct_answers) < 5:
-            self.correct_answers.append(self.model.to_string(out_tensor)[0])
-      else:
-        if len(self.incorrect_answers) < 5:
-          self.incorrect_answers.append((prompt + " -> " + correct_tok, self.model.to_string(out_tensor)[0]))
+        if pred == correct_tok:
+          self.num_correct += 1
 
-      del out_tensor
-      t.cuda.empty_cache()
+          if len(self.correct_answers) < 5:
+              self.correct_answers.append(self.model.to_string(out_tensor)[0])
+        else:
+          if len(self.incorrect_answers) < 5:
+            self.incorrect_answers.append((prompt + " -> " + correct_tok, self.model.to_string(out_tensor)[0]))
+
+        del out_tensor
+        t.cuda.empty_cache()
 
   def compute_loss_batched(self, batch, ckp_file):
     batch_loss = t.zeros(len(batch["sentence"]))
 
     for i in range(len(batch["sentence"])):
-      batch_loss[i] = self.model(batch["sentence"][i], return_type="loss")
+      if len(batch["tokenized"][i]) > 1:
+        batch_loss[i] = self.model(batch["sentence"][i], return_type="loss")
     
     if self.loss == None:
       self.loss = batch_loss
