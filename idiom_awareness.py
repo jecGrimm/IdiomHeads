@@ -55,6 +55,8 @@ class IdiomAwareness:
   
   def get_correct_toks(self, tags, toks):
     correct_id = max([i for i in range(len(tags)) if "IDIOM" in tags[i]])
+    if correct_id >= len(toks):
+       correct_id = len(toks)-1
     return self.remove_spaces([" ".join(toks[:correct_id])])[0], toks[correct_id]
 
   def predict_next_word_batched(self, batch):

@@ -2,17 +2,22 @@
 This repository is part of the Master thesis "Spilling the beans: Interpreting Attention Patterns for Idioms in transformer-based Language Models".
 
 ## Todos
+0. Awareness
+- pythia 14m: 719449
+- pythia 70m
+- pythia 1.4B
 1. Head detection
 - komponenten
     - full
+        - 719198: formal und trans
     - plots
         - full
     - sigmoid anpassen
 - literal score
     - formal score
-        - full
+        - full 719199
     - trans score
-        - full
+        - full 719199
     - plot scatter to see correlation
         - full
 - plots: 
@@ -20,15 +25,22 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - formal literal
         - trans literal
 2. Logit attribution
-- MLP mit aufnehmen (llm_transparency hat funktionen wie get_attention_contribution oder get_mlp_contribution)
-- Überprüfen anhand von llm_transparency, ob ich die richtige Komponente benutze
+- full 
+    - formal 719219
+    - trans 719219
+- plot
+    - formal
+    - trans
 3. Ablation
     - einzelne Heads abschalten, die für Idiome sind
     - Zusammenspiel von Heads abschalten, die für Idiome sind
     - Auswirkung auf loss
     - Auswirkung auf nwp
 4. zweites Modell
-    - BertIdiomClassifier: ist das auf EPIe trainiert? Gibt es dafür ein Paper?
+    - Awareness
+    - Head detection
+    - logit attribution
+    - ablation
 5. Schreiben
 - Selbstständigkeitserklärung -> auch digital unterschreiben? Muss das die neue sein?
 - Related Work
@@ -45,32 +57,41 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Update requirements and yml-file
 - Plot title
 - unnötige Funktionen ins Archiv
-- Wichtige Plots in main Funktion aufrufen
-- literal score relativieren mit idiom score?
-- idiom score mit generellem ngram-Score relativieren oder den einzelnen Features?
-- literal und idiom score methoden gleich benennen
-- score überklasse
+- nwg und loss Experimente in Repo übertragen
 
 ### Optional
-- Scatter Plot feature vectors
-- Regression: Add weights and bias
-- Clustering
-- Loss für static Idiomsätze
-- Token for whole idiom in vocabulary
-- static scores
-- literal scores
-- trans scores: momentan nur für idiom_pos, sollte aber eigl die gesamte Idiomübersetzung verwenden
-- idiom positions in data class verschieben
-- line single plot: alle layer anzeigen
-- hist plot: alle Zahlen anzeigen
-- alle plots in plot all
-- Liegen die Scores wegen Sigmoid alle so bei 0.5?
-- Experimente mit pythia-14m vergleichen
-- cache: to token rausnehmen
-- model mit from_pretrained_no_processing laden und überprüfen, ob das die Scores ändert
-- Aktivierungen austauschen und schauen, was das mit der Prediction macht
-- Route im LLM-transparency-tool anschauen
-- MLP Pattern untersuchen
+- Duplizierende Methoden (eigl bereits abgedeckt):
+    - Clustering
+    - weitere Modelle
+        - Experimente mit pythia-14m vergleichen
+    - weitere Daten
+        - static scores
+        - ambigue scores
+        - random scores
+        - transparent vs. opaque (Madabushi 2022)
+
+- Noch nicht abgedeckte Methoden:
+    - Aktivierungen austauschen und schauen, was das mit der Prediction macht
+    - Route im LLM-transparency-tool anschauen
+    - MLP Pattern untersuchen
+    - logit lens oder utils.test_prompt 
+
+- Änderungen an bestehenden Methoden:
+    - trans scores: momentan nur für idiom_pos, sollte aber eigl die gesamte Idiomübersetzung verwenden?
+    - model mit from_pretrained_no_processing laden und überprüfen, ob das die Scores ändert
+    - literal score relativieren mit idiom score?
+    - idiom score mit generellem ngram-Score relativieren oder den einzelnen Features?
+
+- Code clean:
+    - idiom positions in data class verschieben
+    - line single plot: alle layer anzeigen
+    - hist plot: alle Zahlen anzeigen
+    - alle plots in plot all
+    - cache: to token rausnehmen
+    - score überklasse
+    - Wichtige Plots in main Funktion aufrufen
+    - literal und idiom score methoden gleich benennen
+
 
 ## Usage
 ### Installation
@@ -115,6 +136,8 @@ sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
 sbatch --partition=NvidiaAll ./scripts/literal_only.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only.sh
 sbatch --partition=NvidiaAll ./scripts/logit_attr.sh
+sbatch --partition=NvidiaAll ./scripts/awareness.sh
+
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

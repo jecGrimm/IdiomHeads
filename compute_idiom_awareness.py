@@ -1,9 +1,10 @@
 from cli import CLI
 import os
-from transformer_lens import HookedTransformer
+from transformer_lens import HookedTransformer, HookedEncoder, loading_from_pretrained
 import torch as t
 from data import EPIE_Data
 from idiom_awareness import IdiomAwareness
+from transformers import AutoTokenizer, BertForMaskedLM
 
 cli = CLI()
 os.makedirs(f"./scores/loss/{cli.model_name}", exist_ok=True)
@@ -12,14 +13,21 @@ os.makedirs(f"./scores/next_word_prediction/{cli.model_name}", exist_ok=True)
 # Saves computation time
 t.set_grad_enabled(False)
 
-model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
+# if "bert" in cli.model_name:
+#     tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
+#     hf_model = BertForMaskedLM.from_pretrained("google-bert/bert-base-cased")
+#     model = HookedEncoder(loading_from_pretrained.get_pretrained_model_config("bert-base-cased")).from_pretrained("bert-base-cased", hf_model = hf_model, tokenizer = tokenizer)
 
+# else:
+#     model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
+model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
 epie = EPIE_Data()
 scorer = IdiomAwareness(model)
 print(f"Running on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
     split = cli.data_split[i]
+    print("\nProcessing split: ", split)
     if split == "formal":
         data = epie.create_hf_dataset(epie.formal_sents[cli.start:cli.end], epie.tokenized_formal_sents[cli.start:cli.end], epie.tags_formal[cli.start:cli.end])
     elif split == "trans":
