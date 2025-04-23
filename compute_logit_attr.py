@@ -43,7 +43,7 @@ for i in range(len(cli.data_split)):
     scorer.explore_tensor()
 
     # PLOT
-    plot_logit_attribution_split(scorer.split_attr, title = "Mean logit attribution: Idiom vs. Literal", x_labels = scorer.labels, filename = f"./plots/{cli.model_name}/heat_{split}_logit_attr.png")
+    #plot_logit_attribution_split(scorer.split_attr, title = "Mean logit attribution: Idiom vs. Literal", x_labels = scorer.labels, filename = f"./plots/{cli.model_name}/heat_{split}_logit_attr.png")
     
     scorer.split_attr = None
     t.cuda.empty_cache()
