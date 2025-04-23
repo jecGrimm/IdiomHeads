@@ -58,6 +58,9 @@ class LogitAttribution:
             sent_score = self.compute_logit_attr(batch["sentence"][i])
             
             batch_split_attr[i] = self.split_logit_attribution(sent_score, batch["idiom_pos"][i])
+
+            del sent_score
+            t.cuda.empty_cache()
         
         if self.split_attr != None:
             self.split_attr = t.cat((self.split_attr, batch_split_attr), dim = 0)
@@ -74,6 +77,9 @@ class LogitAttribution:
         with t.inference_mode():
             _, lbls = cache.get_full_resid_decomposition(expand_neurons=False, return_labels=True)
         print(f"\nComputing logit attribution for the following components:\n{lbls}")
+
+        del cache
+        t.cuda.empty_cache()
         return lbls
         
     def explore_tensor(self):

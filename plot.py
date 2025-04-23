@@ -221,7 +221,7 @@ def get_lh_std_scores(tensor):
             scores[f"{layer}.{head}"] = t.std(sent_last[layer][head]).numpy()
     return scores
 
-def explore_scores(tensor, filename = None, model_name = None):
+def explore_scores(tensor, filename = None):
     output = ""
     # MEAN
     mean_scores = get_lh_mean_scores(tensor)
@@ -242,12 +242,12 @@ def explore_scores(tensor, filename = None, model_name = None):
     output += f"\nMean distribution bottom 10 layer: {mean_bottom_10_layer}"
     output += f"\nMean distribution bottom 10 heads: {mean_bottom_10_heads}"
 
-    mean_above_59 = {head: float(score) for head, score in mean_scores.items() if score >= 0.59}
-    output += f"\nThere are {len(mean_above_59)} scores with a score higher than 0.59: {sorted(mean_above_59, key = lambda k:mean_above_59.get(k), reverse = True)}"
+    # mean_above_59 = {head: float(score) for head, score in mean_scores.items() if score >= 0.59}
+    # output += f"\nThere are {len(mean_above_59)} scores with a score higher than 0.59: {sorted(mean_above_59, key = lambda k:mean_above_59.get(k), reverse = True)}"
     # STD
     std_scores = get_lh_std_scores(tensor)
-    std_above_59 = [(head, float(std_scores[head])) for head in mean_above_59.keys()]
-    output += f"\nThese scores have a std of: {std_above_59}"
+    # std_above_59 = [(head, float(std_scores[head])) for head in mean_above_59.keys()]
+    # output += f"\nThese scores have a std of: {std_above_59}"
     output += f"\n\nMaximum std: {max(std_scores, key=lambda k:std_scores.get(k))} - {max(std_scores.values())}"
     output += f"\nMinimum std: {min(std_scores, key=lambda k:std_scores.get(k))} - {min(std_scores.values())}"
 
@@ -264,8 +264,8 @@ def explore_scores(tensor, filename = None, model_name = None):
     output += f"\nStd distribution bottom 10 layer: {std_bottom_10_layer}"
     output += f"\nStd distribution bottom 10 heads: {std_bottom_10_heads}"
 
-    if filename and model_name:
-        with open(f"./plots/{model_name}/{filename}.txt", 'w', encoding = "utf-8") as f:
+    if filename != None:
+        with open(filename, 'w', encoding = "utf-8") as f:
             f.write(output)
     else:
         print(output)
@@ -336,7 +336,7 @@ def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
         plot_line_std(tensor, f"{path}/std_line_{filename}.png")
         plot_heatmap(tensor, f"{path}/heat_{filename}.png")
         plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
-        explore_scores(tensor, filename, model_name)
+        explore_scores(tensor, f"{path}/{filename}.txt")
     else:
         plot_tensor_line(tensor)
         plot_line_std(tensor)
@@ -376,13 +376,14 @@ def plot_all_components(full_tensor, filename = None, model_name = None):
             plot_line_std(tensor, f"{path}/std_line_{filename}.png", title = f"Standard deviation of the {comp} (component) per head and layer", ylabel = comp)
             plot_heatmap(tensor, f"{path}/heat_{filename}.png", title = f"{comp[0].upper()}{comp[1:]} (component)")
             plot_tensor_hist(tensor, f"{path}/hist_{filename}.png", title = f"Distribution of the {comp} (component)", xlabel = comp)
-            explore_scores(tensor, filename, model_name)
+            explore_scores(tensor, f"{path}/{filename}.txt")
 
         else:
             plot_tensor_line(tensor, title = f"Average {comp} (component) per head and layer", ylabel=comp)
             plot_line_std(tensor, title = f"Standard deviation of the {comp} (component) per head and layer", ylabel=comp)
             plot_heatmap(tensor, title = f"{comp[0].upper()}{comp[1:]} (component)")
             plot_tensor_hist(tensor, title = f"Distribution of the {comp} (component)", xlabel=comp)
+            print(f"\n\nComponent: {comp}")
             explore_scores(tensor)
 
     if orig_filename and model_name:
@@ -403,19 +404,19 @@ if __name__ == "__main__":
     scatter_file = parser.parse_args().scatter_file
     device = "cuda" if t.cuda.is_available() else "cpu"
 
-    if not os.path.isdir("./plots"):
-        os.mkdir("./plots")
-
-    if not os.path.isdir(f"./plots/{model_name}"):
-        os.mkdir(f"./plots/{model_name}")
+    os.makedirs(f"./plots/{model_name}", exist_ok=True)
 
     loaded_tensor = t.load(tensor_file, map_location=t.device(device))
+    loaded_tensor = t.sigmoid((10*t.sum(loaded_tensor, dim = -1)+t.exp(t.tensor(2))))
     print(f"Loaded tensor with size: {loaded_tensor.size()}")
+    #plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
-    if tensor_file.endswith("_comp.pt"):
-        plot_all_components(loaded_tensor, img_file, model_name)
-    else:
-        plot_all(loaded_tensor, img_file, model_name, scatter_file)
+    explore_scores(loaded_tensor)
+
+    # if tensor_file.endswith("_comp.pt"):
+    #     plot_all_components(loaded_tensor, img_file, model_name)
+    # else:
+    #     plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
     # get_head_info("1.1", loaded_tensor)
     # get_head_info("1.4", loaded_tensor)

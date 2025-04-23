@@ -2,10 +2,10 @@
 This repository is part of the Master thesis "Spilling the beans: Interpreting Attention Patterns for Idioms in transformer-based Language Models".
 
 ## Todos
-0. Awareness
-- pythia 1.4B
+0. Cagen
 1. Head detection
 - komponenten
+    - contributions korrekt berechnen
     - full
         - 15: formal und trans
     - plots
@@ -24,7 +24,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - trans literal
 2. Logit attribution
 - full 
-    - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22
+    - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22 OOM
     - trans 18 -> 19 -> 22
 - plot
     - formal
@@ -66,11 +66,26 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - ambigue scores
         - random scores
         - transparent vs. opaque (Madabushi 2022)
+    - weitere Komponenten
+        - contributions für MLP berechnen
 
 - Noch nicht abgedeckte Methoden:
     - Aktivierungen austauschen und schauen, was das mit der Prediction macht
+    - Letztes Idiomwort austauschen mit trans und random und Unterschied betrachten
+        - Loss-Unterschiede
+        - logit Difference
+        - cosine similarity 
+    - Cosine Similarity zwischen den Pattern berechnen
+        - Paare finden, die gleich lang sind (formal und trans)
+        - ganze Pattern
+        - letztes Query word
+        - letztes query idiom word
+        - random Satz, der gleich lang ist
+        - Gruppen von Idiomen vergleichen
+            - dimension reduction cluster: tsn-e, enge oder weite Cluster?
+            - pairwise cosine 
+                - jedes Idiom mit jedem und dann den Durchschnitt für jeden Head
     - Route im LLM-transparency-tool anschauen
-    - MLP Pattern untersuchen
     - logit lens oder utils.test_prompt 
 
 - Änderungen an bestehenden Methoden:
