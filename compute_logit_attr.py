@@ -4,7 +4,6 @@ from transformer_lens import HookedTransformer
 from data import EPIE_Data
 from logit_attribution import LogitAttribution
 import torch as t
-from plot import plot_logit_attribution_split
 
 cli = CLI() # parses arguments
 os.makedirs(f"./scores/logit_attribution/{cli.model_name}", exist_ok=True)
