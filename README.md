@@ -3,21 +3,20 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 0. Awareness
-- pythia 14m: 719449
 - pythia 70m
 - pythia 1.4B
 1. Head detection
 - komponenten
     - full
-        - 719198: formal und trans
+        - 15: formal und trans
     - plots
         - full
     - sigmoid anpassen
 - literal score
     - formal score
-        - full 719199
+        - full 17
     - trans score
-        - full 719199
+        - full 17
     - plot scatter to see correlation
         - full
 - plots: 
@@ -26,8 +25,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - trans literal
 2. Logit attribution
 - full 
-    - formal 719219
-    - trans 719219
+    - formal 18 - failed no module named IPython -> 19
+    - trans 18 -> 19
 - plot
     - formal
     - trans
@@ -110,6 +109,7 @@ conda activate idiom
 `conda install pytorch torchdata torchvision -c pytorch -y`
 pip install -r conda_requirements.txt
 pip install merge-tokenizers
+pip install IPython
 
 Wenn Fehlermeldung kommt, dass torchvision:nms nicht vorhanden ist: 
 conda remove torchvision
@@ -121,6 +121,7 @@ conda activate idiom
 `conda install pytorch torchdata torchvision -c pytorch -y` (kommt Nachricht, dass alles schon installiert ist, funzt aber trotzdem)
 pip install transformer-lens
 pip install merge-tokenizers
+pip install IPython
 
 ### SLURM
 ssh grimmj@remote.cip.ifi.lmu.de
