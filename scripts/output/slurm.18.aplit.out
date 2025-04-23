@@ -1,0 +1,8 @@
+slurmstepd-aplit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-aplit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_logit_attr.py", line 7, in <module>
+    from plot import plot_logit_attribution_split
+  File "/home/g/grimmj/IdiomHeads/plot.py", line 1, in <module>
+    from IPython.display import display
+ModuleNotFoundError: No module named 'IPython'

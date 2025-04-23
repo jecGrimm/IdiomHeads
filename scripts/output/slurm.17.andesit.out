@@ -1,0 +1,10 @@
+slurmstepd-andesit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-andesit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device cuda.
+
+Processing split formal:
+Map:   0%|          | 0/2761 [00:00<?, ? examples/s]Map:   0%|          | 1/2761 [00:09<7:20:02,  9.57s/ examples]Map:   0%|          | 2/2761 [00:14<5:05:32,  6.64s/ examples]Map:   0%|          | 3/2761 [00:20<4:56:55,  6.46s/ examples]Map:   0%|          | 4/2761 [02:48<47:50:24, 62.47s/ examples]Map:   0%|          | 5/2761 [03:28<41:28:40, 54.18s/ examples]Map:   0%|          | 6/2761 [03:32<28:33:56, 37.33s/ examples]Map:   0%|          | 7/2761 [03:49<23:20:57, 30.52s/ examples]
