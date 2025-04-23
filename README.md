@@ -3,7 +3,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 0. Awareness
-- pythia 70m
 - pythia 1.4B
 1. Head detection
 - komponenten
@@ -25,8 +24,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - trans literal
 2. Logit attribution
 - full 
-    - formal 18 - failed no module named IPython -> 19
-    - trans 18 -> 19
+    - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22
+    - trans 18 -> 19 -> 22
 - plot
     - formal
     - trans
