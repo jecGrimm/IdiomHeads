@@ -55,7 +55,7 @@ gitdb==4.0.12
 GitPython==3.1.44
 gmpy2 @ file:///home/conda/feedstock_root/build_artifacts/gmpy2_1733462543063/work
 grpcio==1.71.0
-h11==0.14.0
+h11==0.16.0
 h2 @ file:///home/conda/feedstock_root/build_artifacts/h2_1738578511449/work
 hpack @ file:///home/conda/feedstock_root/build_artifacts/hpack_1737618293087/work
 httpcore==1.0.7
