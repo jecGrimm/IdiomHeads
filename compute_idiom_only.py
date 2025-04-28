@@ -40,7 +40,7 @@ for i in range(len(cli.data_split)):
         
     data = data.add_column("idiom_pos", scorer.idiom_positions[cli.start:cli.end])
     
-    scorer.cage_dir = f"./cage/{cli.model_name}/{split}"
+    #scorer.cage_dir = f"./cage/{cli.model_name}/{split}"
     comp_file = f"./scores/idiom_components/{cli.model_name}/idiom_only_{split}_{cli.start}_{cli.end}_comp.pt"
     
     data.map(lambda batch: scorer.create_idiom_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)

@@ -394,7 +394,7 @@ def plot_all_components(full_tensor, filename = None, model_name = None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="./components/idiom_components/pythia-1.4b/idiom_only_formal_0_None.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="./scores/idiom_components/pythia-1.4b/idiom_only_formal_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -407,11 +407,11 @@ if __name__ == "__main__":
     os.makedirs(f"./plots/{model_name}", exist_ok=True)
 
     loaded_tensor = t.load(tensor_file, map_location=t.device(device))
-    loaded_tensor = t.sigmoid((10*t.sum(loaded_tensor, dim = -1)+t.exp(t.tensor(2))))
+    loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
     print(f"Loaded tensor with size: {loaded_tensor.size()}")
-    #plot_all(loaded_tensor, img_file, model_name, scatter_file)
+    plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
-    explore_scores(loaded_tensor)
+    #explore_scores(loaded_tensor)
 
     # if tensor_file.endswith("_comp.pt"):
     #     plot_all_components(loaded_tensor, img_file, model_name)
