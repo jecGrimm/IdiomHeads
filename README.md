@@ -188,22 +188,19 @@ pythia 14m
     - logit 
         - b1: 8.15s/ex
 
-pythia 1.4b
+pythia 1.4b - immer mit GPU
 - formal 
     - literal
         - b 3: cuda oom 
     - mean
         - b3: cuda oom
         - b1: cudo oom
-        - b1, GPU: 5s/ex-41s/ex (extract tensor per attention pattern)
+        - b1: 5s/ex-41s/ex (extract tensor per attention pattern)
     - idiom only
-        - b1: 1.21s/ex (load model with float16)
-    literal 
-        - b1:
-    - logit 
-        - b1: 
+        - b1: 18.28s/ex (load model with float16)
 - trans literal
-    - b 8: cuda oom
-    - logit 
-        - b1: 
+    - idiom
+        - b 8: cuda oom
+    - idiom only
+        - b1: 19.39s/ex (load model with float16)
 
