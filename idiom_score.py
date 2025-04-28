@@ -13,7 +13,7 @@ import os
 import einops
 
 class IdiomScorer:
-    def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json"):
+    def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json", start = 0, cage_dir = ""):
         #self.data = EPIE_Data()
         self.model = model
         self.model.cfg.use_attn_result = True
@@ -23,6 +23,8 @@ class IdiomScorer:
         self.idiom_positions = self.load_all_idiom_pos(filename)
         self.components = None
         self.features = 5
+        self.batch_num = start
+        self.cage_dir = cage_dir
 
     def get_all_idiom_pos(self, batch):
         for i in range(len(batch["sentence"])):
@@ -47,15 +49,36 @@ class IdiomScorer:
         _, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
         return cache.to(self.device)
 
+    def get_cage(self):
+        if os.path.isfile(f"{self.cage_dir}/pattern/{self.batch_num}.pt"):
+            pattern_stack = t.load(f"{self.cage_dir}/pattern/{self.batch_num}.pt", map_location=t.device(self.device))
+        else:
+            pattern_stack = None
+        
+        if os.path.isfile(f"{self.cage_dir}/result/{self.batch_num}.pt"):
+            result_stack = t.load(f"{self.cage_dir}/result/{self.batch_num}.pt", map_location=t.device(self.device))
+        else:
+            result_stack = None
+        
+        return pattern_stack, t.einsum("ijkl->ikjl", result_stack)
+
+
     def create_idiom_features(self, sent, idiom_pos):
-        cache = self.get_cache(sent)
+        pattern_stack, result_stack = self.get_cage()
+        cache = None
+        if pattern_stack == None or result_stack == None:
+            cache = self.get_cache(sent)
 
         layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device) # 8 features (4 idiom feats, 4 ngram feats)
         #activation_matrix = cache.stack_activation("pattern") # layers x heads x seq x seq
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
-                attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
-                head_result = cache["result", layer][:, head, :].to(dtype=t.float16) # seq x heads x d_model
+                if cache != None:
+                    attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
+                    head_result = cache["result", layer][:, head, :].to(dtype=t.float16) # seq x heads x d_model
+                else:
+                    attention_pattern = pattern_stack[layer][head]
+                    head_result = result_stack[layer][head]
                 layer_head_features[layer][head] = self.compute_components(attention_pattern, head_result, idiom_pos)
 
                 del attention_pattern
@@ -63,6 +86,8 @@ class IdiomScorer:
                 t.cuda.empty_cache()
         
         del cache
+        del pattern_stack
+        del result_stack
         t.cuda.empty_cache()
 
         return layer_head_features

@@ -3,19 +3,21 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 
 ## Todos
 0. Cagen
+- pythia 24 failed, aber output lässt keine Probleme erkennen
+- qwen 25 failed, aber output lässt keine Probleme erkennen
 1. Head detection
 - komponenten
     - contributions korrekt berechnen
     - full
-        - 15: formal und trans
+        - 15: formal und trans - failed, aber output lässt keine Probleme erkennen
     - plots
         - full
     - sigmoid anpassen
 - literal score
     - formal score
-        - full 17
+        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
     - trans score
-        - full 17
+        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
     - plot scatter to see correlation
         - full
 - plots: 
@@ -25,7 +27,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 2. Logit attribution
 - full 
     - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22 OOM
-    - trans 18 -> 19 -> 22
+    - trans 18 -> 19 -> 22 OOM
 - plot
     - formal
     - trans
@@ -55,6 +57,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Plot title
 - unnötige Funktionen ins Archiv
 - nwg und loss Experimente in Repo übertragen
+- Angeben, dass h11-Update auf 0.16.0 von dependabot gemacht wurde
 
 ### Optional
 - Duplizierende Methoden (eigl bereits abgedeckt):
@@ -151,6 +154,8 @@ sbatch --partition=NvidiaAll ./scripts/literal_only.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only.sh
 sbatch --partition=NvidiaAll ./scripts/logit_attr.sh
 sbatch --partition=NvidiaAll ./scripts/awareness.sh
+sbatch --partition=NvidiaAll ./scripts/cage_pythia.sh
+sbatch --partition=NvidiaAll ./scripts/cage_qwen.sh
 
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
@@ -163,7 +168,7 @@ pythia 14m
 - formal 
     - idiom 
         - b 3: 42,78s/ex
-        - b 1: 2.86 - 43,53s/ex (delete tensors), 3.89 - 132.81 (load model with float16)
+        - b 1: 2.86 - 43,53s/ex (delete tensors), 3.89 - 132.81 (load model with float16), 2.80 s/ex(caging), 2.35s/ex (no caging)
     - mean
         - b3: 4,55s/ex
         - b1, GPU: 12s/ex, 1.2s/ex (extract tensor per attention pattern)

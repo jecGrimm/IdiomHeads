@@ -15,7 +15,7 @@ t.set_grad_enabled(False)
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
 model.eval()
 epie = EPIE_Data()
-scorer = IdiomScorer(model, filename = cli.idiom_file)
+scorer = IdiomScorer(model, filename = cli.idiom_file, start = cli.start)
 
 print(f"Running on device {scorer.device}.")
 
@@ -40,6 +40,7 @@ for i in range(len(cli.data_split)):
         
     data = data.add_column("idiom_pos", scorer.idiom_positions[cli.start:cli.end])
     
+    scorer.cage_dir = f"./cage/{cli.model_name}/{split}"
     comp_file = f"./scores/idiom_components/{cli.model_name}/idiom_only_{split}_{cli.start}_{cli.end}_comp.pt"
     
     data.map(lambda batch: scorer.create_idiom_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)
