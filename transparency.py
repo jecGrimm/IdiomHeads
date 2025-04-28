@@ -1,7 +1,7 @@
 from llm_transparency_tool.models.tlens_model import TransformerLensTransparentLlm
 import torch as t
 
-model = TransformerLensTransparentLlm("pythia-14m", dtype = t.bfloat16)
+model = TransformerLensTransparentLlm("Qwen/Qwen2-0.5B-Instruct", dtype = t.bfloat16)
 
 print(model.n_layers)
 

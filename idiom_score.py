@@ -57,10 +57,11 @@ class IdiomScorer:
         
         if os.path.isfile(f"{self.cage_dir}/result/{self.batch_num}.pt"):
             result_stack = t.load(f"{self.cage_dir}/result/{self.batch_num}.pt", map_location=t.device(self.device))
+            result_stack = t.einsum("ijkl->ikjl", result_stack)
         else:
             result_stack = None
         
-        return pattern_stack, t.einsum("ijkl->ikjl", result_stack)
+        return pattern_stack, result_stack
 
 
     def create_idiom_features(self, sent, idiom_pos):
