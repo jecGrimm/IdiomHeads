@@ -9,7 +9,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - komponenten
     - contributions korrekt berechnen
     - full
-        - 15: formal und trans - failed, aber output lässt keine Probleme erkennen
+        - 623: formal ab 1232 - DONE! 
+        - trans: 787
+        - 15: formal und trans - failed, aber output lässt keine Probleme erkennen, formal bis 1231 auf gpu_archive bzw. lokal
     - plots
         - full
     - sigmoid anpassen
@@ -150,6 +152,7 @@ sbatch --partition=NvidiaAll ./scripts/literal_trans.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_formal.sh
 sbatch --partition=NvidiaAll ./scripts/mean_idiom_trans.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only_formal.sh
+sbatch --partition=NvidiaAll ./scripts/idiom_only_trans.sh
 sbatch --partition=NvidiaAll ./scripts/literal_only.sh
 sbatch --partition=NvidiaAll ./scripts/idiom_only.sh
 sbatch --partition=NvidiaAll ./scripts/logit_attr.sh
@@ -183,6 +186,8 @@ pythia 14m
 - trans 
     - idiom
         - b 8: 1721 s/ex
+        - only comp mit contr
+            - b1: 2.71 - 22.32 s/ex
     - literal only
         - b1: 2.2s/ex
     - logit 
