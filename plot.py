@@ -394,7 +394,7 @@ def plot_all_components(full_tensor, filename = None, model_name = None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="./scores/idiom_components/pythia-1.4b/idiom_only_formal_0_None_comp.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="./scores/idiom_scores/pythia-1.4b/idiom_only_formal_0_None.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 

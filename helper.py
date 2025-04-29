@@ -23,4 +23,9 @@ def merge_tensors(file1, file2, outfile):
     t.save(concat_tensor, outfile)
 
 if __name__ == "__main__":
-    merge_tensors("./scores/idiom_components/pythia-1.4b/idiom_only_formal_0_1231_comp.pt", "./scores/idiom_components/pythia-1.4b/idiom_only_formal_1232_None_comp.pt", "./scores/idiom_scores/pythia-1.4b/idiom_only_formal_0_None.pt")
+    #merge_tensors("./scores/idiom_components/pythia-1.4b/idiom_only_formal_0_1231_comp.pt", "./scores/idiom_components/pythia-1.4b/idiom_only_formal_1232_None_comp.pt", "./scores/idiom_scores/pythia-1.4b/idiom_only_formal_0_None.pt")
+
+    file1 = "./scores/idiom_components/pythia-1.4b/idiom_only_trans_0_None_comp.pt"
+    device = "cuda" if t.cuda.is_available() else "cpu"
+    tensor1 = t.load(file1, map_location=t.device(device))
+    print("Size tensor1: ", tensor1.size())
