@@ -1,0 +1,10 @@
+slurmstepd-dacit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-dacit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device cuda.
+
+Processing split:  trans
+Map:   0%|          | 0/2761 [00:00<?, ? examples/s]Map:   0%|          | 1/2761 [00:04<3:16:57,  4.28s/ examples]Map:   0%|          | 2/2761 [00:05<1:57:20,  2.55s/ examples]Map:   0%|          | 3/2761 [00:07<1:51:40,  2.43s/ examples]slurmstepd-dacit: error: *** JOB 882 ON dacit CANCELLED AT 2025-04-29T11:03:41 ***
