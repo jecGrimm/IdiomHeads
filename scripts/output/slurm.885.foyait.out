@@ -1,0 +1,15 @@
+slurmstepd-foyait: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-foyait: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running on device cpu.
+
+Processing split:  formal
+Map:   0%|          | 0/1 [00:00<?, ? examples/s]Map: 100%|██████████| 1/1 [46:36<00:00, 2796.49s/ examples]Map: 100%|██████████| 1/1 [46:36<00:00, 2796.49s/ examples]
+The score of the first sentence for the layer 0 and head 0 is:
+0.50048828125
+components first sentence and head:  tensor([ 3.8948e-03, -6.6986e-03,  0.0000e+00,  4.9744e-03, -8.7023e-06],
+       dtype=torch.float16)
+component size:  torch.Size([1, 24, 16, 5])
