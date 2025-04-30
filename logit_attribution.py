@@ -72,14 +72,14 @@ class LogitAttribution:
     def mean_idiom_attribution(self, logit_attr, idiom_pos):
         idiom_tensor = logit_attr[idiom_pos[0]:idiom_pos[1]+1]
         if idiom_tensor.size(0) == 0:
-            return t.zeros(logit_attr.size(1))
+            return t.zeros(logit_attr.size(1), dtype=t.float16, device = self.device)
         else:
             return t.mean(idiom_tensor, dim = 0)
 
     def mean_literal_attribution(self, logit_attr, idiom_pos):
         literal_tensor = t.cat((logit_attr[:idiom_pos[0]], logit_attr[idiom_pos[1]+1:]))
         if literal_tensor.size(0) == 0:
-            return t.zeros(logit_attr.size(1))
+            return t.zeros(logit_attr.size(1), dtype=t.float16, device = self.device)
         else:
             return t.mean(literal_tensor, dim = 0)
     
@@ -104,7 +104,7 @@ class LogitAttribution:
         if self.labels == None:
             self.get_labels(batch["sentence"][0])
         
-        batch_split_attr = t.zeros(len(batch["sentence"]), 2, len(self.labels), device=self.device)
+        batch_split_attr = t.zeros(len(batch["sentence"]), 2, len(self.labels), device=self.device, dtype=t.float16)
 
         for i in range(len(batch["sentence"])):
             sent_score = self.compute_logit_attr(batch["sentence"][i])

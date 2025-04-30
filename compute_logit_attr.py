@@ -10,7 +10,7 @@ os.makedirs(f"./scores/logit_attribution/{cli.model_name}", exist_ok=True)
 os.makedirs(f"./plots/{cli.model_name}", exist_ok=True)
 t.set_grad_enabled(False)
 
-model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16") # cannot load bfloat16 because logit_attr does not work with that dtype
+model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="float16") # cannot load bfloat16 because logit_attr does not work with that dtype
 
 model.eval()
 epie = EPIE_Data()

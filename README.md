@@ -2,26 +2,16 @@
 This repository is part of the Master thesis "Spilling the beans: Interpreting Attention Patterns for Idioms in transformer-based Language Models".
 
 ## Todos
-0. Cagen
-- pythia 24 failed, aber output lässt keine Probleme erkennen
-- qwen 25 failed, aber output lässt keine Probleme erkennen
 1. Head detection
-- komponenten
-    - contributions korrekt berechnen
-    - full
-        - 623: formal ab 1232 - DONE! 
-        - trans: 787 - 887
-        - 15: formal und trans - failed, aber output lässt keine Probleme erkennen, formal bis 1231 auf gpu_archive bzw. lokal
-    - plots
-        - full
-    - sigmoid anpassen
 - literal score
     - formal score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
         - 1039: ab 96
+        - 1055: full (fix der idiom Positionen)
     - trans score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
         - 1039: ganz
+        - 1055: full (fix der idiom Positionen)
     - plot scatter to see correlation
         - full
 - plots: 
@@ -33,6 +23,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - 1040 (bfloat16)
     - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22 OOM
     - trans 18 -> 19 -> 22 OOM
+    - full: 1056 (fix nan values)
 - plot
     - formal
     - trans
