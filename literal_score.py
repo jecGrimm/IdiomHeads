@@ -27,6 +27,17 @@ class LiteralScorer:
                 return json.load(f) 
         else:
             return [] 
+        
+    def get_all_idiom_pos(self, batch):
+        for i in range(len(batch["sentence"])):
+            sent = batch["sentence"][i]
+            model_str_tokens= self.model.to_str_tokens(sent)
+            aligned_positions = self.align_tokens(sent, batch["tokenized"][i], model_str_tokens)
+            self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
+
+    def store_all_idiom_pos(self, filename):
+        with open(filename, 'w', encoding = "utf-8") as f:
+            json.dump(self.idiom_positions, f)   
 
     def create_data_score_tensor(self, batch, comp_file):
         batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device)
