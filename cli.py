@@ -16,8 +16,10 @@ class CLI:
 
         self.end = parser.parse_args().end
         for i in range(len(self.end)):
-            if self.end[i] != None:
+            if self.end[i] != "None":
                 self.end[i] = int(self.end[i])
+            else:
+                self.end[i] = None
 
         while len(self.start) < len(self.data_split):
             self.start.append(self.start[-1])
