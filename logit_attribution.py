@@ -2,6 +2,7 @@ import torch as t
 import os
 import json
 from transformer_lens.utils import Slice
+from merge_tokenizers import PythonGreedyCoverageAligner, types
 
 class LogitAttribution:
     def __init__(self, model, filename = "pythia_formal_idiom_pos.json"):
@@ -17,6 +18,7 @@ class LogitAttribution:
         self.labels = None
         self.cache = None
         self.residual_stack = None
+        self.aligner = PythonGreedyCoverageAligner()
 
     def load_all_idiom_pos(self, filename):
         if os.path.isfile(filename):
@@ -24,6 +26,39 @@ class LogitAttribution:
                 return json.load(f) 
         else:
             return [] 
+        
+    def get_all_idiom_pos(self, batch):
+        for i in range(len(batch["sentence"])):
+            sent = batch["sentence"][i]
+            model_str_tokens= self.model.to_str_tokens(sent)
+            aligned_positions = self.align_tokens(sent, batch["tokenized"][i], model_str_tokens)
+            self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
+
+    def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):
+        aligned = self.aligner.align(
+            types.TokenizedSet(tokens=[tokenized_sent, model_str_tokens], text=sent)
+        )
+        return list(aligned[0])
+    
+    def get_idiom_pos(self, aligned_positions, tags: list):
+        epie_idiom_pos = [i for i in range(len(tags)) if "IDIOM" in tags[i]]
+
+        start = None
+        end = None
+        for epie_pos, model_positions in aligned_positions:
+            if epie_pos == epie_idiom_pos[0]:
+                start = model_positions[0]
+            elif epie_pos == epie_idiom_pos[-1]:
+                end = model_positions[-1]
+        
+        if end == None:
+            end = aligned_positions[-1][-1][-1]
+        assert start != None and end != None
+        return (start, end)
+
+    def store_all_idiom_pos(self, filename):
+        with open(filename, 'w', encoding = "utf-8") as f:
+            json.dump(self.idiom_positions, f)   
 
     def get_cache(self, sent):
         _, self.cache = self.model.run_with_cache(sent, remove_batch_dim=True)
