@@ -1,0 +1,10 @@
+slurmstepd-dacit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-dacit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_literal_only.py", line 10, in <module>
+    cli = CLI()
+          ^^^^^
+  File "/home/g/grimmj/IdiomHeads/cli.py", line 20, in __init__
+    self.end[i] = int(self.end[i])
+                  ^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'None'
