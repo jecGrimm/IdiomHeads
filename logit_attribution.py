@@ -70,10 +70,18 @@ class LogitAttribution:
         return t.vstack((idiom_attr, literal_attr))
 
     def mean_idiom_attribution(self, logit_attr, idiom_pos):
-        return t.mean(logit_attr[idiom_pos[0]:idiom_pos[1]], dim = 0)
+        idiom_tensor = logit_attr[idiom_pos[0]:idiom_pos[1]+1]
+        if idiom_tensor.size(0) == 0:
+            return t.zeros(logit_attr.size(1))
+        else:
+            return t.mean(idiom_tensor, dim = 0)
 
     def mean_literal_attribution(self, logit_attr, idiom_pos):
-        return t.mean(t.cat((logit_attr[:idiom_pos[0]], logit_attr[idiom_pos[1]+1:])), dim = 0)
+        literal_tensor = t.cat((logit_attr[:idiom_pos[0]], logit_attr[idiom_pos[1]+1:]))
+        if literal_tensor.size(0) == 0:
+            return t.zeros(logit_attr.size(1))
+        else:
+            return t.mean(literal_tensor, dim = 0)
     
     def compute_logit_attr(self, sent):
         if self.cache == None:

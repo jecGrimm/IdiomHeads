@@ -119,6 +119,12 @@ class LiteralScorer:
         sent_positions = t.arange(attention_pattern.size(-1)).to(self.device)
 
         literal_attention = self.extract_tensor(attention_pattern, self.get_literal_combinations(idiom_positions, sent_positions))
+        if literal_attention.size(0) == 0:
+            mean = t.zeros(1)
+            std = t.zeros(1)
+        else:
+            mean = t.mean(literal_attention)
+            std = -t.std(literal_attention)
         max_tok = self.mean_qk_max(attention_pattern, idiom_pos)
         phrase = self.mean_qk_phrase(attention_pattern, idiom_pos)
         contribution = self.get_attn_contribution(head_result, idiom_pos)
@@ -127,7 +133,7 @@ class LiteralScorer:
         del sent_positions
         t.cuda.empty_cache()
 
-        return t.tensor((t.mean(literal_attention), -t.std(literal_attention), max_tok, phrase, contribution), dtype=t.float16, device = self.device)
+        return t.tensor((mean, std, max_tok, phrase, contribution), dtype=t.float16, device = self.device)
     
     def get_literal_combinations(self, idiom_positions, sent_positions):
         '''
@@ -158,10 +164,18 @@ class LiteralScorer:
         @param attention_pattern: attention scores for one head and one sentence
         @returns mean of the row and column fractions
         '''
-        literal_argmax_k = t.cat((t.argmax(attention_pattern, dim = 1)[:9], t.argmax(attention_pattern, dim = 1)[13:])) # check device
-        literal_argmax_q = t.cat((t.argmax(attention_pattern, dim = 0)[:9], t.argmax(attention_pattern, dim = 1)[13:]))
-        q2k = self.max_idiom_toks(literal_argmax_k.tolist(), idiom_pos)
-        k2q = self.max_idiom_toks(literal_argmax_q.tolist(), idiom_pos)
+        literal_argmax_k = t.cat((t.argmax(attention_pattern, dim = 1)[:idiom_pos[0]], t.argmax(attention_pattern, dim = 1)[idiom_pos[1]+1:])) 
+        literal_argmax_q = t.cat((t.argmax(attention_pattern, dim = 0)[:idiom_pos[0]], t.argmax(attention_pattern, dim = 0)[idiom_pos[1]+1:]))
+
+        if literal_argmax_k.size(0) == 0:
+            q2k = t.zeros(1)
+        else:
+            q2k = self.max_idiom_toks(literal_argmax_k.tolist(), idiom_pos)
+        
+        if literal_argmax_q.size(0) == 0:
+            k2q = t.zeros(1)
+        else:
+            k2q = self.max_idiom_toks(literal_argmax_q.tolist(), idiom_pos)
 
         del literal_argmax_k
         del literal_argmax_q
@@ -238,7 +252,11 @@ class LiteralScorer:
 
     def get_attn_contribution(self, head_result, idiom_pos):
         # seq_len x dmodel
-        return t.mean(t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:])))
+        literal_result = t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:]))
+        if literal_result.size(0) == 0:
+            return t.zeros(1)
+        else:
+            return t.mean(t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:])))
         
     def explore_tensor(self):
         print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")
