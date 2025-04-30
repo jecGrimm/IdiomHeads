@@ -15,7 +15,7 @@ model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name
 model.eval()
 epie = EPIE_Data()
 scorer = LogitAttribution(model, filename = cli.idiom_file)
-print(f"Running on device {scorer.device}.")
+print(f"Running logit attribution on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
     if cli.batch_sizes[i] == None:

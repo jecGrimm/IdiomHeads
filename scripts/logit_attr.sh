@@ -8,4 +8,4 @@
 #SBATCH --output=/home/g/grimmj/IdiomHeads/scripts/output/slurm.%j.%N.out
 #SBATCH --ntasks=1
 
-python3 -u compute_logit_attr.py -d formal trans -s 0 0 -e None None
+python3 -u compute_logit_attr.py -d formal trans -s 0 0 -e None None -i pythia_formal_idiom_pos.json
