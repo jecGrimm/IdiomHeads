@@ -10,7 +10,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - contributions korrekt berechnen
     - full
         - 623: formal ab 1232 - DONE! 
-        - trans: 787
+        - trans: 787 - 887
         - 15: formal und trans - failed, aber output lässt keine Probleme erkennen, formal bis 1231 auf gpu_archive bzw. lokal
     - plots
         - full
@@ -108,6 +108,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - score überklasse
     - Wichtige Plots in main Funktion aufrufen
     - literal und idiom score methoden gleich benennen
+    - in idiom scores ordner nur die sigmoid-Scores speichern
 
 
 ## Usage
@@ -182,7 +183,7 @@ pythia 14m
         - b1: 2.88a/ex (load model with bfloat16, delete cache)
         - b1, GPU: 1.3s/ex
     - logit 
-        - b1: 5.17s/ex
+        - b1: 5.17s/ex, 9.57 s/ex (copied logit_attrs, bfloat16)
 - trans 
     - idiom
         - b 8: 1721 s/ex

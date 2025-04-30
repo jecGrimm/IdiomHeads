@@ -3,7 +3,7 @@ from datasets import Dataset
 
 class EPIE_Data:
     def __init__(self):
-        formal_idioms_labels = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Labels.txt")
+        formal_idioms_labels = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Labels.txt")# Sentence at pos 1231 is so long that it causes memory errors
         translated_sentences = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/translated_sentences.txt")
         formal_idioms_words = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Words.txt")
         formal_idioms_tags = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Tags.txt")
@@ -17,6 +17,12 @@ class EPIE_Data:
         self.formal_sents = self.remove_spaces(self.tokenized_formal_sents)
         self.trans_formal_sents = self.remove_spaces(self.tokenized_trans_formal_sents)
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
+
+        self.formal_sents.pop(1231)
+        self.tokenized_formal_sents.pop(1231)
+        self.trans_formal_sents.pop(1231)
+        self.tokenized_trans_formal_sents.pop(1231)
+        self.tags_formal.pop(1231)
 
     def read_file(self, path: str):
         '''
@@ -52,6 +58,10 @@ class EPIE_Data:
                 self.tokenized_literal_sents.append(formal_idioms_words[i].strip())
                 self.tokenized_trans_literal_sents.append(translated_sentences[i].strip())
                 self.tags_literal.append(formal_idioms_tags[i].strip())
+
+        # self.tokenized_formal_sents.pop(1231)
+        # self.tokenized_trans_formal_sents.pop(1231)
+        # self.tags_formal.pop(1231)
 
     def remove_spaces(self, sent_list: list):
         '''

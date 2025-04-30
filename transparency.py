@@ -1,9 +1,8 @@
 from llm_transparency_tool.models.tlens_model import TransformerLensTransparentLlm
 import torch as t
 
-model = TransformerLensTransparentLlm("Qwen/Qwen2-0.5B-Instruct", dtype = t.bfloat16)
+model = TransformerLensTransparentLlm("EleutherAI/pythia-14m", dtype = t.bfloat16)
 
-print(model.n_layers)
 
 # VON LEA
 # resid_pre = model.residual_in(layer)[B0].unsqueeze(0)
