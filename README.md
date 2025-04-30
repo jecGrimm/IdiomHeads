@@ -18,10 +18,10 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - literal score
     - formal score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
-        - 1036: ab 96
+        - 1038: ab 96
     - trans score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
-        - 1036: ganz
+        - 1038: ganz
     - plot scatter to see correlation
         - full
 - plots: 
