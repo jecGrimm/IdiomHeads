@@ -120,8 +120,8 @@ class LiteralScorer:
 
         literal_attention = self.extract_tensor(attention_pattern, self.get_literal_combinations(idiom_positions, sent_positions))
         if literal_attention.size(0) == 0:
-            mean = t.zeros(1)
-            std = t.zeros(1)
+            mean = t.zeros(1, device=self.device, dtype=t.float16)
+            std = t.zeros(1, device=self.device, dtype=t.float16)
         else:
             mean = t.mean(literal_attention)
             std = -t.std(literal_attention)
@@ -168,12 +168,12 @@ class LiteralScorer:
         literal_argmax_q = t.cat((t.argmax(attention_pattern, dim = 0)[:idiom_pos[0]], t.argmax(attention_pattern, dim = 0)[idiom_pos[1]+1:]))
 
         if literal_argmax_k.size(0) == 0:
-            q2k = t.zeros(1)
+            q2k = t.zeros(1, device=self.device, dtype=t.float16)
         else:
             q2k = self.max_idiom_toks(literal_argmax_k.tolist(), idiom_pos)
         
         if literal_argmax_q.size(0) == 0:
-            k2q = t.zeros(1)
+            k2q = t.zeros(1, device=self.device, dtype=t.float16)
         else:
             k2q = self.max_idiom_toks(literal_argmax_q.tolist(), idiom_pos)
 
@@ -254,7 +254,7 @@ class LiteralScorer:
         # seq_len x dmodel
         literal_result = t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:]))
         if literal_result.size(0) == 0:
-            return t.zeros(1)
+            return t.zeros(1, device=self.device, dtype=t.float16)
         else:
             return t.mean(t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:])))
         
