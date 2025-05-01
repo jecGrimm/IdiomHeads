@@ -1,0 +1,3 @@
+slurmstepd-diorit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-diorit: error: Setting TMPDIR to /tmp
+slurmstepd-diorit: error: *** JOB 1059 ON diorit CANCELLED AT 2025-04-30T14:59:02 ***
