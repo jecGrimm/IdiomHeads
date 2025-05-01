@@ -22,11 +22,15 @@ def merge_tensors(file1, file2, outfile):
 
     t.save(concat_tensor, outfile)
 
+def print_tensor_size(file):
+    device = "cuda" if t.cuda.is_available() else "cpu"
+    tensor1 = t.load(file, map_location=t.device(device))
+    print("Size tensor1: ", tensor1.size())
+    print("tensor1: ", (t.isnan(tensor1) == True).nonzero())
+
 if __name__ == "__main__":
     #merge_tensors("./scores/idiom_components/pythia-1.4b/idiom_only_trans_0_1231_comp.pt", "./scores/idiom_components/pythia-1.4b/idiom_only_trans_1232_None_comp.pt", "./scores/idiom_scores/pythia-1.4b/idiom_only_trans_0_None.pt")
 
-    file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
-    device = "cuda" if t.cuda.is_available() else "cpu"
-    tensor1 = t.load(file1, map_location=t.device(device))
-    print("Size tensor1: ", tensor1.size())
-    print("tensor1: ", (t.isnan(tensor1) == True).nonzero())
+    #file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
+    file1 = "scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt"
+    print_tensor_size(file1)

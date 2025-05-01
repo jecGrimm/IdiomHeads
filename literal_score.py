@@ -122,6 +122,9 @@ class LiteralScorer:
         if literal_attention.size(0) == 0:
             mean = t.zeros(1, device=self.device, dtype=t.float16)
             std = t.zeros(1, device=self.device, dtype=t.float16)
+        elif literal_attention.size(0) == 1:
+            mean = t.mean(literal_attention)
+            std = t.zeros(1, device=self.device, dtype=t.float16)
         else:
             mean = t.mean(literal_attention)
             std = -t.std(literal_attention)

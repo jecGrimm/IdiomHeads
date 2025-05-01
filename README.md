@@ -7,11 +7,11 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - formal score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
         - 1039: ab 96
-        - 1055: full (fix der idiom Positionen)
+        - 1055: full (fix der idiom Positionen), 1057 (fix device)
     - trans score
         - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
         - 1039: ganz
-        - 1055: full (fix der idiom Positionen)
+        - 1055: full (fix der idiom Positionen), 1057 (fix device)
     - plot scatter to see correlation
         - full
 - plots: 
@@ -23,7 +23,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - 1040 (bfloat16)
     - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22 OOM
     - trans 18 -> 19 -> 22 OOM
-    - full: 1056 (fix nan values)
+    - full: 1056 (fix nan values), 1058 (fix device)
 - plot
     - formal
     - trans
