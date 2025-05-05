@@ -13,9 +13,14 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - sigmoid anpassen
 - literal score
     - formal score
-        - full 17
+        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
+        - 1039: ab 96
+        - 1055: full (fix der idiom Positionen), 1057 (fix device) -> lief bis 225 korrekt
+        - 1141: ab 225 (fix std)
     - trans score
-        - full 17
+        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
+        - 1039: ganz
+        - 1055: full (fix der idiom Positionen), 1057 (fix device), 1141 (fix std)
     - plot scatter to see correlation
         - full
 - plots: 
