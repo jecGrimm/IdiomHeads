@@ -21,9 +21,9 @@ epie = EPIE_Data()
 
 ablation_heads = {
     "pythia-14m": [(0,0), (5,3)],
-    "pythia-1.4b": [(2, 15), (16, 10), (19, 14), (15, 13)]
+    "pythia-1.4b": [(2, 15), (16, 10), (19, 14), (15, 13)] # top heads identified by idiom score and dla
 }
-scorer = Ablation(model, ablation_heads=[(0,0), (5,3)])
+scorer = Ablation(model, ablation_heads=ablation_heads[cli.model_name])
 print(f"Running compute_ablation on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):

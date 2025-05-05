@@ -22,8 +22,8 @@ class Ablation():
             prompt, correct_tok = self.get_correct_toks(batch["tags"][i], batch["tokenized"][i])
             self.predictions["prompt"].append(prompt)
             self.predictions["correct_token"].append(correct_tok)
-            correct_idx = self.model.to_single_token(correct_tok)
-            self.predictions["correct_index"].append(correct_idx)
+            correct_idx = self.model.to_tokens(correct_tok, prepend_bos = False).squeeze()[0]
+            self.predictions["correct_index"].append(int(correct_idx))
 
             if prompt != None and correct_tok != None:
                 batched_logit_diff[i], batched_loss_diff[i] = self.ablate_head(prompt, correct_idx)
@@ -52,7 +52,10 @@ class Ablation():
         orig_logits, orig_loss = self.model(prompt, return_type = "both")
         orig_logits = orig_logits.to(self.device).squeeze()
         orig_loss = orig_loss.to(self.device)
-        self.predictions["original"].append(self.get_prediction(orig_logits))
+
+        orig_pred, orig_rank = self.get_prediction(orig_logits, correct_idx)
+        self.predictions["original_prediction"].append(orig_pred)
+        self.predictions["original_rank"].append(orig_rank)
 
         loss_diff = t.zeros(len(self.ablation_heads), dtype=t.float16, device=self.device)
         logit_diff = t.zeros(len(self.ablation_heads), dtype=t.float16, device=self.device)        
@@ -71,16 +74,24 @@ class Ablation():
             ablated_logits = ablated_logits.to(self.device).squeeze()
             ablated_loss = ablated_loss.to(self.device)
             
-            logit_diff[i] = orig_logits[-1, correct_idx] - ablated_logits[-1, correct_idx] 
+            logit_diff[i] = orig_logits[-1, correct_idx] - ablated_logits[-1, correct_idx]
             loss_diff[i] = ablated_loss - orig_loss 
-            self.predictions[f"L{layer_to_ablate}H{head_index_to_ablate}"].append(self.get_prediction(ablated_logits))
+
+            ablated_pred, ablated_rank = self.get_prediction(ablated_logits, correct_idx)
+            self.predictions[f"L{layer_to_ablate}H{head_index_to_ablate}_prediction"].append(ablated_pred)
+            self.predictions[f"L{layer_to_ablate}H{head_index_to_ablate}_rank"].append(int(ablated_rank))
+            #self.predictions[f"L{layer_to_ablate}H{head_index_to_ablate}"].append(self.get_prediction(ablated_logits))
 
             del ablated_logits
             del ablated_loss
+            del ablated_pred
+            del ablated_rank
             t.cuda.empty_cache()
         
         del orig_logits
         del orig_loss
+        del orig_pred
+        del orig_rank
         t.cuda.empty_cache()
         
         return logit_diff, loss_diff
@@ -125,8 +136,11 @@ class Ablation():
         value[:, :, self.head_idx, :] = 0.0
         return value
     
-    def get_prediction(self, logits):
-        return self.model.to_string(logits.softmax(dim=-1)[-1].argmax()).strip()
+    def get_prediction(self, logits, correct_idx):
+        sorted_probs = logits.softmax(dim=-1)[-1].argsort(descending = True)
+        top_pred = self.model.to_string(sorted_probs[0]).strip() 
+        rank = int(t.where(correct_idx == sorted_probs)[0])
+        return top_pred, rank
     
     def get_ablation_function(ablate_to_mean, head_to_ablate, component="HEAD"):
         # @deprecated
@@ -150,7 +164,7 @@ class Ablation():
     def explore_tensor(self):
         print(f"The logit diff of the first sentence for the first ablated head is: {self.logit_diffs[0][0]}")
         print(f"The loss diff of the first sentence for the first ablated head is: {self.loss_diffs[0][0]}")
-        print(f"\nThe predictions for the first sentence are:\nPrompt: {self.predictions["prompt"][0]}\nCorrect Token: {self.predictions["correct_token"][0]}\nOriginal Prediction: {self.predictions["original"][0]}\nFirst Ablated Prediction: {self.predictions[f"L{self.ablation_heads[0][0]}H{self.ablation_heads[0][1]}"][0]}")
+        print(f"\nThe predictions for the first sentence are:\nPrompt: {self.predictions["prompt"][0]}\nCorrect Token: {self.predictions["correct_token"][0]}\nOriginal Prediction: {self.predictions["original_prediction"][0]}\nFirst Ablated Prediction Rank: {self.predictions[f"L{self.ablation_heads[0][0]}H{self.ablation_heads[0][1]}_rank"][0]}")
 
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m", dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht

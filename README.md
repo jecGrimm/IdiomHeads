@@ -30,6 +30,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - trans
 3. Ablation
     - einzelne Heads abschalten, die für Idiome sind
+        - full: 2270
     - Zusammenspiel von Heads abschalten, die für Idiome sind
     - Auswirkung auf loss
     - Auswirkung auf nwp
@@ -155,6 +156,7 @@ sbatch --partition=NvidiaAll ./scripts/logit_attr.sh
 sbatch --partition=NvidiaAll ./scripts/awareness.sh
 sbatch --partition=NvidiaAll ./scripts/cage_pythia.sh
 sbatch --partition=NvidiaAll ./scripts/cage_qwen.sh
+sbatch --partition=NvidiaAll ./scripts/ablation.sh
 
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!

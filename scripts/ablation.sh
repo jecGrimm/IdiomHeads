@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-#SBATCH --job-name=literal_only
-#SBATCH --comment="Compute literal only scores for formal and translated idiom occurences"
+#SBATCH --job-name=ablation
+#SBATCH --comment="Compute ablation results for formal and translated idiom occurences"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=j.grimm@campus.lmu.de
 #SBATCH --chdir=/home/g/grimmj/IdiomHeads
