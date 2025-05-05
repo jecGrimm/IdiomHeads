@@ -30,7 +30,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - trans
 3. Ablation
     - einzelne Heads abschalten, die für Idiome sind
-        - full: 2270
+        - full: 2270 failed single token issue -> 2297 (fix single token, added pred rank) failed multiple dims for single tokens
     - Zusammenspiel von Heads abschalten, die für Idiome sind
     - Auswirkung auf loss
     - Auswirkung auf nwp

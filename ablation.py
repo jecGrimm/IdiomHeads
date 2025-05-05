@@ -22,8 +22,12 @@ class Ablation():
             prompt, correct_tok = self.get_correct_toks(batch["tags"][i], batch["tokenized"][i])
             self.predictions["prompt"].append(prompt)
             self.predictions["correct_token"].append(correct_tok)
-            correct_idx = self.model.to_tokens(correct_tok, prepend_bos = False).squeeze()[0]
+            correct_idx = self.model.to_tokens(correct_tok, prepend_bos = False).squeeze()
+            
+            if correct_idx.dim() != 0:
+                correct_idx = correct_idx[0]
             self.predictions["correct_index"].append(int(correct_idx))
+        
 
             if prompt != None and correct_tok != None:
                 batched_logit_diff[i], batched_loss_diff[i] = self.ablate_head(prompt, correct_idx)
@@ -42,8 +46,8 @@ class Ablation():
         del batched_loss_diff
         t.cuda.empty_cache()
 
-        t.save(self.logit_diffs, ckp_file + "logit_ckp.pt")  
-        t.save(self.loss_diffs, ckp_file + "loss_ckp.pt")  
+        t.save(self.logit_diffs, ckp_file + "_logit_ckp.pt")  
+        t.save(self.loss_diffs, ckp_file + "_loss_ckp.pt")  
 
         with open(ckp_file + "_ckp.json", "w", encoding = "utf-8") as f:
             json.dump(self.predictions, f)  
