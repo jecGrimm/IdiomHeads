@@ -1,0 +1,38 @@
+slurmstepd-adakit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-adakit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model pythia-1.4b into HookedTransformer
+Running compute_ablation on device cuda.
+
+Processing split formal:
+Map:   0%|          | 0/2760 [00:00<?, ? examples/s]Map:   0%|          | 1/2760 [00:01<1:02:43,  1.36s/ examples]Map:   0%|          | 2/2760 [00:01<35:07,  1.31 examples/s]  Map:   0%|          | 3/2760 [00:02<25:48,  1.78 examples/s]Map:   0%|          | 4/2760 [00:02<27:37,  1.66 examples/s]Map:   0%|          | 5/2760 [00:03<25:36,  1.79 examples/s]Map:   0%|          | 6/2760 [00:03<21:54,  2.09 examples/s]Map:   0%|          | 7/2760 [00:03<20:17,  2.26 examples/s]Map:   0%|          | 8/2760 [00:04<19:59,  2.29 examples/s]Map:   0%|          | 9/2760 [00:04<18:31,  2.47 examples/s]Map:   0%|          | 10/2760 [00:04<17:05,  2.68 examples/s]Map:   0%|          | 11/2760 [00:05<21:00,  2.18 examples/s]Map:   0%|          | 12/2760 [00:06<21:08,  2.17 examples/s]Map:   0%|          | 13/2760 [00:06<20:21,  2.25 examples/s]Map:   1%|          | 14/2760 [00:06<20:31,  2.23 examples/s]Map:   1%|          | 15/2760 [00:07<20:38,  2.22 examples/s]Map:   1%|          | 16/2760 [00:07<19:52,  2.30 examples/s]Map:   1%|          | 17/2760 [00:08<18:01,  2.54 examples/s]Map:   1%|          | 18/2760 [00:08<21:27,  2.13 examples/s]Map:   1%|          | 19/2760 [00:09<19:11,  2.38 examples/s]Map:   1%|          | 20/2760 [00:09<17:30,  2.61 examples/s]Map:   1%|          | 21/2760 [00:09<16:30,  2.77 examples/s]Map:   1%|          | 22/2760 [00:09<15:50,  2.88 examples/s]Map:   1%|          | 23/2760 [00:10<18:59,  2.40 examples/s]Map:   1%|          | 24/2760 [00:10<18:09,  2.51 examples/s]Map:   1%|          | 25/2760 [00:11<17:38,  2.58 examples/s]Map:   1%|          | 26/2760 [00:11<18:28,  2.47 examples/s]Map:   1%|          | 27/2760 [00:12<18:46,  2.43 examples/s]Map:   1%|          | 28/2760 [00:12<21:00,  2.17 examples/s]Map:   1%|          | 29/2760 [00:13<19:43,  2.31 examples/s]Map:   1%|          | 30/2760 [00:13<18:17,  2.49 examples/s]Map:   1%|          | 31/2760 [00:13<16:56,  2.68 examples/s]Map:   1%|          | 32/2760 [00:14<16:30,  2.75 examples/s]Map:   1%|          | 33/2760 [00:14<15:41,  2.90 examples/s]Map:   1%|          | 33/2760 [00:14<19:43,  2.30 examples/s]
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_ablation.py", line 50, in <module>
+    data.map(lambda batch: scorer.ablate_head_batched(batch, ckp_file), batched=True, batch_size = batch_size)
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3079, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3519, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3469, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3392, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/compute_ablation.py", line 50, in <lambda>
+    data.map(lambda batch: scorer.ablate_head_batched(batch, ckp_file), batched=True, batch_size = batch_size)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/ablation.py", line 25, in ablate_head_batched
+    correct_idx = self.model.to_single_token(correct_tok)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 945, in to_single_token
+    assert not token.shape, f"Input string: {string} is not a single token!"
+           ^^^^^^^^^^^^^^^
+AssertionError: Input string: peeled is not a single token!
