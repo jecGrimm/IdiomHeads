@@ -20,16 +20,16 @@ class Ablation():
         batched_loss_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
         for i in range(len(batch["sentence"])):
             prompt, correct_tok = self.get_correct_toks(batch["tags"][i], batch["tokenized"][i])
-            self.predictions["prompt"].append(prompt)
-            self.predictions["correct_token"].append(correct_tok)
-            correct_idx = self.model.to_tokens(correct_tok, prepend_bos = False).squeeze()
-            
-            if correct_idx.dim() != 0:
-                correct_idx = correct_idx[0]
-            self.predictions["correct_index"].append(int(correct_idx))
-        
 
             if prompt != None and correct_tok != None:
+                self.predictions["prompt"].append(prompt)
+                self.predictions["correct_token"].append(" " + correct_tok) # needs a preceeding spaces due to the tokenization
+                correct_idx = self.model.to_tokens(" " + correct_tok, prepend_bos = False).squeeze()
+                
+                if correct_idx.dim() != 0:
+                    correct_idx = correct_idx[0]
+                self.predictions["correct_index"].append(int(correct_idx))
+
                 batched_logit_diff[i], batched_loss_diff[i] = self.ablate_head(prompt, correct_idx)
 
         if self.logit_diffs != None:
@@ -142,7 +142,7 @@ class Ablation():
     
     def get_prediction(self, logits, correct_idx):
         sorted_probs = logits.softmax(dim=-1)[-1].argsort(descending = True)
-        top_pred = self.model.to_string(sorted_probs[0]).strip() 
+        top_pred = self.model.to_string(sorted_probs[0]) 
         rank = int(t.where(correct_idx == sorted_probs)[0])
         return top_pred, rank
     
@@ -168,7 +168,11 @@ class Ablation():
     def explore_tensor(self):
         print(f"The logit diff of the first sentence for the first ablated head is: {self.logit_diffs[0][0]}")
         print(f"The loss diff of the first sentence for the first ablated head is: {self.loss_diffs[0][0]}")
-        print(f"\nThe predictions for the first sentence are:\nPrompt: {self.predictions["prompt"][0]}\nCorrect Token: {self.predictions["correct_token"][0]}\nOriginal Prediction: {self.predictions["original_prediction"][0]}\nFirst Ablated Prediction Rank: {self.predictions[f"L{self.ablation_heads[0][0]}H{self.ablation_heads[0][1]}_rank"][0]}")
+        
+        if self.predictions["prompt"] != []:
+            print(f"\nThe predictions for the first sentence are:\nPrompt: {self.predictions["prompt"][0]}\nCorrect Token: {self.predictions["correct_token"][0]}\nOriginal Prediction: {self.predictions["original_prediction"][0]}\nFirst Ablated Prediction Rank: {self.predictions[f"L{self.ablation_heads[0][0]}H{self.ablation_heads[0][1]}_rank"][0]}")
+        else:
+            print("\nNo predictions available!")
 
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m", dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht

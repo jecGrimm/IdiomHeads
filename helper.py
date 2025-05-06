@@ -60,7 +60,8 @@ if __name__ == "__main__":
     # file1= "scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt"
     # file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
     #file1 = "scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt"
-    file1 = "scores/literal_scores/pythia-1.4b/literal_only_trans_0_None.pt"
+    #file1 = "scores/literal_scores/pythia-1.4b/literal_only_trans_0_None.pt"
+    file1 = "scores/ablation/pythia-1.4b/ablation_trans_0_None_logit_ckp.pt"
     print_tensor_size(file1)
 
     #get_logit_component(384, "pythia-1.4b")

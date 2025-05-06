@@ -24,7 +24,7 @@ ablation_heads = {
     "pythia-1.4b": [(2, 15), (16, 10), (19, 14), (15, 13)] # top heads identified by idiom score and dla
 }
 scorer = Ablation(model, ablation_heads=ablation_heads[cli.model_name])
-print(f"Running compute_ablation on device {scorer.device}.")
+print(f"\nRunning compute_ablation on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
     if cli.batch_sizes[i] == None:
