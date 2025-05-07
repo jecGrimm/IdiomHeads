@@ -40,9 +40,9 @@ for i in range(len(cli.data_split)):
     if scorer.idiom_positions == []:
         data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
         scorer.store_all_idiom_pos(cli.idiom_file)
-    data = data.add_column("idiom_pos", scorer.idiom_positions[cli.start:cli.end])
+    data = data.add_column("idiom_pos", scorer.idiom_positions[start:start])
     
-    ckp_file = f"./scores/loss/{cli.model_name}/loss_{split}_{cli.start}_{cli.end}.pt"
+    ckp_file = f"./scores/loss/{cli.model_name}/loss_{split}_{start}_{start}.pt"
     
     print("\nLoss:\n")
     data.map(lambda batch: scorer.compute_loss_batched(batch, ckp_file), batched=True, batch_size = batch_size)
@@ -54,7 +54,7 @@ for i in range(len(cli.data_split)):
     print("\nNext Word Generation:\n")
     data.map(lambda batch: scorer.predict_next_word_batched(batch), batched=True, batch_size = batch_size)
 
-    with open(f"./scores/next_word_prediction/{cli.model_name}/nwp_{split}_{cli.start}_{cli.end}.txt", 'w', encoding = "utf-8") as f:
+    with open(f"./scores/next_word_prediction/{cli.model_name}/nwp_{split}_{start}_{start}.txt", 'w', encoding = "utf-8") as f:
         f.write(scorer.explore_results())
 
     scorer.num_correct = 0
