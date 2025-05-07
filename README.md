@@ -18,7 +18,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - Zusammenspiel von Heads abschalten, die für Idiome sind
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
-        - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567
+        - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568
     - Head detection
     - logit attribution
     - llm transparency

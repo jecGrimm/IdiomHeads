@@ -9,6 +9,8 @@ from cli import CLI
 
 cli = CLI()
 os.makedirs(f"./scores/idiom_components/{cli.model_name}", exist_ok=True)
+os.makedirs(f"./scores/idiom_scores/{cli.model_name}", exist_ok=True)
+
 # Saves computation time
 t.set_grad_enabled(False)
 
@@ -17,7 +19,7 @@ model.eval()
 epie = EPIE_Data()
 scorer = IdiomScorer(model, filename = cli.idiom_file)
 
-print(f"Running on device {scorer.device}.")
+print(f"Running compute_idiom_only on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
     if cli.batch_sizes[i] == None:
