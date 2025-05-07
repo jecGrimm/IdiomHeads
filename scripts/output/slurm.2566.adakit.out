@@ -1,0 +1,15 @@
+slurmstepd-adakit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-adakit: error: Setting TMPDIR to /tmp
+WARNING:root:You are not using LayerNorm, so the writing weights can't be centered! Skipping
+Loaded pretrained model meta-llama/Llama-3.2-1B-Instruct into HookedTransformer
+Moving model to device:  cuda
+
+Running compute_idiom_awareness on device cuda.
+
+Processing split:  formal
+Map:   0%|          | 0/2760 [00:00<?, ? examples/s]Map:   0%|          | 11/2760 [00:00<00:32, 85.10 examples/s]Map:   3%|▎         | 94/2760 [00:00<00:05, 471.52 examples/s]Map:   6%|▋         | 175/2760 [00:00<00:04, 610.52 examples/s]Map:  10%|▉         | 264/2760 [00:00<00:03, 710.84 examples/s]Map:  13%|█▎        | 350/2760 [00:00<00:03, 760.05 examples/s]Map:  16%|█▌        | 433/2760 [00:00<00:02, 781.60 examples/s]Map:  19%|█▉        | 518/2760 [00:00<00:02, 801.34 examples/s]Map:  22%|██▏       | 607/2760 [00:00<00:02, 826.48 examples/s]Map:  25%|██▌       | 692/2760 [00:00<00:02, 826.89 examples/s]Map:  28%|██▊       | 777/2760 [00:01<00:02, 828.95 examples/s]Map:  32%|███▏      | 871/2760 [00:01<00:02, 859.87 examples/s]Map:  35%|███▍      | 960/2760 [00:01<00:02, 865.65 examples/s]Map:  38%|███▊      | 1048/2760 [00:01<00:01, 866.26 examples/s]Map:  41%|████▏     | 1139/2760 [00:01<00:01, 877.49 examples/s]Map:  45%|████▍     | 1230/2760 [00:01<00:01, 880.30 examples/s]Map:  49%|████▉     | 1363/2760 [00:01<00:01, 874.40 examples/s]Map:  54%|█████▍    | 1484/2760 [00:01<00:01, 846.16 examples/s]Map:  57%|█████▋    | 1573/2760 [00:01<00:01, 855.80 examples/s]Map:  60%|██████    | 1669/2760 [00:02<00:01, 882.58 examples/s]Map:  65%|██████▌   | 1797/2760 [00:02<00:01, 855.27 examples/s]Map:  68%|██████▊   | 1889/2760 [00:02<00:01, 869.46 examples/s]Map:  72%|███████▏  | 1992/2760 [00:02<00:00, 910.90 examples/s]Map:  77%|███████▋  | 2129/2760 [00:02<00:00, 906.18 examples/s]Map:  82%|████████▏ | 2252/2760 [00:02<00:00, 869.52 examples/s]Map:  86%|████████▌ | 2374/2760 [00:02<00:00, 847.78 examples/s]Map:  90%|█████████ | 2495/2760 [00:03<00:00, 831.81 examples/s]Map:  95%|█████████▍| 2621/2760 [00:03<00:00, 830.02 examples/s]Map:  98%|█████████▊| 2710/2760 [00:03<00:00, 841.86 examples/s]Map: 100%|██████████| 2760/2760 [00:03<00:00, 825.53 examples/s]
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_awareness.py", line 43, in <module>
+    data = data.add_column("idiom_pos", scorer.idiom_positions[cli.start:cli.end])
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+TypeError: slice indices must be integers or None or have an __index__ method

@@ -1,0 +1,10 @@
+slurmstepd-adakit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-adakit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_awareness.py", line 9, in <module>
+    cli = CLI()
+          ^^^^^
+  File "/home/g/grimmj/IdiomHeads/cli.py", line 20, in __init__
+    self.end[i] = int(self.end[i])
+                  ^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
