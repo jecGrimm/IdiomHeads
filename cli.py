@@ -16,7 +16,7 @@ class CLI:
 
         self.end = parser.parse_args().end
         for i in range(len(self.end)):
-            if self.end[i] != "None":
+            if self.end[i] != "None" and self.end[i] != None:
                 self.end[i] = int(self.end[i])
             else:
                 self.end[i] = None

@@ -16,7 +16,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - trans
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind
-4. zweites Modell: qwen oder olmo
+4. zweites Modell: qwen oder olmo oder llama
+    - nwp
+        - llama 2565 failed cli None
     - Head detection
     - logit attribution
     - llm transparency
