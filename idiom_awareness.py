@@ -139,8 +139,8 @@ class IdiomAwareness:
     output = f"\nThe model generated {self.num_correct} correct answers.\n"
     output += "\nAccuracy: "
     output += "{:.2%}".format(self.num_correct/self.total)
-    output += f"\nFive correct outputs: {self.correct_answers}"
-    output += f"\nFive incorrect outputs: {self.incorrect_answers}"
+    output += f"\n\nFive correct outputs: {self.correct_answers}"
+    output += f"\n\nFive incorrect outputs: {self.incorrect_answers}"
     
     print(output)
     return output

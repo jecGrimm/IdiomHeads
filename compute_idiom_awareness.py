@@ -34,6 +34,8 @@ for i in range(len(cli.data_split)):
         data = epie.create_hf_dataset(epie.formal_sents[start:end], epie.tokenized_formal_sents[start:end], epie.tags_formal[start:end])
     elif split == "trans":
         data = epie.create_hf_dataset(epie.trans_formal_sents[start:end], epie.tokenized_trans_formal_sents[start:end], epie.tags_formal[start:end])
+    elif split == "static":
+        data = epie.create_hf_dataset(epie.static_sents[start:end], epie.tokenized_static_sents[start:end], epie.tags_static[start:end])
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     

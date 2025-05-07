@@ -18,8 +18,10 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - Zusammenspiel von Heads abschalten, die für Idiome sind
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
-        - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568
+        - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
     - Head detection
+        - idiom score 2569
+        - literal score
     - logit attribution
     - llm transparency
     - ablation
@@ -121,6 +123,8 @@ conda activate idiom
 pip install transformer-lens
 pip install merge-tokenizers
 pip install IPython
+
+huggingface-cli login <huggingface_token> -> Access zu Llama 3 nötig
 
 ### SLURM
 ssh grimmj@remote.cip.ifi.lmu.de

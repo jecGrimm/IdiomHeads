@@ -1,0 +1,6 @@
+
+The model generated 173 correct answers.
+
+Accuracy: 6.27%
+Five correct outputs: ['<|endoftext|>‘I assure you, Sir John,’ Mowbray rasped, ‘we can hardly find our way around the Tower in the full light of day, never mind', '<|endoftext|>Windsor has already tried to set up a team of his own in F1 and knows the problems involved, not least of which is the mega money needed to gain a foothold, never mind', '<|endoftext|>I know I keep saying never mind, never mind', '<|endoftext|>But never mind nevermind', '<|endoftext|>No, oh alright then, do not mind, alright, never mind']
+Five incorrect outputs: [('Anyway, thanks MKM and keep up the good -> work', '<|endoftext|>Anyway, thanks MKM and keep up the good options'), ('Well done Steffi — keep up the good -> work', '<|endoftext|>Well done Steffi — keep up the good for'), ('Please use it as a reminder to ensure that you keep up the good -> work', '<|endoftext|>Please use it as a reminder to ensure that you keep up the good way'), ('Please do keep up the good -> work', '<|endoftext|>Please do keep up the good time'), ('We hope you find the current issue still of interest and we plan to keep up the good -> work', '<|endoftext|>We hope you find the current issue still of interest and we plan to keep up the good lives')]
