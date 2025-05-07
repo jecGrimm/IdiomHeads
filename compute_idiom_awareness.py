@@ -13,17 +13,10 @@ os.makedirs(f"./scores/next_word_prediction/{cli.model_name}", exist_ok=True)
 # Saves computation time
 t.set_grad_enabled(False)
 
-# if "bert" in cli.model_name:
-#     tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
-#     hf_model = BertForMaskedLM.from_pretrained("google-bert/bert-base-cased")
-#     model = HookedEncoder(loading_from_pretrained.get_pretrained_model_config("bert-base-cased")).from_pretrained("bert-base-cased", hf_model = hf_model, tokenizer = tokenizer)
-
-# else:
-#     model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
 epie = EPIE_Data()
 scorer = IdiomAwareness(model, filename = cli.idiom_file)
-print(f"Running on device {scorer.device}.")
+print(f"\nRunning compute_idiom_awareness on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
     if cli.batch_sizes[i] == None:
@@ -33,10 +26,14 @@ for i in range(len(cli.data_split)):
 
     split = cli.data_split[i]
     print("\nProcessing split: ", split)
+
+    start = cli.start[i]
+    end = cli.end[i]
+
     if split == "formal":
-        data = epie.create_hf_dataset(epie.formal_sents[cli.start:cli.end], epie.tokenized_formal_sents[cli.start:cli.end], epie.tags_formal[cli.start:cli.end])
+        data = epie.create_hf_dataset(epie.formal_sents[start:end], epie.tokenized_formal_sents[start:end], epie.tags_formal[start:end])
     elif split == "trans":
-        data = epie.create_hf_dataset(epie.trans_formal_sents[cli.start:cli.end], epie.tokenized_trans_formal_sents[cli.start:cli.end], epie.tags_formal[cli.start:cli.end])
+        data = epie.create_hf_dataset(epie.trans_formal_sents[start:end], epie.tokenized_trans_formal_sents[start:end], epie.tags_formal[start:end])
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
@@ -57,11 +54,12 @@ for i in range(len(cli.data_split)):
     print("\nNext Word Generation:\n")
     data.map(lambda batch: scorer.predict_next_word_batched(batch), batched=True, batch_size = batch_size)
 
-    with open(f"./scores/next_word_prediction/{cli.model_name}/nwg_{split}_{cli.start}_{cli.end}.txt", 'w', encoding = "utf-8") as f:
+    with open(f"./scores/next_word_prediction/{cli.model_name}/nwp_{split}_{cli.start}_{cli.end}.txt", 'w', encoding = "utf-8") as f:
         f.write(scorer.explore_results())
 
     scorer.num_correct = 0
     scorer.total = 0
     scorer.incorrect_answers = []
     scorer.correct_answers = []
+    t.cuda.empty_cache()
 

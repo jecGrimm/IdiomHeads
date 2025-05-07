@@ -4,15 +4,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 ## Todos
 1. Head detection
 - literal score
-    - formal score
-        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
-        - 1039: ab 96
-        - 1055: full (fix der idiom Positionen), 1057 (fix device) -> lief bis 225 korrekt
-        - 1141: ab 225 (fix std)
-    - trans score
-        - full 17 - läuft, aber sehr langsam bzw Zeitangabe irgendwie nicht korrekt glaub ich
-        - 1039: ganz
-        - 1055: full (fix der idiom Positionen), 1057 (fix device), 1141 (fix std)
     - plot scatter to see correlation
         - full
 - plots: 
@@ -20,23 +11,15 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - formal literal
         - trans literal
 2. Logit attribution
-- full 
-    - 1040 (bfloat16)
-    - formal 18 - failed no module named IPython -> 19 failed no module named circuitvis -> 22 OOM
-    - trans 18 -> 19 -> 22 OOM
-    - full: 1056 (fix nan values), 1058 (fix device)
 - plot
     - formal
     - trans
 3. Ablation
-    - einzelne Heads abschalten, die für Idiome sind
-        - full: 2270 failed single token issue -> 2297 (fix single token, added pred rank) failed multiple dims for single tokens -> 2298
     - Zusammenspiel von Heads abschalten, die für Idiome sind
-    - Auswirkung auf loss
-    - Auswirkung auf nwp
-4. zweites Modell: qwen
+4. zweites Modell: qwen oder olmo
     - Head detection
     - logit attribution
+    - llm transparency
     - ablation
 5. Schreiben
 - Selbstständigkeitserklärung -> auch digital unterschreiben? Muss das die neue sein?
@@ -67,8 +50,6 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - ambigue scores
         - random scores
         - transparent vs. opaque (Madabushi 2022)
-    - weitere Komponenten
-        - contributions für MLP berechnen
 
 - Noch nicht abgedeckte Methoden:
     - Aktivierungen austauschen und schauen, was das mit der Prediction macht

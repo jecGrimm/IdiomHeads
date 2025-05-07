@@ -1,0 +1,60 @@
+
+original
+
+Accuracy: 60.07%
+
+Mean Rank Difference: 0.0
+
+Total Changed Predictions: 0.00%
+
+Correct2False Changed Predictions: 0.00%
+
+False2Correct Changed Predictions: 0.00%
+
+L2H15
+
+Accuracy: 59.93%
+
+Mean Rank Difference: 0.3644927442073822
+
+Total Changed Predictions: 24.35%
+
+Correct2False Changed Predictions: 0.83%
+
+False2Correct Changed Predictions: 0.69%
+
+L16H10
+
+Accuracy: 60.22%
+
+Mean Rank Difference: -0.13695652782917023
+
+Total Changed Predictions: 18.95%
+
+Correct2False Changed Predictions: 0.33%
+
+False2Correct Changed Predictions: 0.47%
+
+L19H14
+
+Accuracy: 60.83%
+
+Mean Rank Difference: -1.8836956024169922
+
+Total Changed Predictions: 25.04%
+
+Correct2False Changed Predictions: 0.40%
+
+False2Correct Changed Predictions: 1.16%
+
+L15H13
+
+Accuracy: 59.60%
+
+Mean Rank Difference: -0.006884058006107807
+
+Total Changed Predictions: 20.22%
+
+Correct2False Changed Predictions: 0.87%
+
+False2Correct Changed Predictions: 0.40%
