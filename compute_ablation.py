@@ -50,25 +50,25 @@ for i in range(len(cli.data_split)):
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
 
     prediction_path = f"./resources/{cli.model_name}/{split}/"
+    os.makedirs(prediction_path, exist_ok=True)
     scorer.load_predictions(prediction_path)
     if scorer.orig_loss == None or len(scorer.predictions["prompt"]) == 0:
         data.map(lambda batch: scorer.create_original_predictions(batch), batched=True, batch_size = batch_size)
+
+        # Save original scores
+        t.save(scorer.orig_loss, prediction_path + "loss_original.pt")
+        with open(prediction_path + "predictions_original.json", 'w', encoding="utf-8") as f:
+            json.dump(scorer.predictions, f)
 
     ckp_file = f"./scores/ablation/{cli.model_name}/ablation_{split}_{start}_{end}"
     data.map(lambda batch: scorer.ablate_head_batched(batch, ckp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
 
+    # Save ablation results
     t.save(scorer.logit_diffs, f"{ckp_file}_logit.pt")
     t.save(scorer.loss_diffs, f"{ckp_file}_loss.pt")
     with open(f"{ckp_file}.json", 'w', encoding = "utf-8") as f:
-        json.dump(scorer.predictions, f)
-
-    os.makedirs(prediction_path, exist_ok=True)
-    t.save(scorer.orig_loss, prediction_path + "loss_original.pt")
-    t.save(scorer.orig_logits, prediction_path + "logits_original.pt")
-
-    with open(prediction_path + "predictions_original.json", 'w', encoding="utf-8") as f:
         json.dump(scorer.predictions, f)
 
     scorer.logit_diffs = None
