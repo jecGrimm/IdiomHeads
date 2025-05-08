@@ -2,18 +2,12 @@
 This repository is part of the Master thesis "Spilling the beans: Interpreting Attention Patterns for Idioms in transformer-based Language Models".
 
 ## Todos
+0. Awareness
+- static pythia 2570
 1. Head detection
+- idiom score
 - literal score
-    - plot scatter to see correlation
-        - full
-- plots: 
-    - 1.4b
-        - formal literal
-        - trans literal
 2. Logit attribution
-- plot
-    - formal
-    - trans
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind
 4. zweites Modell: qwen oder olmo oder llama
