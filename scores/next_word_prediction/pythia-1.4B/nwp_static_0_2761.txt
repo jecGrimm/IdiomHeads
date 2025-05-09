@@ -1,0 +1,8 @@
+
+The model generated 1445 correct answers.
+
+Accuracy: 52.34%
+
+Five correct outputs: ['<|endoftext|>Anyway, thanks MKM and keep up the good work', '<|endoftext|>Well done Steffi — keep up the good work', '<|endoftext|>Please use it as a reminder to ensure that you keep up the good work', '<|endoftext|>Please do keep up the good work', '<|endoftext|>We hope you find the current issue still of interest and we plan to keep up the good work']
+
+Five incorrect outputs: [('P.S. Tennis World is brilliant — keep up the good -> work', '<|endoftext|>P.S. Tennis World is brilliant — keep up the good fight'), ('I will try and keep up the good -> work', '<|endoftext|>I will try and keep up the good "'), ('What a lack of self-confidence this implies : the present wants both to patronise the past by adjudicating on its political acceptability, and also to be flattered by it, to be patted on the back and told to keep up the good -> work', '<|endoftext|>What a lack of self-confidence this implies : the present wants both to patronise the past by adjudicating on its political acceptability, and also to be flattered by it, to be patted on the back and told to keep up the good fight'), ("When we're ready, that is at zero -> hour", "<|endoftext|>When we're ready, that is at zero degrees"), ('It was zero -> hour', '<|endoftext|>It was zero to')]
