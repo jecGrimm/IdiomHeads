@@ -5,6 +5,8 @@ Mean Rank Difference: 0.0
 Total Changed Predictions: 0.00%
 Correct2False Changed Predictions: 0.00%
 False2Correct Changed Predictions: 0.00%
+Worst Prediction: No rank differences
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', '‘I will be watching him\n ->  carefully,, predicted: ’\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n']
 
 L2H15
 Accuracy: 16.11%
@@ -12,6 +14,10 @@ Mean Rank Difference: 2.2753992080688477
 Total Changed Predictions: 61.10%
 Correct2False Changed Predictions: 0.62%
 False2Correct Changed Predictions: 0.62%
+Worst Prediction: 3157: stale
+ -> ' anecdote', predicted: '
+'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', '‘I will be watching him\n ->  carefully,, predicted: ’\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n']
 
 L16H10
 Accuracy: 16.15%
@@ -19,6 +25,9 @@ Mean Rank Difference: 1.8889695405960083
 Total Changed Predictions: 56.93%
 Correct2False Changed Predictions: 0.33%
 False2Correct Changed Predictions: 0.36%
+Worst Prediction: 1793: In all socioeconomic backgrounds
+ -> ' wives', predicted: ','
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n']
 
 L19H14
 Accuracy: 16.44%
@@ -26,6 +35,9 @@ Mean Rank Difference: 3.3632075786590576
 Total Changed Predictions: 62.81%
 Correct2False Changed Predictions: 0.54%
 False2Correct Changed Predictions: 0.87%
+Worst Prediction: 5010: Hundreds of police spent their bank holiday weekend toying with with
+ -> ' travellers', predicted: ' a'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n']
 
 L15H13
 Accuracy: 15.97%
@@ -33,3 +45,7 @@ Mean Rank Difference: -0.443033367395401
 Total Changed Predictions: 53.16%
 Correct2False Changed Predictions: 0.44%
 False2Correct Changed Predictions: 0.29%
+Worst Prediction: 1177: British GAS
+ -> ' UP', predicted: '
+'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n']

@@ -518,33 +518,45 @@ def compute_accuracy(file, outfile = None):
     changed_corr2false = defaultdict(float) 
     changed_false2corr = defaultdict(float) 
     wrong = defaultdict(list) 
+    worst_pred = defaultdict(str)
     for k, v in predictions.items():
-        if "rank" in k:
-            acc[k.split('_')[0]] = t.sum((t.tensor(v) == 0))/num_sents
-            rank_dif[k.split('_')[0]] = t.mean((t.tensor(v)-t.tensor(predictions["original_rank"])).float())
+        #print("k:", k)
+        name = k.split('_')[:-1]
+        name = '_'.join(name)
+        #print("name: ", name)
 
-            #output += f"{k.split('_')[0]}: {float(acc):.2%}\n"
+        if "rank" in k:
+            acc[name] = t.sum((t.tensor(v) == 0))/num_sents
+            rank_diffs = (t.tensor(v)-t.tensor(predictions["original_rank"]))
+            rank_dif[name] = t.mean(rank_diffs.float())
+
+            worst_rank = max(rank_diffs)
+            if worst_rank != 0:
+                worst_rank_idx = int((rank_diffs == worst_rank).nonzero())
+                worst_pred[name] = f"{worst_rank}: {predictions["prompt"][worst_rank_idx]}\n -> '{predictions["correct_token"][worst_rank_idx]}', predicted: '{predictions[name+"_prediction"][worst_rank_idx]}'" 
+            else:
+                worst_pred[name] = "No rank differences"
         elif "prediction" in k:
             for i in range(len(v)):
                 correct = predictions["correct_token"][i]
                 #original_tok = predictions["original_prediction"][i]
                 original_rank = predictions["original_rank"][i]
                 ablated_tok = v[i]
-                ablated_rank = predictions[f"{k.split('_')[0]}_rank"][i]
+                ablated_rank = predictions[f"{name}_rank"][i]
 
                 if ablated_tok.strip() not in correct.strip():
-                    wrong[k.split('_')[0]].append(f"{predictions["prompt"][i]}\n -> {correct}, predicted: {v[i]}\n")
+                    wrong[name].append(f"{predictions["prompt"][i]}\n -> {correct}, predicted: {v[i]}\n")
 
                 if original_rank != ablated_rank:
-                    changed_total[k.split('_')[0]] += 1
+                    changed_total[name] += 1
                     if original_rank == 0:
-                        changed_corr2false[k.split('_')[0]] += 1
+                        changed_corr2false[name] += 1
                     elif original_rank != 0 and ablated_rank == 0:
-                        changed_false2corr[k.split('_')[0]] += 1
+                        changed_false2corr[name] += 1
 
-            changed_total[k.split('_')[0]] = changed_total[k.split('_')[0]]/num_sents
-            changed_corr2false[k.split('_')[0]] = changed_corr2false[k.split('_')[0]]/num_sents
-            changed_false2corr[k.split('_')[0]] = changed_false2corr[k.split('_')[0]]/num_sents
+            changed_total[name] = changed_total[name]/num_sents
+            changed_corr2false[name] = changed_corr2false[name]/num_sents
+            changed_false2corr[name] = changed_false2corr[name]/num_sents
 
     output = ""
     for k, v in acc.items():
@@ -554,32 +566,8 @@ def compute_accuracy(file, outfile = None):
         output += f"Total Changed Predictions: {float(changed_total[k]):.2%}\n"
         output += f"Correct2False Changed Predictions: {float(changed_corr2false[k]):.2%}\n"
         output += f"False2Correct Changed Predictions: {float(changed_false2corr[k]):.2%}\n"
-
-    # for k, v in predictions.items():
-    #     if "rank" in k:
-    #         rank_dif = t.mean((t.tensor(v)-t.tensor(predictions["original_rank"])).float())
-    #         output += f"{k.split('_')[0]}: {float(rank_dif):.5}\n"
-
-    # output += "\nChanged Predictions:\n"
-    # for k, v in predictions.items():
-    #     if "prediction" in k:
-    #         output += f"\n{k.split('_')[0]}:\n"
-
-    #         for i in range(len(v)):
-    #             correct = predictions["correct_token"][i]
-    #             original = predictions["original_token"][i]
-    #             if v[i].strip() not in correct.strip():
-    #                 output += f"{predictions["prompt"][i]}\n -> {correct}, predicted: {v[i]}\n"
-
-    # output += "\nWrong Predictions:\n"
-    # for k, v in predictions.items():
-    #     if "prediction" in k:
-    #         output += f"\n{k.split('_')[0]}:\n"
-
-    #         for i in range(20):
-    #             correct = predictions["correct_token"][i]
-    #             if v[i].strip() not in correct.strip():
-    #                 output += f"{predictions["prompt"][i]}\n -> {correct}, predicted: {v[i]}\n"
+        output += f"Worst Prediction: {worst_pred[k]}\n"
+        output += f"Wrong Predictions: {wrong[k][:5]}\n"
 
     if outfile != None:
         with open(outfile, 'w', encoding = "utf-8") as f:
@@ -590,14 +578,22 @@ def compute_accuracy(file, outfile = None):
 def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
     ablation_heads = {
         "pythia-14m": ["L0H0", "L5H3"],
-        "pythia-1.4b": ["L2H15", "L16H10", "L19H14", "L15H13"] # top heads identified by idiom score and dla
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]] # top heads identified by idiom score and dla
     }
+
+    abl_heads = []
+    for group in ablation_heads[model_name]:
+        name = ""
+        for layer_head in group:
+            name += f"_L{layer_head[0]}H{layer_head[1]}"
+        abl_heads.append(name[1:])
+
     logit_tensor = t.load(logit_file, map_location=t.device(device))
     loss_tensor = t.load(loss_file, map_location=t.device(device))
 
     mean_logit_tensor = get_mean_sentence_tensor(logit_tensor) # 4
     mean_loss_tensor = get_mean_sentence_tensor(loss_tensor) 
-    df = pd.DataFrame({"layer.head": ablation_heads[model_name], "logits": mean_logit_tensor.numpy(), "loss": mean_loss_tensor.numpy()})
+    df = pd.DataFrame({"layer.head": abl_heads, "logits": mean_logit_tensor.numpy(), "loss": mean_loss_tensor.numpy()})
     df.plot.bar(x = "layer.head")
     save_plt(outfile)
 
@@ -607,9 +603,13 @@ if __name__ == "__main__":
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
     # scores/ablation/pythia-1.4b/ablation_trans_0_None.json
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/pythia-1.4b/ablation_trans_0_None.json", type=str)
+
+    # llama
+    # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
+    # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_formal_0_None.pt
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_trans_0_None.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
-    parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default="scores/literal_scores/pythia-1.4b/literal_only_formal_0_None.pt", type=str)
+    parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
     model_name = parser.parse_args().model_name
     tensor_file = parser.parse_args().tensor_file
@@ -634,24 +634,25 @@ if __name__ == "__main__":
         os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
         if img_file == None:
             img_file = tensor_file.split('_')[1]
+        #f"./plots/{model_name}/ablation/{img_file}.txt"
         compute_accuracy(tensor_file, f"./plots/{model_name}/ablation/{img_file}.txt")
 
-    #     # logit_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_logit.pt"
-    #     # loss_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_loss.pt"
-    #     # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/formal.png", model_name)
+        # logit_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_logit.pt"
+        # loss_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_loss.pt"
+        # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/formal.png", model_name)
 
-    #     # logit_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_logit.pt"
-    #     # loss_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_loss.pt"
-    #     # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
-    # else:
-    #     loaded_tensor = t.load(tensor_file, map_location=t.device(device))
-    #     #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
-    #     print(f"Loaded tensor with size: {loaded_tensor.size()}")
-    #     #plot_all(loaded_tensor, img_file, model_name, scatter_file)
+        # logit_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_logit.pt"
+        # loss_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_loss.pt"
+        # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
+    else:
+        loaded_tensor = t.load(tensor_file, map_location=t.device(device))
+        #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
+        print(f"Loaded tensor with size: {loaded_tensor.size()}")
+        #plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
-    #     if tensor_file.endswith("_comp.pt"):
-    #         os.makedirs(f"./plots/{model_name}/components", exist_ok=True)
-    #         plot_all_components(loaded_tensor, img_file, model_name)
+        if tensor_file.endswith("_comp.pt"):
+            os.makedirs(f"./plots/{model_name}/components", exist_ok=True)
+            plot_all_components(loaded_tensor, img_file, model_name)
     #     elif "grouped" in tensor_file:
     #         path = f"./plots/{model_name}/logit"
     #         os.makedirs(path, exist_ok=True)
@@ -666,9 +667,9 @@ if __name__ == "__main__":
     #             comp_logit = mean_logit_attr[:, seen_comps:(seen_comps+num_comps)]
     #             plot_logit_attribution_split(comp_logit, x_labels = x_labels[model_name][comp_group], filename=f"{path}/{img_file}_{comp_group}.png")
     #             seen_comps += len(x_labels[model_name][comp_group])
-    #     else:
-    #         os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
-    #         plot_all(loaded_tensor, img_file, model_name, scatter_file)
+        else:
+            os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
+            plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
 
     

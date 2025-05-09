@@ -7,6 +7,7 @@ import os
 import torch as t
 from cli import CLI
 import json
+from collections import defaultdict
 
 cli = CLI()
 os.makedirs(f"./scores/ablation/{cli.model_name}", exist_ok=True)
@@ -75,6 +76,6 @@ for i in range(len(cli.data_split)):
     scorer.loss_diffs = None
     scorer.orig_logits = None
     scorer.orig_loss = None
-    scorer.predictions = None
+    scorer.predictions = defaultdict(list)
     t.cuda.empty_cache()
     
