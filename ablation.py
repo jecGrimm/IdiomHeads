@@ -41,17 +41,24 @@ class Ablation():
         
     
     def create_original_predictions(self, batch):
-            batched_orig_loss = t.zeros(len(batch["sentence"]), dtype=t.float16, device=self.device)
-            for i in range(len(batch["sentence"])):
-                batched_orig_loss[i] = self.clean_run(batch["tags"][i], batch["tokenized"][i])
-
+        batched_orig_loss = t.zeros(len(batch["sentence"]), dtype=t.float16, device=self.device)
+        add_loss = True
+        for i in range(len(batch["sentence"])):
+            loss = self.clean_run(batch["tags"][i], batch["tokenized"][i])
+            if loss != None:
+                batched_orig_loss[i] = loss
+            else:
+                if len(batch["sentence"]) == 1:
+                    add_loss = False
+        
+        if add_loss:
             if self.orig_loss != None:
                 self.orig_loss = t.cat((self.orig_loss, batched_orig_loss), dim = 0)
             else:
                 self.orig_loss = batched_orig_loss  
-            
-            del batched_orig_loss
-            t.cuda.empty_cache()
+        
+        del batched_orig_loss
+        t.cuda.empty_cache()
 
     def clean_run(self, tags, tokenized):
         prompt, correct_tok = self.get_correct_toks(tags, tokenized)
@@ -69,6 +76,8 @@ class Ablation():
             orig_loss = orig_loss.to(self.device)
 
             return orig_loss
+        else:
+            return None
     
     def ablate_head_batched(self, batch, ckp_file):
         batched_logit_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)

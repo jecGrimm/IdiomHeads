@@ -14,7 +14,7 @@ os.makedirs(f"./scores/ablation/{cli.model_name}", exist_ok=True)
 # Saves computation time
 t.set_grad_enabled(False)
 
-model: HookedTransformer = HookedTransformer.from_pretrained(cli.model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
+model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
 
 model.eval()
 epie = EPIE_Data()
