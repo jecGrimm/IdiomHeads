@@ -80,31 +80,32 @@ class Ablation():
             return None
     
     def ablate_head_batched(self, batch, ckp_file):
-        batched_logit_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
-        batched_loss_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
-        for i in range(len(batch["sentence"])):
-            batched_logit_diff[i], batched_loss_diff[i] = self.ablate_head(self.predictions["prompt"][self.sent_idx], self.predictions["correct_index"][self.sent_idx])
-            self.sent_idx += 1
+        if self.sent_idx <= len(self.predictions["prompt"]):
+            batched_logit_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
+            batched_loss_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
+            for i in range(len(batch["sentence"])):
+                batched_logit_diff[i], batched_loss_diff[i] = self.ablate_head(self.predictions["prompt"][self.sent_idx], self.predictions["correct_index"][self.sent_idx])
+                self.sent_idx += 1
 
-        if self.logit_diffs != None:
-            self.logit_diffs = t.cat((self.logit_diffs, batched_logit_diff), dim = 0)
-        else:
-            self.logit_diffs = batched_logit_diff  
+            if self.logit_diffs != None:
+                self.logit_diffs = t.cat((self.logit_diffs, batched_logit_diff), dim = 0)
+            else:
+                self.logit_diffs = batched_logit_diff  
 
-        if self.loss_diffs != None:
-            self.loss_diffs = t.cat((self.loss_diffs, batched_loss_diff), dim = 0)
-        else:
-            self.loss_diffs = batched_loss_diff  
-        
-        del batched_logit_diff
-        del batched_loss_diff
-        t.cuda.empty_cache()
+            if self.loss_diffs != None:
+                self.loss_diffs = t.cat((self.loss_diffs, batched_loss_diff), dim = 0)
+            else:
+                self.loss_diffs = batched_loss_diff  
+            
+            del batched_logit_diff
+            del batched_loss_diff
+            t.cuda.empty_cache()
 
-        t.save(self.logit_diffs, ckp_file + "_logit_ckp.pt")  
-        t.save(self.loss_diffs, ckp_file + "_loss_ckp.pt")  
+            t.save(self.logit_diffs, ckp_file + "_logit_ckp.pt")  
+            t.save(self.loss_diffs, ckp_file + "_loss_ckp.pt")  
 
-        with open(ckp_file + "_ckp.json", "w", encoding = "utf-8") as f:
-            json.dump(self.predictions, f)  
+            with open(ckp_file + "_ckp.json", "w", encoding = "utf-8") as f:
+                json.dump(self.predictions, f)  
 
     def ablate_head(self, prompt, correct_idx):
         # clean run

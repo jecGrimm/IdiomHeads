@@ -6,17 +6,18 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - static pythia 2570 DONE
 1. Head detection
 - idiom score
-    - static pythia 
+    - static pythia 2917
 - literal score
 2. Logit attribution
 3. Ablation
-    - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch -> 2885 (fixed trans switch)
+    - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch
+    - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run)
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
         - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
     - Head detection
         - idiom score 2569 DONE 
-        - literal score 2886
+        - literal score 2886 failed short model name -> 2890 (full model name)
     - logit attribution
     - llm transparency
     - ablation
