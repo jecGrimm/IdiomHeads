@@ -33,7 +33,7 @@ class Ablation():
 
         try:
             with open(orig_pred_file, 'r', encoding="utf-8") as f:
-                self.predictions = json.load(f)
+                self.predictions.update(json.load(f))
 
             self.orig_loss = t.load(orig_loss_file, map_location=t.device(self.device))
         except:
