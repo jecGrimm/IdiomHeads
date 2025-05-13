@@ -9,6 +9,8 @@ from cli import CLI
 
 cli = CLI()
 os.makedirs(f"./scores/literal_components/{cli.model_name}", exist_ok=True)
+os.makedirs(f"./scores/literal_scores/{cli.model_name}", exist_ok=True)
+
 # Saves computation time
 t.set_grad_enabled(False)
 
