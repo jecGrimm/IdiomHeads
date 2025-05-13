@@ -17,7 +17,7 @@ model = TransformerLensTransparentLlm("meta-llama/Llama-3.2-1B-Instruct", dtype 
 
 model.eval()
 epie = EPIE_Data()
-scorer = Contribution(model)
+scorer = Contribution(model, filename=cli.idiom_file)
 print(f"Running compute_contribution on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
