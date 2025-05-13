@@ -120,6 +120,14 @@ pip install transformer-lens
 pip install merge-tokenizers
 pip install IPython
 
+für LLMTransparency:
+cd llm-transparency-tool
+conda env update --name idiom --file env.yaml
+pip install -e .
+pip install streamlit
+pip install streamlit_extras
+pip install pyinstrument
+
 huggingface-cli login <huggingface_token> -> Access zu Llama 3 nötig
 
 ### SLURM
@@ -140,7 +148,7 @@ sbatch --partition=NvidiaAll ./scripts/awareness.sh
 sbatch --partition=NvidiaAll ./scripts/cage_pythia.sh
 sbatch --partition=NvidiaAll ./scripts/cage_qwen.sh
 sbatch --partition=NvidiaAll ./scripts/ablation.sh
-
+sbatch --partition=NvidiaAll ./scripts/contribution.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

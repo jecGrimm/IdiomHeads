@@ -15,7 +15,6 @@ t.set_grad_enabled(False)
 
 model = TransformerLensTransparentLlm("meta-llama/Llama-3.2-1B-Instruct", dtype = t.bfloat16) # cannot load bfloat16 because logit_attr does not work with that dtype
 
-model.eval()
 epie = EPIE_Data()
 scorer = Contribution(model, filename=cli.idiom_file)
 print(f"Running compute_contribution on device {scorer.device}.")

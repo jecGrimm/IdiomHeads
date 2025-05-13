@@ -24,6 +24,10 @@ class EPIE_Data:
         self.tokenized_trans_formal_sents.pop(1231)
         self.tags_formal.pop(1231)
 
+        self.static_sents.pop(1773)
+        self.tokenized_static_sents.pop(1773)
+        self.tags_static.pop(1773)
+
     def read_file(self, path: str):
         '''
         This method reads the files from the EPIE_Corpus and stores them in a list.
@@ -103,5 +107,6 @@ class EPIE_Data:
     
 if __name__ == "__main__":
     epie = EPIE_Data()
-    print(epie.trans_formal_sents[1497])
+    print(epie.static_sents[1773])
+    #print(epie.trans_formal_sents[1497])
     #print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))

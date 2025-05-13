@@ -67,7 +67,8 @@ if __name__ == "__main__":
 
     # llama
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
-    file1 = "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt"
+    # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
+    file1 = "scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_trans_0_None.pt"
     print_tensor_size(file1)
 
     #get_logit_component(384, "pythia-1.4b")
