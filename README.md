@@ -11,13 +11,13 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 2. Logit attribution
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch
-    - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run)
+    - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run) DONE
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
         - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
     - Head detection
         - idiom score 2569 DONE 
-        - literal score 2886 failed short model name -> 2890 (full model name)
+        - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full)
     - logit attribution
     - llm transparency
     - ablation

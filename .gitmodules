@@ -7,3 +7,6 @@
 [submodule "merge-tokenizers"]
 	path = merge-tokenizers
 	url = https://github.com/symanto-research/merge-tokenizers.git
+[submodule "llm-transparency-tool"]
+	path = llm-transparency-tool
+	url = https://github.com/jecGrimm/llm-transparency-tool.git
