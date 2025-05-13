@@ -517,6 +517,8 @@ def compute_accuracy(file, outfile = None):
     changed_total = defaultdict(float) 
     changed_corr2false = defaultdict(float) 
     changed_false2corr = defaultdict(float) 
+    changed_rank_down = defaultdict(float) 
+    changed_rank_up = defaultdict(float) 
     wrong = defaultdict(list) 
     worst_pred = defaultdict(str)
     for k, v in predictions.items():
@@ -549,6 +551,11 @@ def compute_accuracy(file, outfile = None):
 
                 if original_rank != ablated_rank:
                     changed_total[name] += 1
+                    if original_rank < ablated_rank:
+                        changed_rank_down[name] += 1
+                    else:
+                        changed_rank_up[name] += 1
+
                     if original_rank == 0:
                         changed_corr2false[name] += 1
                     elif original_rank != 0 and ablated_rank == 0:
@@ -557,6 +564,8 @@ def compute_accuracy(file, outfile = None):
             changed_total[name] = changed_total[name]/num_sents
             changed_corr2false[name] = changed_corr2false[name]/num_sents
             changed_false2corr[name] = changed_false2corr[name]/num_sents
+            changed_rank_down[name] = changed_rank_down[name]/num_sents
+            changed_rank_up[name] = changed_rank_up[name]/num_sents
 
     output = ""
     for k, v in acc.items():
@@ -566,6 +575,8 @@ def compute_accuracy(file, outfile = None):
         output += f"Total Changed Predictions: {float(changed_total[k]):.2%}\n"
         output += f"Correct2False Changed Predictions: {float(changed_corr2false[k]):.2%}\n"
         output += f"False2Correct Changed Predictions: {float(changed_false2corr[k]):.2%}\n"
+        output += f"Ablation has negative effect on rank of the correct token: {float(changed_rank_down[k]):.2%}\n"
+        output += f"Ablation has positive effect on rank of the correct token: {float(changed_rank_up[k]):.2%}\n"
         output += f"Worst Prediction: {worst_pred[k]}\n"
         output += f"Wrong Predictions: {wrong[k][:5]}\n"
 
@@ -607,7 +618,8 @@ if __name__ == "__main__":
     # llama
     # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
     # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_trans_0_None.pt", type=str)
+    # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -646,13 +658,13 @@ if __name__ == "__main__":
         # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
     else:
         loaded_tensor = t.load(tensor_file, map_location=t.device(device))
-        #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
+        loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
         print(f"Loaded tensor with size: {loaded_tensor.size()}")
-        #plot_all(loaded_tensor, img_file, model_name, scatter_file)
+        plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
-        if tensor_file.endswith("_comp.pt"):
-            os.makedirs(f"./plots/{model_name}/components", exist_ok=True)
-            plot_all_components(loaded_tensor, img_file, model_name)
+        # if tensor_file.endswith("_comp.pt"):
+        #     os.makedirs(f"./plots/{model_name}/components", exist_ok=True)
+        #     plot_all_components(loaded_tensor, img_file, model_name)
     #     elif "grouped" in tensor_file:
     #         path = f"./plots/{model_name}/logit"
     #         os.makedirs(path, exist_ok=True)
@@ -667,9 +679,9 @@ if __name__ == "__main__":
     #             comp_logit = mean_logit_attr[:, seen_comps:(seen_comps+num_comps)]
     #             plot_logit_attribution_split(comp_logit, x_labels = x_labels[model_name][comp_group], filename=f"{path}/{img_file}_{comp_group}.png")
     #             seen_comps += len(x_labels[model_name][comp_group])
-        else:
-            os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
-            plot_all(loaded_tensor, img_file, model_name, scatter_file)
+        # else:
+        #     os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
+        #     plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
 
     

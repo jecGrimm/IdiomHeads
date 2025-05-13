@@ -38,7 +38,7 @@ def print_tensor_size(file):
     tensor1 = t.load(file, map_location=t.device(device))
     print("Size tensor1: ", tensor1.size())
     print("tensor1 nan: ", (t.isnan(tensor1) == True).nonzero())
-    print("tensor1 zero: ", (tensor1 == 0.0))
+    #print("tensor1 zero: ", (tensor1 == 0.0))
     #print("tensor1:", tensor1)
 
 def get_logit_component(num, model_name):
@@ -63,7 +63,11 @@ if __name__ == "__main__":
     # file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
     #file1 = "scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt"
     #file1 = "scores/literal_scores/pythia-1.4b/literal_only_trans_0_None.pt"
-    file1 = "scores/ablation/pythia-1.4b/ablation_trans_0_None_logit.pt"
+    #file1 = "scores/ablation/pythia-1.4b/ablation_trans_0_None_loss.pt"
+
+    # llama
+    # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
+    file1 = "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt"
     print_tensor_size(file1)
 
     #get_logit_component(384, "pythia-1.4b")

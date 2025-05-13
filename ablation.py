@@ -80,7 +80,7 @@ class Ablation():
             return None
     
     def ablate_head_batched(self, batch, ckp_file):
-        if self.sent_idx <= len(self.predictions["prompt"]):
+        if self.sent_idx < len(self.predictions["prompt"]):
             batched_logit_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
             batched_loss_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
             for i in range(len(batch["sentence"])):
