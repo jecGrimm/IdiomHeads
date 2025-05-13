@@ -1,0 +1,8 @@
+slurmstepd-andesit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-andesit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_contribution.py", line 5, in <module>
+    from contribution import Contribution
+  File "/home/g/grimmj/IdiomHeads/contribution.py", line 4, in <module>
+    from llm_transparency_tool.models.tlens_model import TransformerLensTransparentLlm
+ModuleNotFoundError: No module named 'llm_transparency_tool'

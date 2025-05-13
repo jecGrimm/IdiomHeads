@@ -1,0 +1,7 @@
+slurmstepd-andesit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-andesit: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_contribution.py", line 18, in <module>
+    model.eval()
+    ^^^^^^^^^^
+AttributeError: 'TransformerLensTransparentLlm' object has no attribute 'eval'
