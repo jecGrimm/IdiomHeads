@@ -6,7 +6,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - static pythia 2570 DONE
 1. Head detection
 - idiom score
-    - static pythia 2917
+    - static pythia 2917 (failed because of long sentence 1773) -> 3500 alle Sätze wegen new idiom pos
 - literal score
 2. Logit attribution
 3. Ablation
@@ -19,7 +19,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - idiom score 2569 DONE 
         - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full)
     - logit attribution
-    - llm transparency
+    - llm transparency - DONE?
     - ablation
 5. Schreiben
 - Selbstständigkeitserklärung -> auch digital unterschreiben? Muss das die neue sein?

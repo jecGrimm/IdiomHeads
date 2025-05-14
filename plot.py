@@ -355,7 +355,7 @@ def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels
         fig.show()
 
 def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
-    path = f"./plots/{model_name}"
+    path = f"./plots/{model_name}/scores"
     if filename and model_name:
         plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
         plot_line_std(tensor, f"{path}/std_line_{filename}.png")
@@ -620,7 +620,8 @@ if __name__ == "__main__":
     # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_formal_0_None.pt
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_trans_0_None.pt", type=str)
+    # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -635,7 +636,7 @@ if __name__ == "__main__":
     # Scatter 
     # loaded_tensor = t.load(tensor_file, map_location=t.device(device))
     # scatter_tensor = t.load(scatter_file, map_location=t.device(device))
-    # loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
+    # #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
     # print(f"Loaded tensor with size: {loaded_tensor.size()}")
     # print(f"Scatter tensor with size: {scatter_tensor.size()}")
     # plot_scatter(loaded_tensor, scatter_tensor, f"plots/{model_name}/scores/scatter_formal_idiom_literal.png")
@@ -700,9 +701,10 @@ if __name__ == "__main__":
                     comp_logit = mean_tensor[:, seen_comps:(seen_comps+num_comps)]
                     plot_logit_attribution_split(comp_logit, x_labels = x_labels[model_name][comp_group], filename=f"{path}/{img_file}_{comp_group}.png")
                     seen_comps += len(x_labels[model_name][comp_group])
-        # else:
-        #     os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
-        #     plot_all(loaded_tensor, img_file, model_name, scatter_file)
+        else:
+            os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
+            #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
+            #plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
 
     

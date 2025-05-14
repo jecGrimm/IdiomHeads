@@ -1,5 +1,6 @@
 import torch as t
 import json
+import os
 
 def create_colab_requirements():
     pkgs = []
@@ -55,9 +56,9 @@ def get_logit_component(num, model_name):
                 return comp
 
 if __name__ == "__main__":
-
-    #merge_tensors("./scores/literal_components/pythia-1.4b/literal_only_formal_0_225_comp.pt", "./scores/literal_components/pythia-1.4b/literal_only_formal_225_None_comp.pt", "./scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt")
-    #tranform_comp2score("scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt", "scores/literal_scores/pythia-1.4b/literal_only_formal_0_None.pt")
+    os.makedirs("scores/literal_scores/Llama-3.2-1B-Instruct/", exist_ok = True)
+    #merge_tensors("scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_2285_comp.pt", "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_2285_None_comp.pt", "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt")
+    tranform_comp2score("scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", "scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt")
 
     # file1= "scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt"
     # file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
@@ -68,7 +69,8 @@ if __name__ == "__main__":
     # llama
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
-    file1 = "scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_trans_0_None.pt"
+    # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_2285_None_comp.pt
+    file1 = "scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt"
     print_tensor_size(file1)
 
     #get_logit_component(384, "pythia-1.4b")
