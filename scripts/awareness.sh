@@ -8,4 +8,4 @@
 #SBATCH --output=/home/g/grimmj/IdiomHeads/scripts/output/slurm.%j.%N.out
 #SBATCH --ntasks=1
 
-python3 -u compute_idiom_awareness.py -d static -m "EleutherAI/pythia-1.4B" -i "pythia_static_idiom_pos.json" -s 0 -e 2761
+python3 -u compute_idiom_awareness.py -d formal trans -m "roneneldan/TinyStories-Instruct-33M" -i "tiny_formal_idiom_pos.json" -s 0 -e None

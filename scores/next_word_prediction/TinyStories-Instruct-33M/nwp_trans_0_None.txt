@@ -1,0 +1,8 @@
+
+The model generated 252 correct answers.
+
+Accuracy: 9.13%
+
+Five correct outputs: ['<|endoftext|>Keep it in the quarantine tank, cease medication and watch it closely for', "<|endoftext|>Struggling peasants they'd be for the most part, trying to survive in difficult times.", '<|endoftext|>" My overseers remain vigilant here,', '<|endoftext|>Routinely monitoring the', '<|endoftext|>Just to ward off starvation.']
+
+Five incorrect outputs: [('‘You know, the panda who watches overs attentively -> my', '<|endoftext|>‘You know, the panda who watches overs attentively!'), ('But I will also be watching you closely. -> ’', '<|endoftext|>But I will also be watching you closely. You'), ('‘I will be watching him -> carefully,', '<|endoftext|>‘I will be watching him.'), ("Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively -> such", "<|endoftext|>Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively--"), ('Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang -> closely.', '<|endoftext|>Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang with')]
