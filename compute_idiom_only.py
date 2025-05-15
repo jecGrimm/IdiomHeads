@@ -45,6 +45,8 @@ for i in range(len(cli.data_split)):
     if scorer.idiom_positions == []:
         data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
         scorer.store_all_idiom_pos(cli.idiom_file)
+
+    print(f"start: {start}, end: {end}, len idiom_pos: {len(scorer.idiom_positions[start:end])}, len data: {len(data)}")
         
     data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
     

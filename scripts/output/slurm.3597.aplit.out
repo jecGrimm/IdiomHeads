@@ -1,0 +1,35 @@
+slurmstepd-aplit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-aplit: error: Setting TMPDIR to /tmp
+/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/pythia-1.4b into HookedTransformer
+Running compute_idiom_only on device cuda.
+
+Processing split:  static
+Map:   0%|          | 0/2106 [00:00<?, ? examples/s]Map:   4%|▎         | 74/2106 [00:00<00:02, 723.75 examples/s]Map:   9%|▊         | 181/2106 [00:00<00:02, 703.08 examples/s]Map:  12%|█▏        | 256/2106 [00:00<00:02, 716.44 examples/s]Map:  16%|█▋        | 346/2106 [00:00<00:02, 773.38 examples/s]Map:  20%|██        | 429/2106 [00:00<00:02, 784.75 examples/s]Map:  26%|██▌       | 539/2106 [00:00<00:02, 755.28 examples/s]Map:  30%|██▉       | 623/2106 [00:00<00:01, 776.95 examples/s]Map:  34%|███▍      | 711/2106 [00:00<00:01, 804.60 examples/s]Map:  38%|███▊      | 799/2106 [00:01<00:01, 821.58 examples/s]Map:  43%|████▎     | 915/2106 [00:01<00:01, 800.74 examples/s]Map:  48%|████▊     | 1021/2106 [00:01<00:01, 765.41 examples/s]Map:  52%|█████▏    | 1104/2106 [00:01<00:01, 777.92 examples/s]Map:  58%|█████▊    | 1227/2106 [00:01<00:01, 786.80 examples/s]Map:  64%|██████▍   | 1346/2106 [00:01<00:00, 783.78 examples/s]Map:  70%|██████▉   | 1466/2106 [00:01<00:00, 784.13 examples/s]Map:  75%|███████▌  | 1583/2106 [00:02<00:00, 777.38 examples/s]Map:  81%|████████  | 1701/2106 [00:02<00:00, 776.45 examples/s]Map:  86%|████████▌ | 1808/2106 [00:02<00:00, 755.24 examples/s]Map:  91%|█████████ | 1910/2106 [00:02<00:00, 730.58 examples/s]Map:  96%|█████████▌| 2020/2106 [00:02<00:00, 728.63 examples/s]Map: 100%|█████████▉| 2104/2106 [00:02<00:00, 748.98 examples/s]Map: 100%|██████████| 2106/2106 [00:02<00:00, 765.00 examples/s]
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_idiom_only.py", line 49, in <module>
+    data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/fingerprint.py", line 442, in wrapper
+    out = func(dataset, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 5795, in add_column
+    table = concat_tables([dataset._data, column_table], axis=1)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/table.py", line 1766, in concat_tables
+    return ConcatenationTable.from_tables(tables, axis=axis)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/table.py", line 1471, in from_tables
+    blocks = _extend_blocks(blocks, table_blocks, axis=axis)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/table.py", line 1463, in _extend_blocks
+    result, blocks = _split_both_like(result, blocks)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/miniconda3/envs/idiom/lib/python3.12/site-packages/datasets/table.py", line 1453, in _split_both_like
+    raise ValueError("Failed to concatenate on axis=1 because tables don't have the same number of rows")
+ValueError: Failed to concatenate on axis=1 because tables don't have the same number of rows
