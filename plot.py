@@ -621,7 +621,8 @@ if __name__ == "__main__":
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", type=str)
+    # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_components/Llama-3.2-1B-Instruct/literal_only_trans_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -704,7 +705,7 @@ if __name__ == "__main__":
         else:
             os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
             #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
-            #plot_all(loaded_tensor, img_file, model_name, scatter_file)
+            plot_all(loaded_tensor, img_file, model_name, scatter_file)
 
 
     

@@ -6,18 +6,18 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - static pythia 2570 DONE
 1. Head detection
 - idiom score
-    - static pythia 2917 (failed because of long sentence 1773) -> 3500 alle Sätze wegen new idiom pos
+    - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung)
 - literal score
 2. Logit attribution
 3. Ablation
-    - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch
+    - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch DONE
     - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run) DONE
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
         - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
     - Head detection
         - idiom score 2569 DONE 
-        - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full)
+        - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full) -> 3513 (nur trans)
     - logit attribution
     - llm transparency - DONE?
     - ablation
