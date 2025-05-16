@@ -38,6 +38,7 @@ def print_tensor_size(file):
     device = "cuda" if t.cuda.is_available() else "cpu"
     tensor1 = t.load(file, map_location=t.device(device))
     print("Size tensor1: ", tensor1.size())
+    #print("Mean:", tensor1.mean())
     print("tensor1 nan: ", (t.isnan(tensor1) == True).nonzero())
     #print("tensor1 zero: ", (tensor1 == 0.0))
     #print("tensor1:", tensor1)
@@ -57,7 +58,10 @@ def get_logit_component(num, model_name):
 
 if __name__ == "__main__":
     #os.makedirs("scores/literal_scores/Llama-3.2-1B-Instruct/", exist_ok = True)
-    #merge_tensors("scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_2285_comp.pt", "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_2285_None_comp.pt", "scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt")
+    file1 = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_formal_0_2210.pt"
+    file2 = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_formal_2211_None.pt"
+    merge_file = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_formal_0_None.pt"
+    merge_tensors(file1, file2, merge_file)
     #tranform_comp2score("scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", "scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt")
 
     # file1= "scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt"
@@ -72,8 +76,12 @@ if __name__ == "__main__":
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_2285_None_comp.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
-    file1 = "scores/idiom_components/pythia-1.4b/idiom_only_static_0_2761_comp.pt"
-    print_tensor_size(file1)
+
+    # tiny
+    # scores/loss/TinyStories-Instruct-33M/loss_formal_0_None.pt
+    # scores/loss/TinyStories-Instruct-33M/loss_trans_0_None.pt
+    #file1 = "scores/loss/TinyStories-Instruct-33M/loss_trans_0_None.pt"
+    #print_tensor_size(file1)
 
     #get_logit_component(384, "pythia-1.4b")
 

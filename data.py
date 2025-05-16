@@ -18,15 +18,22 @@ class EPIE_Data:
         self.trans_formal_sents = self.remove_spaces(self.tokenized_trans_formal_sents)
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
 
-        self.formal_sents.pop(1231)
-        self.tokenized_formal_sents.pop(1231)
-        self.trans_formal_sents.pop(1231)
-        self.tokenized_trans_formal_sents.pop(1231)
-        self.tags_formal.pop(1231)
+        # 1231 ab idiom pythia
+        # 1280, 1281, 1282, 1386, 2210 ab logit llama
+        formal_long_sent_ids = [1231, 1280, 1281, 1282, 1386, 2210] 
+        for sent_idx in formal_long_sent_ids:
+            self.formal_sents.pop(sent_idx)
+            self.tokenized_formal_sents.pop(sent_idx)
+            self.trans_formal_sents.pop(sent_idx)
+            self.tokenized_trans_formal_sents.pop(sent_idx)
+            self.tags_formal.pop(sent_idx)
 
-        self.static_sents.pop(1773)
-        self.tokenized_static_sents.pop(1773)
-        self.tags_static.pop(1773)
+        # 1773 und 1817 ab pythia idiom score
+        static_long_sent_ids = [1773, 1817]
+        for sent_idx in static_long_sent_ids:
+            self.static_sents.pop(sent_idx)
+            self.tokenized_static_sents.pop(sent_idx)
+            self.tags_static.pop(sent_idx)
 
     def read_file(self, path: str):
         '''
@@ -107,6 +114,10 @@ class EPIE_Data:
     
 if __name__ == "__main__":
     epie = EPIE_Data()
-    print(epie.static_sents[1773])
+    print(len(epie.static_sents[1817]))
+
+    for i in range(2761):
+        if len(epie.static_sents[i]) >= 196:
+            print(i)
     #print(epie.trans_formal_sents[1497])
     #print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))
