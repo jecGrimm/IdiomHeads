@@ -613,7 +613,7 @@ def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="TinyStories-Instruct-33M")
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
     # scores/ablation/pythia-1.4b/ablation_trans_0_None.json
@@ -625,7 +625,10 @@ if __name__ == "__main__":
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_0_None.pt", type=str)
+
+    # tiny
+    # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/TinyStories-Instruct-33M/idiom_only_formal_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 

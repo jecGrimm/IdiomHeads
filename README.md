@@ -6,8 +6,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - static pythia 2570 DONE
 1. Head detection
 - idiom score
-    - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung) failed OOM -> 3743 (ab 1817) failed OOM -> 3751
+    - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung) failed OOM -> 3743 (ab 1817) failed OOM -> 3751 DONE
 - literal score
+    - static 3809 
 2. Logit attribution
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch DONE
@@ -21,7 +22,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - logit attribution - 3742 (formal und trans) failed OOM 1280 -> 3755 (ab 1280) OOM bei 1280 -> 3771 (nur formal, ab 1281 mit alter pos file) OOM für 1281 -> 3772 (ab 1282) OOM für 1282 -> 3773 (ab 1283) OOM für 1386 -> 3775 (ab 1387) OOM für 2210 -> 3377 (2211) DONE
         - trans: 3778 (nur trans, pop lange sents neue idiom pos) OOM für 1383 -> 3779 (ab 1384) OOM für 2205 -> 3780 (ab 2206) OOM für 2206 -> 3781 (ab 2207) DONE
     - llm transparency - DONE?
-    - ablation
+    - ablation - 3789 (full)
 5. Drittes Modell: Tiny
     - nwp
         - formal und trans 3602 DONE (commited auf remote main)
@@ -51,6 +52,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - unnötige Funktionen ins Archiv
 - nwg und loss Experimente in Repo übertragen
 - Angeben, dass h11-Update auf 0.16.0 von dependabot gemacht wurde
+- fix plots
+- fix distribution 
 
 ### Optional
 - Duplizierende Methoden (eigl bereits abgedeckt):

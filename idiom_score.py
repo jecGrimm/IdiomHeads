@@ -283,8 +283,25 @@ class IdiomScorer:
         @param attention_pattern: attention scores for one head and one sentence
         @returns mean of the row and column fractions
         '''
-        q2k = self.max_idiom_toks(t.argmax(attention_pattern, dim=1).tolist()[idiom_pos[0]:], idiom_pos)
-        k2q = self.max_idiom_toks(t.argmax(attention_pattern, dim=0).tolist()[:idiom_pos[1]+1], idiom_pos)
+        # q2k = self.max_idiom_toks(t.argmax(attention_pattern, dim=1).tolist()[idiom_pos[0]:], idiom_pos)
+        # k2q = self.max_idiom_toks(t.argmax(attention_pattern, dim=0).tolist()[:idiom_pos[1]+1], idiom_pos)
+
+        literal_argmax_k = t.argmax(attention_pattern, dim=1)[idiom_pos[0]:]
+        literal_argmax_q = t.argmax(attention_pattern, dim=0)[:idiom_pos[1]+1]
+
+        if literal_argmax_k.size(0) == 0:
+            q2k = t.zeros(1, device=self.device, dtype=t.float16)
+        else:
+            q2k = self.max_idiom_toks(literal_argmax_k.tolist(), idiom_pos)
+        
+        if literal_argmax_q.size(0) == 0:
+            k2q = t.zeros(1, device=self.device, dtype=t.float16)
+        else:
+            k2q = self.max_idiom_toks(literal_argmax_q.tolist(), idiom_pos)
+
+        del literal_argmax_k
+        del literal_argmax_q
+        t.cuda.empty_cache()
 
         return (q2k + k2q)/2
     
@@ -314,7 +331,11 @@ class IdiomScorer:
                     idiom_fraction += 1
             idiom_fractions.append(idiom_fraction / len(max_indices))
 
-        return sum(idiom_fractions)/len(idiom_fractions)
+        if len(idiom_fractions) != 0:
+            return sum(idiom_fractions)/len(idiom_fractions)
+        else:
+            return 0.0
+        #return sum(idiom_fractions)/len(idiom_fractions)
     
     def compute_k_phrase_attention(self, attention_pattern, idiom_pos):
         '''
@@ -342,7 +363,11 @@ class IdiomScorer:
                     idiom_fraction += 1
             idiom_fractions.append(idiom_fraction / len(max_indices))
 
-        return sum(idiom_fractions)/len(idiom_fractions)
+        if len(idiom_fractions) != 0:
+            return sum(idiom_fractions)/len(idiom_fractions)
+        else:
+            return 0.0
+        #return sum(idiom_fractions)/len(idiom_fractions)
     
     def mean_qk_phrase(self, attention_pattern, idiom_pos):
         '''

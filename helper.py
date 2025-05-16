@@ -58,11 +58,11 @@ def get_logit_component(num, model_name):
 
 if __name__ == "__main__":
     #os.makedirs("scores/literal_scores/Llama-3.2-1B-Instruct/", exist_ok = True)
-    file1 = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_0_2205.pt"
-    file2 = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_2207_None.pt"
-    merge_file = "scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_0_None.pt"
-    merge_tensors(file1, file2, merge_file)
-    #tranform_comp2score("scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt", "scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt")
+    file1 = "scores/idiom_components/pythia-1.4b/idiom_only_static_0_1818_comp.pt"
+    file2 = "scores/idiom_components/pythia-1.4b/idiom_only_static_1818_2761_comp.pt"
+    merge_file = "scores/idiom_components/pythia-1.4b/idiom_only_static_0_None_comp.pt"
+    #merge_tensors(file1, file2, merge_file)
+    tranform_comp2score(merge_file, "scores/idiom_scores/pythia-1.4b/idiom_only_static_0_None.pt")
 
     # file1= "scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt"
     # file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
