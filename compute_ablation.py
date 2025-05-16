@@ -19,9 +19,11 @@ model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name
 model.eval()
 epie = EPIE_Data()
 
+# top 3 idiom scores, top 3 diff idiom scores formal - trans, top 3 dla formal, top 3 diff dla formal idiom - literal, top 3 diff dla formal idiom - trans idiom  
 ablation_heads = {
     "pythia-14m": [[(0,0), (0, 1), (0, 2)], [(5, 1), (5, 2), (5,3)]],
-    "pythia-1.4b": [[(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)]] # top heads identified by idiom score and dla
+    "pythia-1.4b": [[(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)]], # top heads identified by idiom score and dla
+    "Llama-3.2-1B-Instruct": [[(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (3, 4)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)]]
 }
 scorer = Ablation(model, ablation_heads=ablation_heads[cli.model_name])
 print(f"\nRunning compute_ablation on device {scorer.device}.")

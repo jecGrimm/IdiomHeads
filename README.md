@@ -18,7 +18,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - Head detection
         - idiom score 2569 DONE 
         - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full) -> 3513 (nur trans) DONE
-    - logit attribution - 3742 (formal und trans) failed OOM 1280 -> 3755 (ab 1280) OOM bei 1280 -> 3771 (nur formal, ab 1281 mit alter pos file) OOM für 1281 -> 3772 (ab 1282) OOM für 1282 -> 3773 (ab 1283) OOM für 1386 -> 3775 (ab 1387)
+    - logit attribution - 3742 (formal und trans) failed OOM 1280 -> 3755 (ab 1280) OOM bei 1280 -> 3771 (nur formal, ab 1281 mit alter pos file) OOM für 1281 -> 3772 (ab 1282) OOM für 1282 -> 3773 (ab 1283) OOM für 1386 -> 3775 (ab 1387) OOM für 2210 -> 3377 (2211) DONE
+        - trans: 3778 (nur trans, pop lange sents neue idiom pos) OOM für 1383 -> 3779 (ab 1384) OOM für 2205 -> 3780 (ab 2206) OOM für 2206 -> 3781 (ab 2207) DONE
     - llm transparency - DONE?
     - ablation
 5. Drittes Modell: Tiny

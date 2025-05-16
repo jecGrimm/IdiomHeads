@@ -19,8 +19,9 @@ class EPIE_Data:
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
 
         # 1231 ab idiom pythia
-        # 1280, 1281, 1282, 1386, 2210 ab logit llama
-        formal_long_sent_ids = [1231, 1280, 1281, 1282, 1386, 2210] 
+        # 1280, 1281, 1282, 1386, 2210 ab logit llama formal
+        # 1379, 2200, 2201 ab logit llama trans
+        formal_long_sent_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210] 
         for sent_idx in formal_long_sent_ids:
             self.formal_sents.pop(sent_idx)
             self.tokenized_formal_sents.pop(sent_idx)
