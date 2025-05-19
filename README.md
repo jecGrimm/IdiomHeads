@@ -8,8 +8,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - idiom score
     - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung) failed OOM -> 3743 (ab 1817) failed OOM -> 3751 DONE
 - literal score
-    - static 3809 
+    - static 3809 DONE
 2. Logit attribution
+    - static 4205
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch DONE
     - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run) DONE
@@ -29,7 +30,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - static
     - Head detection
         - idiom score 
-            - formal und trans 3744 
+            - formal 3744 DONE
+            - trans 3744 failed weil argmax idiom_fractions leer -> 3811 failed weil idiom_pos zu lang -> 4210
         - literal score
     - logit attribution
     - llm transparency ?
@@ -54,6 +56,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Angeben, dass h11-Update auf 0.16.0 von dependabot gemacht wurde
 - fix plots
 - fix distribution 
+- alle Tensoren sollten die gleiche Größe haben
+- alle Funktionen testen (besonders plots)
 
 ### Optional
 - Duplizierende Methoden (eigl bereits abgedeckt):
@@ -164,6 +168,7 @@ sbatch --partition=NvidiaAll ./scripts/cage_pythia.sh
 sbatch --partition=NvidiaAll ./scripts/cage_qwen.sh
 sbatch --partition=NvidiaAll ./scripts/ablation.sh
 sbatch --partition=NvidiaAll ./scripts/contribution.sh
+sbatch --partition=NvidiaAll ./scripts/idiom_only_tiny.sh
 
 NICHT VERGESSEN, CONDA ZU AKTIVIEREN!
 

@@ -450,12 +450,22 @@ def create_csv(model_name, device):
     df_trans_attr["DLA Std Idiom Trans"] = std_trans_logits[0]
     df_trans_attr["DLA Std Literal Trans"] = std_trans_logits[1]
 
+    # Static
+    logit_static_file = f"scores/logit_attribution/{model_name}/grouped_attr_static_0_2761.pt"
+    static_logits = t.load(logit_static_file, map_location=t.device(device))
+    mean_static_logits = get_mean_sentence_tensor(static_logits)
+    df_static_attr = pd.DataFrame(mean_static_logits.numpy().T, columns=['DLA Idiom Static', 'DLA Literal Static'])
+
+    std_static_logits = t.std(static_logits, dim = 0)
+    df_static_attr["DLA Std Idiom Static"] = std_static_logits[0]
+    df_static_attr["DLA Std Literal Static"] = std_static_logits[1]
+
     # IDIOM SCORE
     # Formal
     idiom_score_formal_file = f"scores/idiom_scores/{model_name}/idiom_only_formal_0_None.pt"
     #formal_idiom_comps = t.load(idiom_score_formal_file, map_location=t.device(device))
     formal_idiom_score = t.load(idiom_score_formal_file, map_location=t.device(device))
-    #formal_idiom_score = t.sigmoid(t.sum(formal_idiom_comps, dim = -1))
+    formal_idiom_score = t.sigmoid(t.sum(formal_idiom_score, dim = -1))
     mean_formal_idiom_score = get_lh_mean_scores(formal_idiom_score)
     df_formal_idiom_score = pd.DataFrame({"Component": list(mean_formal_idiom_score.keys()), "Idiom Score Formal": list(mean_formal_idiom_score.values())})
     std_formal_idiom_score = get_lh_std_scores(formal_idiom_score)
@@ -467,13 +477,25 @@ def create_csv(model_name, device):
     idiom_score_trans_file = f"scores/idiom_scores/{model_name}/idiom_only_trans_0_None.pt"
     #trans_idiom_comps = t.load(idiom_score_trans_file, map_location=t.device(device))
     trans_idiom_score = t.load(idiom_score_trans_file, map_location=t.device(device))
-    #trans_idiom_score = t.sigmoid(t.sum(trans_idiom_comps, dim = -1))
+    trans_idiom_score = t.sigmoid(t.sum(trans_idiom_score, dim = -1))
     mean_trans_idiom_score = get_lh_mean_scores(trans_idiom_score)
     df_trans_idiom_score = pd.DataFrame({"Component": list(mean_trans_idiom_score.keys()), "Idiom Score Trans": list(mean_trans_idiom_score.values())})
     #df_trans_idiom_score["Idiom Score Std Trans"] = get_lh_std_scores(trans_idiom_score)
     std_trans_idiom_score = get_lh_std_scores(trans_idiom_score)
     df_std_trans_idiom_score = pd.DataFrame({"Component": list(std_trans_idiom_score.keys()), "Idiom Score Std Trans": list(std_trans_idiom_score.values())})
     df_trans_idiom_score = pd.merge(df_trans_idiom_score, df_std_trans_idiom_score, on="Component",  how='left')
+
+    # Static
+    idiom_score_static_file = f"scores/idiom_scores/{model_name}/idiom_only_static_0_None.pt"
+    #trans_idiom_comps = t.load(idiom_score_trans_file, map_location=t.device(device))
+    static_idiom_score = t.load(idiom_score_static_file, map_location=t.device(device))
+    #trans_idiom_score = t.sigmoid(t.sum(trans_idiom_comps, dim = -1))
+    mean_static_idiom_score = get_lh_mean_scores(static_idiom_score)
+    df_static_idiom_score = pd.DataFrame({"Component": list(mean_static_idiom_score.keys()), "Idiom Score Static": list(mean_static_idiom_score.values())})
+    #df_trans_idiom_score["Idiom Score Std Trans"] = get_lh_std_scores(trans_idiom_score)
+    std_static_idiom_score = get_lh_std_scores(static_idiom_score)
+    df_std_static_idiom_score = pd.DataFrame({"Component": list(std_static_idiom_score.keys()), "Idiom Score Std Static": list(std_static_idiom_score.values())})
+    df_static_idiom_score = pd.merge(df_static_idiom_score, df_std_static_idiom_score, on="Component",  how='left')
 
     # LITERAL SCORE
     # Formal
@@ -496,18 +518,37 @@ def create_csv(model_name, device):
     df_std_trans_literal_score = pd.DataFrame({"Component": list(std_trans_literal_score.keys()), "Literal Score Std Trans": list(std_trans_literal_score.values())})
     df_trans_literal_score = pd.merge(df_trans_literal_score, df_std_trans_literal_score, on="Component",  how='left')
 
+    # Static
+    literal_score_static_file = f"scores/literal_scores/{model_name}/literal_only_static_0_2761.pt"
+    static_literal_score = t.load(literal_score_static_file, map_location=t.device(device))
+    mean_static_literal_score = get_lh_mean_scores(static_literal_score)
+    df_static_literal_score = pd.DataFrame({"Component": list(mean_static_literal_score.keys()), "Literal Score Static": list(mean_static_literal_score.values())})
+    #df_trans_literal_score["literal Score Std Trans"] = get_lh_std_scores(trans_literal_score)
+    std_static_literal_score = get_lh_std_scores(static_literal_score)
+    df_std_static_literal_score = pd.DataFrame({"Component": list(std_static_literal_score.keys()), "Literal Score Std Static": list(std_static_literal_score.values())})
+    df_static_literal_score = pd.merge(df_static_literal_score, df_std_static_literal_score, on="Component",  how='left')
 
     # ALL
-    df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_formal_literal_score, df_trans_literal_score, df_formal_attr, df_trans_attr], axis=1).set_index("Component")
+    df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_static_idiom_score, df_formal_literal_score, df_trans_literal_score, df_static_literal_score, df_formal_attr, df_trans_attr, df_static_attr], axis=1).set_index("Component")
     df["Idiom Score Diff Formal Trans"] = df["Idiom Score Formal"] - df["Idiom Score Trans"]
+    df["Idiom Score Diff Static Trans"] = df["Idiom Score Static"] - df["Idiom Score Trans"]
+    df["Idiom Score Diff Static Formal"] = df["Idiom Score Static"] - df["Idiom Score Formal"]
+
     df["Literal Score Diff Trans Formal"] = df["Literal Score Trans"] - df["Literal Score Formal"]
+    df["Literal Score Diff Trans Static"] = df["Literal Score Trans"] - df["Literal Score Static"]
+
     df["Score Diff Idiom Literal Formal"] = df["Idiom Score Formal"] - df["Literal Score Formal"]
+    df["Score Diff Idiom Literal Static"] = df["Idiom Score Static"] - df["Literal Score Static"]
 
     df["DLA Diff Formal"] = df["DLA Idiom Formal"] - df["DLA Literal Formal"]
+    df["DLA Diff Static"] = df["DLA Idiom Static"] - df["DLA Literal Static"]
     df["DLA Diff Trans"] = df["DLA Idiom Trans"] - df["DLA Literal Trans"]
-    df["DLA Diff Idiom"] = df["DLA Idiom Formal"] - df["DLA Idiom Trans"]
-    df["DLA Diff Literal"] = df["DLA Literal Formal"] - df["DLA Literal Trans"]
-    
+
+    df["DLA Diff Idiom Formal Trans"] = df["DLA Idiom Formal"] - df["DLA Idiom Trans"]
+    df["DLA Diff Idiom Static Trans"] = df["DLA Idiom Static"] - df["DLA Idiom Trans"]
+    df["DLA Diff Literal Formal Trans"] = df["DLA Literal Formal"] - df["DLA Literal Trans"]
+    df["DLA Diff Literal Static Trans"] = df["DLA Literal Static"] - df["DLA Literal Trans"]
+
     df.to_csv(f"plots/{model_name}/{model_name}.csv", index_label = "Index") 
 
 def compute_accuracy(file, outfile = None):
@@ -592,7 +633,8 @@ def compute_accuracy(file, outfile = None):
 def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
     ablation_heads = {
         "pythia-14m": ["L0H0", "L5H3"],
-        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]] # top heads identified by idiom score and dla
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
+        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(3, 4)], [(15, 8)], [(0, 0)], [(15, 14)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (3, 4)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (3, 4), (15, 14), (13, 30), (13, 30)]]
     }
 
     abl_heads = []
@@ -613,10 +655,11 @@ def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="TinyStories-Instruct-33M")
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
     # scores/ablation/pythia-1.4b/ablation_trans_0_None.json
+    # scores/literal_components/pythia-1.4b/literal_only_static_0_2761_comp.pt
 
     # llama
     # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
@@ -625,10 +668,12 @@ if __name__ == "__main__":
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
+    # scores/ablation/Llama-3.2-1B-Instruct/ablation_formal_0_None.json
+    # scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/TinyStories-Instruct-33M/idiom_only_formal_0_None_comp.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -659,12 +704,12 @@ if __name__ == "__main__":
             #f"./plots/{model_name}/ablation/{img_file}.txt"
             compute_accuracy(tensor_file, f"./plots/{model_name}/ablation/{img_file}.txt")
 
-            # logit_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_logit.pt"
-            # loss_file = "scores/ablation/pythia-1.4b/ablation_formal_0_None_loss.pt"
+            # logit_file = f"scores/ablation/{model_name}/ablation_formal_0_None_logit.pt"
+            # loss_file = f"scores/ablation/{model_name}/ablation_formal_0_None_loss.pt"
             # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/formal.png", model_name)
 
-            # logit_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_logit.pt"
-            # loss_file = "scores/ablation/pythia-1.4b/ablation_trans_0_None_loss.pt"
+            # logit_file = f"scores/ablation/{model_name}/ablation_trans_0_None_logit.pt"
+            # loss_file = f"scores/ablation/{model_name}/ablation_trans_0_None_loss.pt"
             # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
         else:
             loaded_tensor = t.load(tensor_file, map_location=t.device(device))

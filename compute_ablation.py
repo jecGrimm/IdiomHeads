@@ -20,12 +20,20 @@ model.eval()
 epie = EPIE_Data()
 
 # top 3 idiom scores, top 3 diff idiom scores formal - trans, top 3 dla formal, top 3 diff dla formal idiom - literal, top 3 diff dla formal idiom - trans idiom  
+# pythia static:
+# - top 3 idiom: (3,4), (2, 15), (0,10)
+# - top 3 diff idiom scores static - trans: alle negativ, static- formal auch
+# - top 3 dla static: (19, 14), (13, 4), (17, 2)
+# - top 3 diff dla static idiom - literal: (18, 4), (23, 9), (12, 12)
+# - top 3 diff dla static idiom - trans idiom: (19, 14), (1, 13), (23, 9)
 ablation_heads = {
     "pythia-14m": [[(0,0), (0, 1), (0, 2)], [(5, 1), (5, 2), (5,3)]],
-    "pythia-1.4b": [[(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)]], # top heads identified by idiom score and dla
+    "pythia-1.4b_formal": [[(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)]], # top heads identified by idiom score and dla
+    "pythia-1.4b_static": [[(3, 4), (2, 15), (0, 10)], [(19, 14), (13, 4), (17, 2)], [(18, 4), (23, 9), (12, 12)], [(19, 14), (1, 13), (23, 9)]], 
     "Llama-3.2-1B-Instruct": [[(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (3, 4)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)]]
 }
-scorer = Ablation(model, ablation_heads=ablation_heads[cli.model_name])
+
+scorer = Ablation(model, ablation_heads=ablation_heads[cli.ablation])
 print(f"\nRunning compute_ablation on device {scorer.device}.")
 
 print("Ablation Heads: ", scorer.ablation_heads)

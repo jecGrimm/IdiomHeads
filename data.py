@@ -115,10 +115,12 @@ class EPIE_Data:
     
 if __name__ == "__main__":
     epie = EPIE_Data()
-    print(len(epie.static_sents[1817]))
+    # print(len(epie.static_sents[1817]))
 
-    for i in range(2761):
-        if len(epie.static_sents[i]) >= 196:
-            print(i)
+    # for i in range(2761):
+    #     if len(epie.static_sents[i]) >= 196:
+    #         print(i)
     #print(epie.trans_formal_sents[1497])
     #print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))
+
+    print([sent for sent in epie.formal_sents if "spill" in sent.lower()])
