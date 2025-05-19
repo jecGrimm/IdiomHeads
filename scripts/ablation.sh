@@ -8,4 +8,4 @@
 #SBATCH --output=/home/g/grimmj/IdiomHeads/scripts/output/slurm.%j.%N.out
 #SBATCH --ntasks=1
 
-python3 -u compute_ablation.py -d formal trans -s 0 0 -e None None -m "meta-llama/Llama-3.2-1B-Instruct"
+python3 -u compute_ablation.py -d static -s 0 -e 2761 -m "EleutherAI/pythia-1.4b" -i "pythia_static_idiom_pos.json" -a "pythia-1.4b_static"

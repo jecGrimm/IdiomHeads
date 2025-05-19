@@ -10,7 +10,7 @@ import json
 from collections import defaultdict
 
 cli = CLI()
-os.makedirs(f"./scores/ablation/{cli.model_name}", exist_ok=True)
+os.makedirs(f"./scores/ablation/{cli.ablation}", exist_ok=True)
 # Saves computation time
 t.set_grad_enabled(False)
 
@@ -60,7 +60,7 @@ for i in range(len(cli.data_split)):
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
 
-    prediction_path = f"./resources/{cli.model_name}/{split}/"
+    prediction_path = f"./resources/{cli.ablation}/{split}/"
     os.makedirs(prediction_path, exist_ok=True)
     scorer.load_predictions(prediction_path)
     if scorer.orig_loss == None or len(scorer.predictions["prompt"]) == 0:
@@ -71,7 +71,7 @@ for i in range(len(cli.data_split)):
         with open(prediction_path + "predictions_original.json", 'w', encoding="utf-8") as f:
             json.dump(scorer.predictions, f)
 
-    ckp_file = f"./scores/ablation/{cli.model_name}/ablation_{split}_{start}_{end}"
+    ckp_file = f"./scores/ablation/{cli.ablation}/ablation_{split}_{start}_{end}"
     data.map(lambda batch: scorer.ablate_head_batched(batch, ckp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
