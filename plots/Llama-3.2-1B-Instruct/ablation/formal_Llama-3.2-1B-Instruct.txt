@@ -1,0 +1,392 @@
+
+original
+Accuracy: 55.45%
+Mean Rank Difference: 0.0
+Total Changed Predictions: 0.00%
+Correct2False Changed Predictions: 0.00%
+False2Correct Changed Predictions: 0.00%
+Ablation has negative effect on rank of the correct token: 0.00%
+Ablation has positive effect on rank of the correct token: 0.00%
+Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L13H30
+Accuracy: 54.91%
+Mean Rank Difference: -1.5861191749572754
+Total Changed Predictions: 26.82%
+Correct2False Changed Predictions: 1.05%
+False2Correct Changed Predictions: 0.51%
+Ablation has negative effect on rank of the correct token: 11.19%
+Ablation has positive effect on rank of the correct token: 15.62%
+Worst Prediction: 3729: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -1502: Images from television of ten fired her
+ -> ' imagination', predicted: 'ons'
+Correct2False Prediction: Ablated rank 1: Pleased with the group's healthy sales, Red Rhino allowed the band the luxury of a colour sleeve for their third release, the double A-side, ‘This Boy Can Wait’ and ‘You Should Always Keep In
+ -> ' Touch', ablation predicted: ' Mind'
+False2Correct Prediction: Original rank 1: Organisers of the biggest air rally in Europe say that military red
+ -> ' tape', originally predicted: ' flags'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L9H13
+Accuracy: 55.34%
+Mean Rank Difference: 1.6667877435684204
+Total Changed Predictions: 28.78%
+Correct2False Changed Predictions: 0.73%
+False2Correct Changed Predictions: 0.62%
+Ablation has negative effect on rank of the correct token: 11.63%
+Ablation has positive effect on rank of the correct token: 17.15%
+Worst Prediction: 1366: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: ' Sea'
+Best Prediction: -666: Home
+ -> ' truths', predicted: ' >'
+Correct2False Prediction: Ablated rank 1: Whitbread had no formal education and seems to have been the archetypal self-made
+ -> ' man', ablation predicted: ' entrepreneur'
+False2Correct Prediction: Original rank 1: Earlier in this chapter ( p. 70 ) striking a realistic
+ -> ' balance', originally predicted: ' picture'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: .\n\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L3H4
+Accuracy: 54.07%
+Mean Rank Difference: 0.6831395626068115
+Total Changed Predictions: 26.34%
+Correct2False Changed Predictions: 1.96%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 14.21%
+Ablation has positive effect on rank of the correct token: 12.14%
+Worst Prediction: 1962: Not only in Europe, but also in Afghanistan, Africa and East Asia, the Soviet Empire now drew in its
+ -> ' horns', predicted: ' vast'
+Best Prediction: -8438: SWEENEY BIG
+ -> ' Cheese', predicted: ' B'
+Correct2False Prediction: Ablated rank 1: Their answers result in the supreme irony of lorry-loads of young men, having scraped
+ -> ' together', ablation predicted: ' their'
+False2Correct Prediction: Original rank 1: Inevitably, a book such as this harps
+ -> ' on', originally predicted: ' at'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L15H8
+Accuracy: 55.27%
+Mean Rank Difference: -0.07085755467414856
+Total Changed Predictions: 22.27%
+Correct2False Changed Predictions: 0.47%
+False2Correct Changed Predictions: 0.29%
+Ablation has negative effect on rank of the correct token: 12.61%
+Ablation has positive effect on rank of the correct token: 9.67%
+Worst Prediction: 737: I beat a heavy
+ -> ' retreat', predicted: ' metal'
+Best Prediction: -2934: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: The Society is keeping in close
+ -> ' touch', ablation predicted: ' contact'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L0H0
+Accuracy: 55.60%
+Mean Rank Difference: 0.8717296719551086
+Total Changed Predictions: 28.20%
+Correct2False Changed Predictions: 0.84%
+False2Correct Changed Predictions: 0.98%
+Ablation has negative effect on rank of the correct token: 14.17%
+Ablation has positive effect on rank of the correct token: 14.03%
+Worst Prediction: 5140: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -2711: Images from television of ten fired her
+ -> ' imagination', predicted: 'ons'
+Correct2False Prediction: Ablated rank 1: Their answers result in the supreme irony of lorry-loads of young men, having scraped
+ -> ' together', ablation predicted: ' their'
+False2Correct Prediction: Original rank 1: Rachel kept in
+ -> ' touch', originally predicted: ' mind'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  closed\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n']
+
+L15H14
+Accuracy: 52.36%
+Mean Rank Difference: 11.319403648376465
+Total Changed Predictions: 38.99%
+Correct2False Changed Predictions: 3.82%
+False2Correct Changed Predictions: 0.73%
+Ablation has negative effect on rank of the correct token: 29.00%
+Ablation has positive effect on rank of the correct token: 9.99%
+Worst Prediction: 2399: Home
+ -> ' truths', predicted: ' >'
+Best Prediction: -4873: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: In this instance we are again studying a very real struggle, with gangs looting, scavenging and turning to organised crime as a means of scraping
+ -> ' together', ablation predicted: ' a'
+False2Correct Prediction: Original rank 1: It took me breath
+ -> ' away', originally predicted: 'less'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
+
+L12H30
+Accuracy: 53.52%
+Mean Rank Difference: 5.94767427444458
+Total Changed Predictions: 28.63%
+Correct2False Changed Predictions: 2.40%
+False2Correct Changed Predictions: 0.47%
+Ablation has negative effect on rank of the correct token: 22.64%
+Ablation has positive effect on rank of the correct token: 6.00%
+Worst Prediction: 3383: Why not cut the
+ -> ' Mustard', predicted: ' cord'
+Best Prediction: -442: WORLD PARTY
+ -> ' animal', predicted: ' OF'
+Correct2False Prediction: Ablated rank 2: But Mr Kaifu is in no mood to let anyone steal his
+ -> ' thunder', ablation predicted: ' idea'
+False2Correct Prediction: Original rank 2: ( James Brown, 20/2/88 who made it Single Of The Week along with The Wedding Present's ‘Nobody's Twisting Your
+ -> ' Arm', originally predicted: ' Arms'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
+
+L15H10
+Accuracy: 55.12%
+Mean Rank Difference: 0.47093021869659424
+Total Changed Predictions: 20.49%
+Correct2False Changed Predictions: 0.62%
+False2Correct Changed Predictions: 0.29%
+Ablation has negative effect on rank of the correct token: 10.43%
+Ablation has positive effect on rank of the correct token: 10.07%
+Worst Prediction: 987: I beat a heavy
+ -> ' retreat', predicted: ' metal'
+Best Prediction: -2704: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: The Society is keeping in close
+ -> ' touch', ablation predicted: ' contact'
+False2Correct Prediction: Original rank 1: Inevitably, a book such as this harps
+ -> ' on', originally predicted: ' at'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L10H29
+Accuracy: 55.52%
+Mean Rank Difference: -0.8760901093482971
+Total Changed Predictions: 19.55%
+Correct2False Changed Predictions: 0.29%
+False2Correct Changed Predictions: 0.36%
+Ablation has negative effect on rank of the correct token: 8.87%
+Ablation has positive effect on rank of the correct token: 10.68%
+Worst Prediction: 225: Apart from Fedorov, that fellow who gave us the
+ -> ' slip', predicted: ' famous'
+Best Prediction: -1279: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: The Society is keeping in close
+ -> ' touch', ablation predicted: ' contact'
+False2Correct Prediction: Original rank 1: Inevitably, a book such as this harps
+ -> ' on', originally predicted: ' at'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L0H21
+Accuracy: 55.16%
+Mean Rank Difference: -1.4135174751281738
+Total Changed Predictions: 27.65%
+Correct2False Changed Predictions: 0.91%
+False2Correct Changed Predictions: 0.62%
+Ablation has negative effect on rank of the correct token: 14.06%
+Ablation has positive effect on rank of the correct token: 13.59%
+Worst Prediction: 6134: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -7359: Home
+ -> ' truths', predicted: ' >'
+Correct2False Prediction: Ablated rank 1: With me that rings a warning
+ -> ' bell', ablation predicted: ','
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L10H3
+Accuracy: 51.09%
+Mean Rank Difference: 6.677689075469971
+Total Changed Predictions: 36.19%
+Correct2False Changed Predictions: 4.61%
+False2Correct Changed Predictions: 0.25%
+Ablation has negative effect on rank of the correct token: 31.21%
+Ablation has positive effect on rank of the correct token: 4.98%
+Worst Prediction: 2014: Why not cut the
+ -> ' Mustard', predicted: ' cord'
+Best Prediction: -10792: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 2: But Mr Kaifu is in no mood to let anyone steal his
+ -> ' thunder', ablation predicted: ' idea'
+False2Correct Prediction: Original rank 1: The achievements are well recorded : the Brabazon airliner, the abortive TSR2 fighter plane and Concorde — the fastest white
+ -> ' elephant', originally predicted: '-t'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L12H8
+Accuracy: 55.49%
+Mean Rank Difference: 0.7456395626068115
+Total Changed Predictions: 17.70%
+Correct2False Changed Predictions: 0.25%
+False2Correct Changed Predictions: 0.29%
+Ablation has negative effect on rank of the correct token: 9.23%
+Ablation has positive effect on rank of the correct token: 8.47%
+Worst Prediction: 841: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -159: Apart from Fedorov, that fellow who gave us the
+ -> ' slip', predicted: ' famous'
+Correct2False Prediction: Ablated rank 1: Like the constable in the story, use any cover to keep your attacker at
+ -> ' bay', ablation predicted: ' a'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L0H17
+Accuracy: 55.23%
+Mean Rank Difference: 0.13190406560897827
+Total Changed Predictions: 27.54%
+Correct2False Changed Predictions: 0.91%
+False2Correct Changed Predictions: 0.69%
+Ablation has negative effect on rank of the correct token: 12.46%
+Ablation has positive effect on rank of the correct token: 15.08%
+Worst Prediction: 5915: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -4622: I beat a heavy
+ -> ' retreat', predicted: ' metal'
+Correct2False Prediction: Ablated rank 1: But Mr Kaifu is in no mood to let anyone steal his
+ -> ' thunder', ablation predicted: ' idea'
+False2Correct Prediction: Original rank 1: The word is much used by his closest adviser, Hernando de Soto, author of ‘The Other Path’ — a celebrated study of Peru's huge and dense informal sector of street vendors, cottage industries and red
+ -> ' tape', originally predicted: '-light'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L0H0_L0H17_L9H13
+Accuracy: 55.74%
+Mean Rank Difference: 1.534883737564087
+Total Changed Predictions: 33.21%
+Correct2False Changed Predictions: 1.34%
+False2Correct Changed Predictions: 1.64%
+Ablation has negative effect on rank of the correct token: 13.70%
+Ablation has positive effect on rank of the correct token: 19.51%
+Worst Prediction: 9067: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Best Prediction: -4373: I beat a heavy
+ -> ' retreat', predicted: ' metal'
+Correct2False Prediction: Ablated rank 1: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', ablation predicted: ' audience'
+False2Correct Prediction: Original rank 1: The word is much used by his closest adviser, Hernando de Soto, author of ‘The Other Path’ — a celebrated study of Peru's huge and dense informal sector of street vendors, cottage industries and red
+ -> ' tape', originally predicted: '-light'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
+
+L12H8_L10H29_L3H4
+Accuracy: 54.22%
+Mean Rank Difference: 0.7336482405662537
+Total Changed Predictions: 27.62%
+Correct2False Changed Predictions: 2.00%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 14.24%
+Ablation has positive effect on rank of the correct token: 13.37%
+Worst Prediction: 2016: While the credit- driven Anglo economies draw in their
+ -> ' horns', predicted: ' capital'
+Best Prediction: -8649: SWEENEY BIG
+ -> ' Cheese', predicted: ' B'
+Correct2False Prediction: Ablated rank 1: Their answers result in the supreme irony of lorry-loads of young men, having scraped
+ -> ' together', ablation predicted: ' their'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L15H8_L15H10_L15H14
+Accuracy: 51.85%
+Mean Rank Difference: 13.189680099487305
+Total Changed Predictions: 39.93%
+Correct2False Changed Predictions: 4.36%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 30.20%
+Ablation has positive effect on rank of the correct token: 9.74%
+Worst Prediction: 2876: Old
+ -> ' chestnut', predicted: 'er'
+Best Prediction: -8207: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: ‘Sleep on
+ -> ' it', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: ‘It rings a vague
+ -> ' bell', originally predicted: ' memory'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  while\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
+
+L0H21_L10H3_L13H30
+Accuracy: 51.20%
+Mean Rank Difference: -0.06104651093482971
+Total Changed Predictions: 38.48%
+Correct2False Changed Predictions: 4.83%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 28.63%
+Ablation has positive effect on rank of the correct token: 9.85%
+Worst Prediction: 2171: I call the
+ -> ' tunes', predicted: ' number'
+Best Prediction: -9232: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 3: But Mr Kaifu is in no mood to let anyone steal his
+ -> ' thunder', ablation predicted: ' ideas'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L10H3_L12H30_L13H30
+Accuracy: 49.20%
+Mean Rank Difference: 10.38626480102539
+Total Changed Predictions: 41.06%
+Correct2False Changed Predictions: 6.83%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 35.14%
+Ablation has positive effect on rank of the correct token: 5.92%
+Worst Prediction: 4809: Why not cut the
+ -> ' Mustard', predicted: ' cord'
+Best Prediction: -9540: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 2: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', ablation predicted: ' audience'
+False2Correct Prediction: Original rank 1: IBM insiders get their equipment cheaper than customers who are sold new computers, but the insiders depend on older machines — proving once again that it's the management and training, not the technology, that makes the difference between a winning system and a white
+ -> ' elephant', originally predicted: ' flag'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
+
+L0H0_L12H8_L15H8_L0H21_L10H3
+Accuracy: 50.84%
+Mean Rank Difference: 2.8913516998291016
+Total Changed Predictions: 39.35%
+Correct2False Changed Predictions: 5.20%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 30.20%
+Ablation has positive effect on rank of the correct token: 9.16%
+Worst Prediction: 2892: The writer often called the
+ -> ' tune', predicted: ' "'
+Best Prediction: -10432: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', ablation predicted: ' audience'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  fixed\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n']
+
+L0H17_L10H29_L15H10_L10H3_L12H30
+Accuracy: 49.78%
+Mean Rank Difference: 11.382994651794434
+Total Changed Predictions: 40.59%
+Correct2False Changed Predictions: 6.29%
+False2Correct Changed Predictions: 0.62%
+Ablation has negative effect on rank of the correct token: 33.76%
+Ablation has positive effect on rank of the correct token: 6.83%
+Worst Prediction: 4179: Why not cut the
+ -> ' Mustard', predicted: ' cord'
+Best Prediction: -11235: SWEENEY BIG
+ -> ' Cheese', predicted: 'G'
+Correct2False Prediction: Ablated rank 1: I do believe that a great work of art strikes a subtle
+ -> ' balance', ablation predicted: ' yet'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: ,\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
+
+L9H13_L3H4_L15H14_L13H30_L13H30
+Accuracy: 51.31%
+Mean Rank Difference: 12.533793449401855
+Total Changed Predictions: 41.50%
+Correct2False Changed Predictions: 5.12%
+False2Correct Changed Predictions: 0.98%
+Ablation has negative effect on rank of the correct token: 29.54%
+Ablation has positive effect on rank of the correct token: 11.95%
+Worst Prediction: 3111: Far from drawing in his
+ -> ' horns', predicted: ' own'
+Best Prediction: -8074: SWEENEY BIG
+ -> ' Cheese', predicted: ' B'
+Correct2False Prediction: Ablated rank 1: Their answers result in the supreme irony of lorry-loads of young men, having scraped
+ -> ' together', ablation predicted: ' up'
+False2Correct Prediction: Original rank 2: England's champs set out on the glory trail with a warning to keep their
+ -> ' cool', originally predicted: ' feet'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted: .\n\n", 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n', 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n']
