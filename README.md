@@ -24,6 +24,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
         - trans: 3778 (nur trans, pop lange sents neue idiom pos) OOM für 1383 -> 3779 (ab 1384) OOM für 2205 -> 3780 (ab 2206) OOM für 2206 -> 3781 (ab 2207) DONE
     - llm transparency - DONE?
     - ablation - 3789 (full)
+        - mit L15H12 für idiom diff nochmal laufen lassen 
+        - plot: Heatmap für die Beisielsätze
 5. Drittes Modell: Tiny
     - nwp
         - formal und trans 3602 DONE (commited auf remote main)
