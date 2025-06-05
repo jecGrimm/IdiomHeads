@@ -29,7 +29,8 @@ def tranform_comp2score(file1, outfile):
     tensor1 = t.load(file1, map_location=t.device(device))
     print("Size tensor1: ", tensor1.size())
 
-    score_tensor = t.sigmoid(t.sum(tensor1, dim = -1))
+    score_tensor = 2 * (t.sigmoid(t.sum(tensor1, dim = -1))-0.5)
+    #score_tensor = t.sigmoid(t.sum(tensor1, dim = -1))
     print("Size score_tensor: ", score_tensor.size())
 
     t.save(score_tensor, outfile)
@@ -58,18 +59,23 @@ def get_logit_component(num, model_name):
 
 if __name__ == "__main__":
     #os.makedirs("scores/literal_scores/Llama-3.2-1B-Instruct/", exist_ok = True)
-    file1 = "scores/idiom_components/pythia-1.4b/idiom_only_static_0_1818_comp.pt"
-    file2 = "scores/idiom_components/pythia-1.4b/idiom_only_static_1818_2761_comp.pt"
-    merge_file = "scores/idiom_components/pythia-1.4b/idiom_only_static_0_None_comp.pt"
+    # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
+    file1 = "scores/idiom_components/pythia-1.4b/idiom_only_trans_0_1231_comp.pt"
+    file2 = "scores/idiom_components/pythia-1.4b/idiom_only_trans_1232_None_comp.pt"
+    merge_file = "scores/literal_components/pythia-1.4b/literal_only_trans_0_None_comp.pt"
     #merge_tensors(file1, file2, merge_file)
-    tranform_comp2score(merge_file, "scores/idiom_scores/pythia-1.4b/idiom_only_static_0_None.pt")
+    tranform_comp2score(merge_file, "scores/literal_scores/pythia-1.4b/literal_trans_0_None.pt")
 
+    # pythia
     # file1= "scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt"
     # file1 = "scores/logit_attribution/pythia-1.4b/grouped_attr_trans_0_None.pt"
     #file1 = "scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt"
     #file1 = "scores/literal_scores/pythia-1.4b/literal_only_trans_0_None.pt"
     #file1 = "scores/ablation/pythia-1.4b/ablation_trans_0_None_loss.pt"
     # scores/idiom_components/pythia-1.4b/idiom_only_static_0_2761_comp.pt
+    # scores/idiom_components/pythia-1.4b/idiom_only_formal_0_1231_comp.pt
+    #scores/idiom_components/pythia-1.4b/idiom_only_formal_1232_None_comp.pt
+    # 
 
     # llama
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt

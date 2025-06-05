@@ -18,6 +18,20 @@ class EPIE_Data:
         self.trans_formal_sents = self.remove_spaces(self.tokenized_trans_formal_sents)
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
 
+        #TODO: Experiment-Argument und dann je nach Experiment poppen
+        # experiment_sents = {
+        #     "nwp_formal_pythia-1.4b": None, 
+        #     "idiom_formal_pythia-1.4b": [1231],
+        #     "literal_formal_pythia-1.4b": [1231],
+        #     "dla_formal_pythia-1.4b": [1231],
+        #     "ablation_formal_pythia-1.4b": [1231],
+        #     "nwp_formal_Llama-3.2-1B-Instruct": [1231], 
+        #     "idiom_formal_Llama-3.2-1B-Instruct": [1231],
+        #     "literal_formal_Llama-3.2-1B-Instruct": [1231],
+        #     "dla_formal_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1386, 2210],
+        #     "dla_trans_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210],
+        #     "ablation_formal_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210],
+        # }
         # 1231 ab idiom pythia
         # 1280, 1281, 1282, 1386, 2210 ab logit llama formal
         # 1379, 2200, 2201 ab logit llama trans
@@ -29,7 +43,7 @@ class EPIE_Data:
             self.tokenized_trans_formal_sents.pop(sent_idx)
             self.tags_formal.pop(sent_idx)
 
-        # 1773 und 1817 ab pythia idiom score
+        # # 1773 und 1817 ab pythia idiom score
         static_long_sent_ids = [1773, 1817]
         for sent_idx in static_long_sent_ids:
             self.static_sents.pop(sent_idx)

@@ -7,13 +7,16 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 1. Head detection
 - idiom score
     - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung) failed OOM -> 3743 (ab 1817) failed OOM -> 3751 DONE
+    - plot: mean dots, Farben nicht nach Heads, sondern wie hoch die Logit Attribution ist
 - literal score
     - static 3809 DONE
 2. Logit attribution
-    - static 4205
+    - static 4205 DONE
+    - Warum sind Bias und Embeds bei Pythia und Llama so konträr?
 3. Ablation
     - Zusammenspiel von Heads abschalten, die für Idiome sind: 2642 failed segmentation error -> 2645 failed trans switch DONE
     - trans 2885 (fixed trans switch) failed None during clean -> 2961 (fixed single token clean run) DONE
+    - static 4252 (ohne trans) failed weil es kein dir mit ablation_name gibt -> 4258 (fix makedir ablation)
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
         - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
@@ -25,7 +28,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
     - llm transparency - DONE?
     - ablation - 3789 (full)
         - mit L15H12 für idiom diff nochmal laufen lassen 
-        - plot: Heatmap für die Beisielsätze
+        - plot: Heatmap für die Beispielsätze
 5. Drittes Modell: Tiny
     - nwp
         - formal und trans 3602 DONE (commited auf remote main)
@@ -41,6 +44,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 5. Schreiben
 - Selbstständigkeitserklärung -> auch digital unterschreiben? Muss das die neue sein?
 - Related Work
+    - muss noch Logit Lens rein
+    - hier müssen noch TransformerLens und LM Transparency Tool rein
 - Experiment
 - Evaluation
 - Discussion
@@ -60,6 +65,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - fix distribution 
 - alle Tensoren sollten die gleiche Größe haben
 - alle Funktionen testen (besonders plots)
+- Sigmoid in allen Skripten gleich
 
 ### Optional
 - Duplizierende Methoden (eigl bereits abgedeckt):
