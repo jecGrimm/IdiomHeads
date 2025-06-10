@@ -17,6 +17,7 @@ from helper import get_logit_component
 import json
 import re
 from data import EPIE_Data
+import seaborn as sns
 
 # %pip install jaxtyping
 # %pip install git+https://github.com/callummcdougall/CircuitsVis.git#subdirectory=python
@@ -600,8 +601,8 @@ def create_csv(model_name, device):
 
     df.to_csv(f"plots/{model_name}/{model_name}.csv", index_label = "Index") 
 
-def compute_accuracy(file, outfile = None):
-    with open(file, 'r', encoding = "utf-8") as f:
+def compute_accuracy(pred_file, outfile = None):
+    with open(pred_file, 'r', encoding = "utf-8") as f:
         predictions = json.load(f)
 
     num_sents = len(predictions["original_rank"])
@@ -617,6 +618,8 @@ def compute_accuracy(file, outfile = None):
     best_pred = defaultdict(str)
     corr2false_pred = defaultdict(str)
     false2corr_pred = defaultdict(str)
+
+    sent_ids = defaultdict(int) 
     for k, v in predictions.items():
         #print("k:", k)
         name = k.split('_')[:-1]
@@ -633,15 +636,18 @@ def compute_accuracy(file, outfile = None):
             if worst_rank != 0:
                 worst_rank_idx = int((rank_diffs == worst_rank).nonzero())
                 worst_pred[name] = f"{worst_rank}: {predictions["prompt"][worst_rank_idx]}\n -> '{predictions["correct_token"][worst_rank_idx]}', predicted: '{predictions[name+"_prediction"][worst_rank_idx]}'" 
+                sent_ids[predictions["prompt"][worst_rank_idx] + " " + predictions["correct_token"][worst_rank_idx]] =  worst_rank_idx
             else:
                 worst_pred[name] = "No rank differences"
 
             if best_rank != 0:
                 best_rank_idx = int((rank_diffs == best_rank).nonzero())
                 best_pred[name] = f"{best_rank}: {predictions["prompt"][best_rank_idx]}\n -> '{predictions["correct_token"][best_rank_idx]}', predicted: '{predictions[name+"_prediction"][best_rank_idx]}'" 
+                sent_ids[predictions["prompt"][best_rank_idx] + " " + predictions["correct_token"][best_rank_idx]] =  best_rank_idx
             else:
                 best_pred[name] = "No rank differences"
         elif "prediction" in k:
+            add_sent_id = True
             for i in range(len(v)):
                 correct = predictions["correct_token"][i]
                 original_tok = predictions["original_prediction"][i]
@@ -662,9 +668,17 @@ def compute_accuracy(file, outfile = None):
                     if original_rank == 0:
                         changed_corr2false[name] += 1
                         corr2false_pred[name] = f"Ablated rank {ablated_rank}: {predictions["prompt"][i]}\n -> '{correct}', ablation predicted: '{ablated_tok}'" 
+                        
+                        if add_sent_id:
+                            sent_ids[predictions["prompt"][i] + " " + correct] =  i
+                            add_sent_id = False
                     elif original_rank != 0 and ablated_rank == 0:
                         changed_false2corr[name] += 1
                         false2corr_pred[name] = f"Original rank {original_rank}: {predictions["prompt"][i]}\n -> '{correct}', originally predicted: '{original_tok}'" 
+                        
+                        if add_sent_id:
+                            sent_ids[predictions["prompt"][i] + " " + correct] =  i
+                            add_sent_id = False
 
             changed_total[name] = changed_total[name]/num_sents
             changed_corr2false[name] = changed_corr2false[name]/num_sents
@@ -691,14 +705,16 @@ def compute_accuracy(file, outfile = None):
     if outfile != None:
         with open(outfile, 'w', encoding = "utf-8") as f:
             f.write(output)
-    else:
-        print(output)
+    # else: TODO: wieder auskommentieren
+    #     print(output)
+
+    return sent_ids
 
 def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
     ablation_heads = {
         "pythia-14m": ["L0H0", "L5H3"],
         "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
-        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(3, 4)], [(15, 8)], [(0, 0)], [(15, 14)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (3, 4)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (3, 4), (15, 14), (13, 30), (13, 30)]]
+        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]]
     }
 
     abl_heads = []
@@ -717,10 +733,58 @@ def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
     df.plot.bar(x = "layer.head")
     save_plt(outfile)
 
+def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name = None):
+    ablation_heads = {
+        "pythia-14m": ["L0H0", "L5H3"],
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
+        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]]
+    }
+
+    abl_heads = []
+    for group in ablation_heads[model_name]:
+        name = ""
+        for layer_head in group:
+            name += f"_L{layer_head[0]}H{layer_head[1]}"
+        abl_heads.append(name[1:])
+
+    logit_tensor = t.load(logit_file, map_location=t.device(device))
+    logit_tensor = logit_tensor.T
+    print("abl_heads:", abl_heads)
+    print("logit_tensor: ", logit_tensor.size())
+
+    # {sent: idx}
+    sent_ids = compute_accuracy(pred_file, outfile=None)
+    sent_ids_tuple = [(sent, idx) for sent, idx in sent_ids.items()]
+    sent_ids_tuple = sorted(sent_ids_tuple, key=lambda x: x[0][::-1])
+    ids = [x[1] for x in sent_ids_tuple]
+    sents = [x[0] for x in sent_ids_tuple] 
+
+    #sent_logits = defaultdict(list)
+    sent_logit_tensor = t.zeros(len(ids), len(abl_heads))
+    for head_pos in range(len(abl_heads)):
+        for sent_pos in range(len(ids)):
+            sent_logit_tensor[sent_pos][head_pos] = logit_tensor[head_pos][ids[sent_pos]]
+    #         sent_logits[sent].append(logit_tensor[head_pos][idx])
+    
+    # df = pd.DataFrame({"sents": list(sent_logits.keys()), "logit_diffs": list(sent_logits.values())})
+    # print("df:", df)
+    sns.heatmap(sent_logit_tensor, xticklabels=abl_heads, yticklabels=sents)
+    save_plt(outfile)
+
+    #print(sent_logit_tensor.size())
+
+    # fig = px.imshow(sent_logit_tensor.float(), title = "Sentence Logit Diffs per ablated head", x=abl_heads, y=sents, labels={"x":"Head Group", "y":"Sentence", "color":"Logit Ablation Score"}, color_continuous_midpoint=0.0)
+
+    # if outfile:
+    #     fig.write_image(outfile)
+    # else:
+    #     fig.show()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
-    # pythie
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
+    # pythia
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
     # scores/ablation/pythia-1.4b/ablation_trans_0_None.json
@@ -742,7 +806,7 @@ if __name__ == "__main__":
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Llama-3.2-1B-Instruct/ablation_formal_0_None.json", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/pythia-1.4b/ablation_formal_0_None.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -771,15 +835,17 @@ if __name__ == "__main__":
             if img_file == None:
                 img_file = tensor_file.split('_')[1]
             #f"./plots/{model_name}/ablation/{img_file}.txt"
-            compute_accuracy(tensor_file, f"./plots/{model_name}/ablation/{img_file}_{model_name}.txt")
+            #compute_accuracy(tensor_file, f"./plots/{model_name}/ablation/{img_file}_{model_name}.txt")
 
-            # logit_file = f"scores/ablation/{model_name}/ablation_formal_0_None_logit.pt"
+            #logit_file = f"scores/ablation/{model_name}/ablation_formal_0_None_logit.pt"
             # loss_file = f"scores/ablation/{model_name}/ablation_formal_0_None_loss.pt"
             # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/formal.png", model_name)
+            #plot_logit_diff_per_sent(logit_file, tensor_file, outfile=f"./plots/{model_name}/ablation/heat_formal_{model_name}.png", model_name=model_name)
 
-            # logit_file = f"scores/ablation/{model_name}/ablation_trans_0_None_logit.pt"
+            logit_file = f"scores/ablation/{model_name}/ablation_{img_file}_0_None_logit.pt"
             # loss_file = f"scores/ablation/{model_name}/ablation_trans_0_None_loss.pt"
             # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
+            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=f"./plots/{model_name}/ablation/heat_{img_file}_{model_name}.png", model_name=model_name)
         else:
             loaded_tensor = t.load(tensor_file, map_location=t.device(device))
             # 2*((1/(1+e^-x))-0.5) -> Range ist -1 bis +1

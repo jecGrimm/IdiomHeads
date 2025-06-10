@@ -1,0 +1,399 @@
+
+original
+Accuracy: 16.67%
+Mean Rank Difference: 0.0
+Total Changed Predictions: 0.00%
+Correct2False Changed Predictions: 0.00%
+False2Correct Changed Predictions: 0.00%
+Ablation has negative effect on rank of the correct token: 0.00%
+Ablation has positive effect on rank of the correct token: 0.00%
+Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L13H30
+Accuracy: 16.67%
+Mean Rank Difference: -1.135735034942627
+Total Changed Predictions: 53.09%
+Correct2False Changed Predictions: 0.44%
+False2Correct Changed Predictions: 0.44%
+Ablation has negative effect on rank of the correct token: 23.33%
+Ablation has positive effect on rank of the correct token: 29.77%
+Worst Prediction: 1907: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -1311: Cops
+ -> ' departed', predicted: ' in'
+Correct2False Prediction: Ablated rank 1: ‘Come now, pet, let's reconcile and resolve
+ -> ' our', ablation predicted: ' this'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L9H13
+Accuracy: 16.34%
+Mean Rank Difference: 4.350436687469482
+Total Changed Predictions: 63.39%
+Correct2False Changed Predictions: 0.84%
+False2Correct Changed Predictions: 0.51%
+Ablation has negative effect on rank of the correct token: 32.57%
+Ablation has positive effect on rank of the correct token: 30.82%
+Worst Prediction: 2930: Erm, with the change of programme, then, the least
+ -> ' reputed', predicted: ' amount'
+Best Prediction: -4240: Ken did not have to put on drag in Carry On Screaming, the first of three 1966 releases, but in Carry On — Do not lose your
+ -> ' composure', predicted: ' head'
+Correct2False Prediction: Ablated rank 1: By the time it reaches the coasts of West Spitsbergen, the largest of the Svalbard group, the current, although much reduced in strength, still has enough energy, when coupled with the summer sun, to warm the sea temperature enough to keep the ice at
+ -> ' a', ablation predicted: ' bay'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L15H8
+Accuracy: 16.59%
+Mean Rank Difference: -1.8235080242156982
+Total Changed Predictions: 48.11%
+Correct2False Changed Predictions: 0.29%
+False2Correct Changed Predictions: 0.22%
+Ablation has negative effect on rank of the correct token: 21.83%
+Ablation has positive effect on rank of the correct token: 26.27%
+Worst Prediction: 1313: Hundreds of police spent their bank holiday weekend toying with with
+ -> ' travellers', predicted: ' the'
+Best Prediction: -1269: He had lost his heart and was in danger of LOSING HIS
+ -> ' composure', predicted: ' M'
+Correct2False Prediction: Ablated rank 1: ‘I think he was treated in a shoddy way, tried by a bogus
+ -> ' court', ablation predicted: ' judge'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L15H14
+Accuracy: 16.12%
+Mean Rank Difference: 5.997452735900879
+Total Changed Predictions: 67.65%
+Correct2False Changed Predictions: 1.53%
+False2Correct Changed Predictions: 0.98%
+Ablation has negative effect on rank of the correct token: 33.19%
+Ablation has positive effect on rank of the correct token: 34.46%
+Worst Prediction: 3745: ‘I suppose you're planning to make me very angry and
+ -> ' gabble', predicted: ' I'
+Best Prediction: -9246: Interfering
+ -> ' hangover', predicted: ' with'
+Correct2False Prediction: Ablated rank 2: In 1924, with the slogan " remain
+ -> ' calm', ablation predicted: ' in'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H0
+Accuracy: 16.59%
+Mean Rank Difference: 1.9501456022262573
+Total Changed Predictions: 59.39%
+Correct2False Changed Predictions: 0.66%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 31.00%
+Ablation has positive effect on rank of the correct token: 28.38%
+Worst Prediction: 1291: Ken did not have to put on drag in Carry On Screaming, the first of three 1966 releases, but in Carry On — Do not lose your
+ -> ' composure', predicted: ' head'
+Best Prediction: -2395: irritates me.
+ -> ' ’', predicted: ' I'
+Correct2False Prediction: Ablated rank 1: The conversation no longer kept the landscape at
+ -> ' a', ablation predicted: ' bay'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L12H30
+Accuracy: 16.45%
+Mean Rank Difference: 0.5200145840644836
+Total Changed Predictions: 47.85%
+Correct2False Changed Predictions: 0.40%
+False2Correct Changed Predictions: 0.18%
+Ablation has negative effect on rank of the correct token: 24.24%
+Ablation has positive effect on rank of the correct token: 23.62%
+Worst Prediction: 1564: Ken did not have to put on drag in Carry On Screaming, the first of three 1966 releases, but in Carry On — Do not lose your
+ -> ' composure', predicted: ' head'
+Best Prediction: -945: ‘I suppose you're planning to make me very angry and
+ -> ' gabble', predicted: ' upset'
+Correct2False Prediction: Ablated rank 1: They did not seem to mind me HANGING IN
+ -> ' THERE', ablation predicted: ' THE'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L15H10
+Accuracy: 16.45%
+Mean Rank Difference: 3.935953378677368
+Total Changed Predictions: 47.71%
+Correct2False Changed Predictions: 0.40%
+False2Correct Changed Predictions: 0.18%
+Ablation has negative effect on rank of the correct token: 27.47%
+Ablation has positive effect on rank of the correct token: 20.23%
+Worst Prediction: 1819: Interfering
+ -> ' hangover', predicted: ' with'
+Best Prediction: -514: Erm, with the change of programme, then, the least
+ -> ' reputed', predicted: ' amount'
+Correct2False Prediction: Ablated rank 1: ‘I think he was treated in a shoddy way, tried by a bogus
+ -> ' court', ablation predicted: ' judge'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L10H29
+Accuracy: 16.81%
+Mean Rank Difference: 0.01855895109474659
+Total Changed Predictions: 51.56%
+Correct2False Changed Predictions: 0.15%
+False2Correct Changed Predictions: 0.29%
+Ablation has negative effect on rank of the correct token: 22.96%
+Ablation has positive effect on rank of the correct token: 28.60%
+Worst Prediction: 672: lost momentum after
+ -> ' eighteen', predicted: ' a'
+Best Prediction: -755: Skates, his ruthless beancounting skills surfacing, acts freely about
+ -> ' suggesting', predicted: ' the'
+Correct2False Prediction: Ablated rank 1: They did not seem to mind me HANGING IN
+ -> ' THERE', ablation predicted: ' THE'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H21
+Accuracy: 16.78%
+Mean Rank Difference: -7.562954902648926
+Total Changed Predictions: 58.92%
+Correct2False Changed Predictions: 0.40%
+False2Correct Changed Predictions: 0.51%
+Ablation has negative effect on rank of the correct token: 28.49%
+Ablation has positive effect on rank of the correct token: 30.42%
+Worst Prediction: 2797: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -10229: irritates me.
+ -> ' ’', predicted: ' I'
+Correct2False Prediction: Ablated rank 1: I can I can rec I can recognise when when the and a small thing is controlling
+ -> ' the', ablation predicted: ' controlling'
+False2Correct Prediction: Original rank 1: If you're over-polite in conversation, your use of distance may suggest that you want to play high status by keeping the other person at
+ -> ' a', originally predicted: ' arm'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L10H3
+Accuracy: 16.67%
+Mean Rank Difference: 3.9905385971069336
+Total Changed Predictions: 56.19%
+Correct2False Changed Predictions: 0.58%
+False2Correct Changed Predictions: 0.58%
+Ablation has negative effect on rank of the correct token: 31.84%
+Ablation has positive effect on rank of the correct token: 24.34%
+Worst Prediction: 4445: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -3072: Samsung Electronics Co Ltd has quit on its
+ -> ' Unix', predicted: ' word'
+Correct2False Prediction: Ablated rank 1: Anybody see erm QUANTUM
+ -> ' LEAP', ablation predicted: ' PHYS'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L15H12
+Accuracy: 16.70%
+Mean Rank Difference: 0.25
+Total Changed Predictions: 36.35%
+Correct2False Changed Predictions: 0.11%
+False2Correct Changed Predictions: 0.15%
+Ablation has negative effect on rank of the correct token: 17.83%
+Ablation has positive effect on rank of the correct token: 18.52%
+Worst Prediction: 365: Local boys Hong Kong made good their pledge to be successful for
+ -> ' retiring', predicted: ' the'
+Best Prediction: -689: ‘I suppose you're planning to make me very angry and
+ -> ' gabble', predicted: ' upset'
+Correct2False Prediction: Ablated rank 1: We used to tease him
+ -> ' about', ablation predicted: ' merciless'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L12H8
+Accuracy: 16.92%
+Mean Rank Difference: 4.321324825286865
+Total Changed Predictions: 51.35%
+Correct2False Changed Predictions: 0.11%
+False2Correct Changed Predictions: 0.36%
+Ablation has negative effect on rank of the correct token: 29.11%
+Ablation has positive effect on rank of the correct token: 22.23%
+Worst Prediction: 1173: irritates me.
+ -> ' ’', predicted: ' I'
+Best Prediction: -554: lost momentum after
+ -> ' eighteen', predicted: ' a'
+Correct2False Prediction: Ablated rank 1: Against the shifting mirror that is the surface of a loch, the colours shimmer and dance ; they astound you,
+ -> ' and', ablation predicted: ' they'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H17
+Accuracy: 17.03%
+Mean Rank Difference: 5.22197961807251
+Total Changed Predictions: 56.99%
+Correct2False Changed Predictions: 0.40%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 28.93%
+Ablation has positive effect on rank of the correct token: 28.06%
+Worst Prediction: 3673: Jake smiled sadistically as he prepared to make him
+ -> ' unexpected', predicted: ' a'
+Best Prediction: -1035: Skates, his ruthless beancounting skills surfacing, acts freely about
+ -> ' suggesting', predicted: ' the'
+Correct2False Prediction: Ablated rank 1: They did not seem to mind me HANGING IN
+ -> ' THERE', ablation predicted: ' THE'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H0_L0H17_L9H13
+Accuracy: 16.34%
+Mean Rank Difference: 11.249635696411133
+Total Changed Predictions: 67.47%
+Correct2False Changed Predictions: 1.35%
+False2Correct Changed Predictions: 1.02%
+Ablation has negative effect on rank of the correct token: 35.30%
+Ablation has positive effect on rank of the correct token: 32.17%
+Worst Prediction: 3854: Do you think you can manage the walk back to Three Colt Street, if I help you?
+ -> ' ’', predicted: ' I'
+Best Prediction: -3068: Ken did not have to put on drag in Carry On Screaming, the first of three 1966 releases, but in Carry On — Do not lose your
+ -> ' composure', predicted: ' head'
+Correct2False Prediction: Ablated rank 1: The conversation no longer kept the landscape at
+ -> ' a', ablation predicted: ' bay'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L12H8_L10H29_L15H12
+Accuracy: 16.89%
+Mean Rank Difference: 4.061499118804932
+Total Changed Predictions: 55.28%
+Correct2False Changed Predictions: 0.22%
+False2Correct Changed Predictions: 0.44%
+Ablation has negative effect on rank of the correct token: 29.22%
+Ablation has positive effect on rank of the correct token: 26.06%
+Worst Prediction: 1591: irritates me.
+ -> ' ’', predicted: ' I'
+Best Prediction: -1093: ‘It's irritating me,
+ -> ' whimpering', predicted: ' but'
+Correct2False Prediction: Ablated rank 1: Against the shifting mirror that is the surface of a loch, the colours shimmer and dance ; they astound you,
+ -> ' and', ablation predicted: ' they'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L15H8_L15H10_L15H14
+Accuracy: 15.98%
+Mean Rank Difference: 6.604803562164307
+Total Changed Predictions: 69.07%
+Correct2False Changed Predictions: 1.64%
+False2Correct Changed Predictions: 0.95%
+Ablation has negative effect on rank of the correct token: 34.93%
+Ablation has positive effect on rank of the correct token: 34.13%
+Worst Prediction: 4842: OKI MICROSYSTEMS i860 WORKSTATION DIVISION
+ -> ' fails', predicted: '
+'
+Best Prediction: -8313: Interfering
+ -> ' hangover', predicted: ' with'
+Correct2False Prediction: Ablated rank 2: In 1924, with the slogan " remain
+ -> ' calm', ablation predicted: ' in'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H21_L10H3_L13H30
+Accuracy: 16.74%
+Mean Rank Difference: -4.279476165771484
+Total Changed Predictions: 63.90%
+Correct2False Changed Predictions: 0.76%
+False2Correct Changed Predictions: 0.84%
+Ablation has negative effect on rank of the correct token: 30.68%
+Ablation has positive effect on rank of the correct token: 33.22%
+Worst Prediction: 9283: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -10401: irritates me.
+ -> ' ’', predicted: ' I'
+Correct2False Prediction: Ablated rank 1: And of course keep me up-to-date
+ -> ' on', ablation predicted: ' with'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L10H3_L12H30_L13H30
+Accuracy: 16.34%
+Mean Rank Difference: 3.7354440689086914
+Total Changed Predictions: 61.03%
+Correct2False Changed Predictions: 0.95%
+False2Correct Changed Predictions: 0.62%
+Ablation has negative effect on rank of the correct token: 30.53%
+Ablation has positive effect on rank of the correct token: 30.49%
+Worst Prediction: 5929: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -3589: Interfering
+ -> ' hangover', predicted: ' with'
+Correct2False Prediction: Ablated rank 1: They did not seem to mind me HANGING IN
+ -> ' THERE', ablation predicted: ' THE'
+False2Correct Prediction: Original rank 1: Domestication or controlled breeding of hitherto wild animals for their products has been commercially successful : witness such ventures as fur ranches for SILVER
+ -> ' FOX', originally predicted: ' fox'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H0_L12H8_L15H8_L0H21_L10H3
+Accuracy: 16.89%
+Mean Rank Difference: 3.0527656078338623
+Total Changed Predictions: 66.23%
+Correct2False Changed Predictions: 0.98%
+False2Correct Changed Predictions: 1.20%
+Ablation has negative effect on rank of the correct token: 35.88%
+Ablation has positive effect on rank of the correct token: 30.35%
+Worst Prediction: 6704: acting
+ -> ' prematurely', predicted: '
+'
+Best Prediction: -11343: irritates me.
+ -> ' ’', predicted: ' I'
+Correct2False Prediction: Ablated rank 1: And of course keep me up-to-date
+ -> ' on', ablation predicted: ' with'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L0H17_L10H29_L15H10_L10H3_L12H30
+Accuracy: 16.52%
+Mean Rank Difference: 14.788209915161133
+Total Changed Predictions: 64.63%
+Correct2False Changed Predictions: 1.13%
+False2Correct Changed Predictions: 0.98%
+Ablation has negative effect on rank of the correct token: 34.64%
+Ablation has positive effect on rank of the correct token: 29.99%
+Worst Prediction: 4611: Jake smiled sadistically as he prepared to make him
+ -> ' unexpected', predicted: ' a'
+Best Prediction: -2738: Samsung Electronics Co Ltd has quit on its
+ -> ' Unix', predicted: ' feet'
+Correct2False Prediction: Ablated rank 1: Anybody see erm QUANTUM
+ -> ' LEAP', ablation predicted: ' PHYS'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
+
+L9H13_L15H12_L15H14_L13H30_L13H30
+Accuracy: 15.83%
+Mean Rank Difference: 8.355895042419434
+Total Changed Predictions: 70.71%
+Correct2False Changed Predictions: 1.89%
+False2Correct Changed Predictions: 1.06%
+Ablation has negative effect on rank of the correct token: 35.04%
+Ablation has positive effect on rank of the correct token: 35.66%
+Worst Prediction: 5849: ‘I suppose you're planning to make me very angry and
+ -> ' gabble', predicted: ' I'
+Best Prediction: -9566: Interfering
+ -> ' hangover', predicted: ' with'
+Correct2False Prediction: Ablated rank 1: In 1924, with the slogan " remain
+ -> ' calm', ablation predicted: ' in'
+False2Correct Prediction: Original rank 1: I was told : ‘She is becoming the image of her mirror
+ -> ' image', originally predicted: '’'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted: ,\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]
