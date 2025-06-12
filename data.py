@@ -35,20 +35,20 @@ class EPIE_Data:
         # 1231 ab idiom pythia
         # 1280, 1281, 1282, 1386, 2210 ab logit llama formal
         # 1379, 2200, 2201 ab logit llama trans
-        formal_long_sent_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210] 
-        for sent_idx in formal_long_sent_ids:
-            self.formal_sents.pop(sent_idx)
-            self.tokenized_formal_sents.pop(sent_idx)
-            self.trans_formal_sents.pop(sent_idx)
-            self.tokenized_trans_formal_sents.pop(sent_idx)
-            self.tags_formal.pop(sent_idx)
+        # formal_long_sent_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210] 
+        # for sent_idx in formal_long_sent_ids:
+        #     self.formal_sents.pop(sent_idx)
+        #     self.tokenized_formal_sents.pop(sent_idx)
+        #     self.trans_formal_sents.pop(sent_idx)
+        #     self.tokenized_trans_formal_sents.pop(sent_idx)
+        #     self.tags_formal.pop(sent_idx)
 
-        # # 1773 und 1817 ab pythia idiom score
-        static_long_sent_ids = [1773, 1817]
-        for sent_idx in static_long_sent_ids:
-            self.static_sents.pop(sent_idx)
-            self.tokenized_static_sents.pop(sent_idx)
-            self.tags_static.pop(sent_idx)
+        # # # 1773 und 1817 ab pythia idiom score
+        # static_long_sent_ids = [1773, 1817]
+        # for sent_idx in static_long_sent_ids:
+        #     self.static_sents.pop(sent_idx)
+        #     self.tokenized_static_sents.pop(sent_idx)
+        #     self.tags_static.pop(sent_idx)
 
     def read_file(self, path: str):
         '''

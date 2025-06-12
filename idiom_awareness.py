@@ -122,8 +122,9 @@ class IdiomAwareness:
     batch_loss = t.zeros(len(batch["sentence"]))
 
     for i in range(len(batch["sentence"])):
-      if len(batch["tokenized"][i]) > 1:
-        batch_loss[i] = self.model(batch["sentence"][i], return_type="loss")
+      #if len(batch["tokenized"][i]) > 1: # macht keinen Sinn, weil das dann 0 hinzufügt, was den Loss besser macht
+        #batch_loss[i] = self.model(batch["sentence"][i], return_type="loss")
+      batch_loss[i] = self.model(batch["sentence"][i], return_type="loss")
     
     if self.loss == None:
       self.loss = batch_loss

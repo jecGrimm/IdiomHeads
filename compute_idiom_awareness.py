@@ -47,6 +47,7 @@ for i in range(len(cli.data_split)):
     ckp_file = f"./scores/loss/{cli.model_name}/loss_{split}_{start}_{end}.pt"
     
     print("\nLoss:\n")
+    data = data.filter(lambda x: len(x["tokenized"]) > 1)
     data.map(lambda batch: scorer.compute_loss_batched(batch, ckp_file), batched=True, batch_size = batch_size)
 
     print(f"\nAverage Loss: {t.mean(scorer.loss)}\n")
