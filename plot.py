@@ -391,23 +391,13 @@ def convert_tokens_to_string(model, tokens, batch_index=0):
 def plot_logit_attribution_sentence(logit_attr: t.Tensor, tokens: t.Tensor, title: str = "", xlabels = None):
     tokens = tokens.squeeze()
     y_labels = convert_tokens_to_string(tokens)
-    return imshow(logit_attr.float(), x=xlabels,  y=y_labels, xaxis="Component", yaxis="Position", caxis="logit", title=title if title else None, height=25*len(tokens))
+    return imshow(logit_attr.float(), x=xlabels,  y=y_labels, xaxis="Component", yaxis="Position", caxis="Logit", title=title if title else None, height=25*len(tokens))
 
 def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels = None, filename = None):
-    #fig = make_subplots(len(x_labels), 1)
-    #mean_logit_attr = get_mean_sentence_tensor(logit_attr)
     y_labels = ["Idiom", "Literal"]
 
-    # for comp_group in range(len(x_labels)):
-    #     num_comps = len(x_labels[comp_group])
-
-    #     comp_logit = mean_logit_attr[:, comp_group*num_comps:(comp_group*num_comps+num_comps)]
-
-    #     fig.add_trace(go.Heatmap(z=comp_logit.float()), row=comp_group+1, col=1)
-        #fig = fig.add_heatmap(y=[0, 1], x = x_labels[comp_group], z = , row=comp_group, col=1)
-        #fig = fig.add_trace(px.imshow(comp_logit.float(), title = title, x=x_labels[comp_group], y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean logit attribution"}, color_continuous_midpoint=0.0))
-    fig = px.imshow(logit_attr.float(), title = title, x=x_labels, y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean logit attribution"}, color_continuous_midpoint=0.0)
-    #fig.update_yaxes(dict(anchor="free", automargin=True, autoshift=True))
+    fig = px.imshow(logit_attr.float(), title = title, x=x_labels, y=y_labels, labels={"x":"Component", "y":"Position", "color":"Mean Logit Attribution"}, color_continuous_midpoint=0.0)
+  
     if filename:
         fig.write_image(filename)
     else:
@@ -1043,6 +1033,7 @@ if __name__ == "__main__":
     # scores/ablation/pythia-1.4b/ablation_trans_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_static_0_2761_comp.pt
     # scores/idiom_components/pythia-1.4b/idiom_only_formal_0_None_comp.pt
+    # scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt
 
     # llama
     # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
@@ -1052,14 +1043,14 @@ if __name__ == "__main__":
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
     # scores/ablation/Llama-3.2-1B-Instruct/ablation_formal_0_None.json
-    # scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt
     # scores/loss/Llama-3.2-1B-Instruct/loss_formal_0_None.pt
     # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_formal_0_None.pt
+    # scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_formal_0_None.pt
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Llama-3.2-1B-Instruct/ablation_trans_0_None.json", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_0_None.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -1121,19 +1112,15 @@ if __name__ == "__main__":
                     }
                     # layer x group x head 
                     mean_tensor = get_mean_sentence_tensor(loaded_tensor)
-                    #print("Mean tensor size:", mean_tensor.size())
 
                     for comp_group in range(len(x_labels[model_name])):
                         num_comps = len(x_labels[model_name][comp_group])
                         comp_contr = mean_tensor[comp_group, :, :]
-                        #print("Comp tensor size:", comp_contr.size())
-                        #print("Transposed comp:", comp_contr.T.size())
-                        #print("len x labels:", len(x_labels[model_name][comp_group]))
                         plot_logit_attribution_split(comp_contr, x_labels = x_labels[model_name][comp_group], filename=f"{path}/{img_file}_{comp_group}.png")
-                        #seen_comps += len(x_labels[model_name][comp_group])
                 else: 
-                    path = f"./plots/{model_name}/logit"
-                    os.makedirs(path, exist_ok=True)
+                    if img_file != None:
+                        path = f"./plots/{model_name}/logit"
+                        os.makedirs(path, exist_ok=True)
 
                     x_labels = {
                         "pythia-14m": ["L0H0", "L0H1", "L0H2", "L0H3", "L1H0", "L1H1", "L1H2", "L1H3", "L2H0", "L2H1", "L2H2", "L2H3", "L3H0", "L3H1", "L3H2", "L3H3", "L4H0", "L4H1", "L4H2", "L4H3", "L5H0", "L5H1", "L5H2", "L5H3", "0_mlp_out", "1_mlp_out", "2_mlp_out", "3_mlp_out", "4_mlp_out", "5_mlp_out", "embed", "bias"],
@@ -1143,10 +1130,24 @@ if __name__ == "__main__":
                     mean_tensor = get_mean_sentence_tensor(loaded_tensor)
                     seen_comps = 0
                     for comp_group in range(len(x_labels[model_name])):
+                        layer = ""
+                        first_comp = x_labels[model_name][comp_group][0]
+                        if first_comp.startswith('L'):
+                            layer = f"Layer {first_comp.split("H")[0][1:]}"
+                        elif first_comp == "embed":
+                            layer = "Embed/Bias"
+                        else:
+                            layer = "MLP"
+
+                        if img_file != None:
+                            filename = f"{path}/{img_file}_{comp_group}.png"
+                        else:
+                            filename = None
+
                         num_comps = len(x_labels[model_name][comp_group])
                         comp_logit = mean_tensor[:, seen_comps:(seen_comps+num_comps)]
-                        plot_logit_attribution_split(comp_logit, x_labels = x_labels[model_name][comp_group], filename=f"{path}/{img_file}_{comp_group}.png")
-                        seen_comps += len(x_labels[model_name][comp_group])
+                        plot_logit_attribution_split(comp_logit, x_labels = x_labels[model_name][comp_group], filename=filename, title = f"Direct Logit Attribution {layer}")
+                        seen_comps += num_comps
             elif "loss" in tensor_file:
                 plot_loss(loaded_tensor, img_file, model_name)
             else:
