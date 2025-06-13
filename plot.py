@@ -964,6 +964,7 @@ def plot_ablation(logit_file, loss_file, outfile=None, model_name=None):
         plt.text(center, ax.get_ylim()[1] * 0.95, section_titles[i], ha='center', va='bottom', fontsize=4)
 
     plt.tight_layout()
+    plt.legend(prop={'size': 6})
     save_plt(outfile, dpi = 300, bbox_inches='tight')
 
 
@@ -1083,21 +1084,22 @@ if __name__ == "__main__":
     else:
         if tensor_file.endswith(".json"):
             # Ablation
-            os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
             if img_file != None:
-                split = tensor_file.split('_')[1]
-                filename = f"./plots/{model_name}/ablation/{img_file}.txt"
+                os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
+                txt_file = f"./plots/{model_name}/ablation/{img_file}.txt"
+                png_file = f"./plots/{model_name}/ablation/{img_file}.png"
                 heat_file = f"./plots/{model_name}/ablation/heat_{img_file}.png"
             else:
                 filename = None
                 heat_file = None
 
-            compute_accuracy(tensor_file, filename)
+            compute_accuracy(tensor_file, txt_file)
 
-            logit_file = f"scores/ablation/{model_name}/ablation_{img_file}_0_None_logit.pt"
-            loss_file = f"scores/ablation/{model_name}/ablation_{img_file}_0_None_loss.pt"
+            split = tensor_file.split('_')[1]
+            logit_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_logit.pt"
+            loss_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_loss.pt"
 
-            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=filename, model_name=model_name)
+            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=png_file, model_name=model_name)
             plot_ablation(logit_file, loss_file, heat_file, model_name)
         else:
             loaded_tensor = t.load(tensor_file, map_location=t.device(device))
