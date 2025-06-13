@@ -1,0 +1,5 @@
+Mean loss: 4.528534889221191
+Sentence with the minimum loss 1.967079520225525:
+Just when you thought it was safe to come out of the closet.
+Sentence with the maximum loss 10.71406364440918:
+Basket case
