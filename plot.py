@@ -52,13 +52,13 @@ def plot_loss(tensor, filename=None, model_name=None):
         txt_file = path+filename+".txt"
  
     df = create_df_from_tensor(tensor)
-    df.plot.line()
+    df.plot.line(legend=False, title= "Loss per Sentence", xlabel= "Sentence ID", ylabel = "Loss")
     save_plt(line_file)
 
-    df.plot.hist(bins=20)
+    df.plot.hist(bins=20, title= "Loss Distribution", xlabel= "Loss", ylabel = "Frequency", legend=False)
     save_plt(hist_file)
 
-    df.plot.box()
+    df.plot.box(title= "Loss Boxplot", xticks= [], ylabel = "Loss")
     save_plt(box_file)
 
     epie = EPIE_Data()
@@ -79,8 +79,9 @@ def plot_loss(tensor, filename=None, model_name=None):
         with open(txt_file, 'w', encoding="utf-8") as f:
             f.write(output)
     else: 
-        output += f"Sentence with the minimum loss {tensor.min()}"
-        output += f"\nSentence with the maximum loss {tensor.max()}"
+        # Hier kein Satz, weil wir nicht wissen, ob trans oder formal
+        output += f"Minimum loss {tensor.min()}"
+        output += f"\nMaximum loss {tensor.max()}"
         print(output)
 
 def plot_score_hist(scores):
@@ -242,9 +243,18 @@ def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
 def get_mean_sentence_tensor(tensor):
     return t.mean(tensor, dim = 0)
 
-def save_plt(filename = None):
+def save_plt(filename = None, dpi = None, bbox_inches = None):
     if filename:
-        plt.savefig(filename) 
+        if dpi: 
+            if bbox_inches:
+                plt.savefig(filename, dpi = dpi, bbox_inches= bbox_inches)
+            else:
+                plt.savefig(filename, dpi=dpi)            
+        else:
+            if bbox_inches:
+                plt.savefig(filename, bbox_inches=bbox_inches)
+            else:
+                plt.savefig(filename)    
     else:
         plt.show()
 
@@ -705,12 +715,12 @@ def compute_accuracy(pred_file, outfile = None):
     if outfile != None:
         with open(outfile, 'w', encoding = "utf-8") as f:
             f.write(output)
-    # else: TODO: wieder auskommentieren
-    #     print(output)
+    else: 
+        print(output)
 
     return sent_ids
 
-def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
+def plot_ablation_hatched(logit_file, loss_file, outfile = None, model_name = None):
     ablation_heads = {
         "pythia-14m": ["L0H0", "L5H3"],
         "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
@@ -721,17 +731,242 @@ def plot_ablation(logit_file, loss_file, outfile = None, model_name = None):
     for group in ablation_heads[model_name]:
         name = ""
         for layer_head in group:
-            name += f"_L{layer_head[0]}H{layer_head[1]}"
+            name += f"\nL{layer_head[0]}H{layer_head[1]}"
         abl_heads.append(name[1:])
+
+    hatches = {
+        "Llama-3.2-1B-Instruct": ["oxoxox", "+++", "///", "///", "+++", "ooo", "///", "OOO", "xxx", "ooo", "OOO", "OOO", "+++", "+++", "OOO", "///", "xxx", "ooo", "***", "***", "***"]
+    }
 
     logit_tensor = t.load(logit_file, map_location=t.device(device))
     loss_tensor = t.load(loss_file, map_location=t.device(device))
 
     mean_logit_tensor = get_mean_sentence_tensor(logit_tensor) # 4
     mean_loss_tensor = get_mean_sentence_tensor(loss_tensor) 
+
     df = pd.DataFrame({"layer.head": abl_heads, "logits": mean_logit_tensor.numpy(), "loss": mean_loss_tensor.numpy()})
-    df.plot.bar(x = "layer.head")
+    df.plot.bar(x = "layer.head", rot = 0, fontsize = 4, hatch= hatches[model_name])
+    plt.xlabel("Ablation Group", fontsize=4)
+    plt.ylabel("Score", fontsize=4)
+    plt.title("Ablation Scores", fontsize=6)
     save_plt(outfile)
+
+def plot_ablation_ordered(logit_file, loss_file, outfile=None, model_name=None):
+    # Ordering done by chatgpt
+    ablation_heads = {
+        "pythia-14m": ["L0H0", "L5H3"],
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)],
+                        [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)],
+                        [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)],
+                        [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)],
+                        [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]],
+        "Llama-3.2-1B-Instruct": [
+            [(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)],
+            [(15, 12)], [(12, 8)], [(0, 17)],
+            [(0, 0), (0, 17), (9, 13)],
+            [(12, 8), (10, 29), (15, 12)],
+            [(15, 8), (15, 10), (15, 14)],
+            [(0, 21), (10, 3), (13, 30)],
+            [(10, 3), (12, 30), (13, 30)],
+            [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)],
+            [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)],
+            [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)],
+        ]
+    }
+
+    # Target custom order for sorting (manually specified)
+    custom_order = [
+        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+        "L10H3", "L13H30", "L12H30",
+        "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
+        "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
+        "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
+    ]
+
+    abl_heads = []
+    for group in ablation_heads[model_name]:
+        name = ""
+        for layer_head in group:
+            name += f"\nL{layer_head[0]}H{layer_head[1]}"
+        abl_heads.append(name[1:])  # strip first newline
+
+    logit_tensor = t.load(logit_file, map_location=t.device(device))
+    loss_tensor = t.load(loss_file, map_location=t.device(device))
+
+    mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)
+    mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)
+
+    df = pd.DataFrame({
+        "layer.head": abl_heads,
+        "logits": mean_logit_tensor.numpy(),
+        "loss": mean_loss_tensor.numpy()
+    })
+
+    # Convert 'layer.head' to categorical with custom order
+    df["layer.head"] = pd.Categorical(df["layer.head"], categories=custom_order, ordered=True)
+
+    # Sort dataframe by this order
+    df = df.sort_values("layer.head")
+
+    df.plot.bar(x="layer.head", rot=0, fontsize=4)
+    plt.xlabel("Ablation Group", fontsize=4)
+    plt.ylabel("Score", fontsize=4)
+    plt.title("Ablation Scores", fontsize=6)
+    save_plt(outfile)
+
+def plot_ablation_sections(logit_file, loss_file, outfile=None, model_name=None):
+    ablation_heads = {
+        "pythia-14m": ["L0H0", "L5H3"],
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)],
+                        [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)],
+                        [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)],
+                        [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)],
+                        [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]],
+        "Llama-3.2-1B-Instruct": [
+            [(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)],
+            [(15, 12)], [(12, 8)], [(0, 17)],
+            [(0, 0), (0, 17), (9, 13)],
+            [(12, 8), (10, 29), (15, 12)],
+            [(15, 8), (15, 10), (15, 14)],
+            [(0, 21), (10, 3), (13, 30)],
+            [(10, 3), (12, 30), (13, 30)],
+            [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)],
+            [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)],
+            [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)],
+        ]
+    }
+
+    # Custom order of bars
+    custom_order = [
+        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+        "L10H3", "L13H30", "L12H30",
+        "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
+        "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
+        "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
+    ]
+
+    # List of bar labels after which we want to draw a line
+    separators = ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"]
+
+    abl_heads = []
+    for group in ablation_heads[model_name]:
+        name = ""
+        for layer_head in group:
+            name += f"\nL{layer_head[0]}H{layer_head[1]}"
+        abl_heads.append(name[1:])  # strip first newline
+
+    logit_tensor = t.load(logit_file, map_location=t.device(device))
+    loss_tensor = t.load(loss_file, map_location=t.device(device))
+
+    mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)
+    mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)
+
+    df = pd.DataFrame({
+        "layer.head": abl_heads,
+        "logits": mean_logit_tensor.numpy(),
+        "loss": mean_loss_tensor.numpy()
+    })
+
+    df["layer.head"] = pd.Categorical(df["layer.head"], categories=custom_order, ordered=True)
+    df = df.sort_values("layer.head").reset_index(drop=True)
+
+    ax = df.plot.bar(x="layer.head", rot=0, fontsize=4)
+    plt.xlabel("Ablation Group", fontsize=4)
+    plt.ylabel("Score", fontsize=4)
+    plt.title("Ablation Scores", fontsize=6)
+
+    # Add vertical lines after selected bars
+    for sep_label in separators:
+        if sep_label in df["layer.head"].values:
+            idx = df[df["layer.head"] == sep_label].index[0]
+            plt.axvline(x=idx + 0.5, color='black', linewidth=0.3)  # thin line
+
+    save_plt(outfile)
+
+def plot_ablation(logit_file, loss_file, outfile=None, model_name=None):
+    ablation_heads = {
+        "pythia-14m": ["L0H0", "L5H3"],
+        "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)],
+                        [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)],
+                        [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)],
+                        [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)],
+                        [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]],
+        "Llama-3.2-1B-Instruct": [
+            [(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)],
+            [(15, 12)], [(12, 8)], [(0, 17)],
+            [(0, 0), (0, 17), (9, 13)],
+            [(12, 8), (10, 29), (15, 12)],
+            [(15, 8), (15, 10), (15, 14)],
+            [(0, 21), (10, 3), (13, 30)],
+            [(10, 3), (12, 30), (13, 30)],
+            [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)],
+            [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)],
+            [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)],
+        ]
+    }
+
+    custom_order = [
+        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+        "L10H3", "L13H30", "L12H30",
+        "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
+        "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
+        "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
+    ]
+
+    separators = ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"]
+
+    section_titles = [
+        "Idiom Score", "Idiom Diff", "DLA", "DLA Formal", "DLA Idiom",
+        "Top Per Experiment", "Top All Experiments"
+    ]
+
+    abl_heads = []
+    for group in ablation_heads[model_name]:
+        name = ""
+        for layer_head in group:
+            name += f"\nL{layer_head[0]}H{layer_head[1]}"
+        abl_heads.append(name[1:])  # strip first newline
+
+    logit_tensor = t.load(logit_file, map_location=t.device(device))
+    loss_tensor = t.load(loss_file, map_location=t.device(device))
+
+    mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)
+    mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)
+
+    df = pd.DataFrame({
+        "layer.head": abl_heads,
+        "logits": mean_logit_tensor.numpy(),
+        "loss": mean_loss_tensor.numpy()
+    })
+
+    df["layer.head"] = pd.Categorical(df["layer.head"], categories=custom_order, ordered=True)
+    df = df.sort_values("layer.head").reset_index(drop=True)
+
+    ax = df.plot.bar(x="layer.head", rot=0, fontsize=4)
+    plt.xlabel("Ablation Group", fontsize=6)
+    plt.ylabel("Score", fontsize=6)
+    plt.title("Ablation Scores", fontsize=8)
+
+    # Separator lines
+    separator_indices = []
+    for sep_label in separators:
+        if sep_label in df["layer.head"].values:
+            idx = df[df["layer.head"] == sep_label].index[0]
+            separator_indices.append(idx + 0.5)
+            plt.axvline(x=idx + 0.5, color='black', linewidth=0.3)
+
+    # Add section titles above each range
+    all_split_positions = [0] + [int(s + 0.5) for s in separator_indices] + [len(df)]
+    for i in range(len(section_titles)):
+        start = all_split_positions[i]
+        end = all_split_positions[i + 1]
+        center = (start + end - 1) / 2
+        plt.text(center, ax.get_ylim()[1] * 0.95, section_titles[i], ha='center', va='bottom', fontsize=4)
+
+    plt.tight_layout()
+    save_plt(outfile, dpi = 300, bbox_inches='tight')
+
+
 
 def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name = None):
     ablation_heads = {
@@ -739,6 +974,14 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
         "pythia-1.4b": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
         "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]]
     }
+
+    custom_order = [
+        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+        "L10H3", "L13H30", "L12H30",
+        "L0H0_L0H17_L9H13", "L12H8_L10H29_L15H12", "L15H8_L15H10_L15H14", "L0H21_L10H3_L13H30",
+        "L10H3_L12H30_L13H30", "L0H0_L12H8_L15H8_L0H21_L10H3", "L0H17_L10H29_L15H10_L10H3_L12H30",
+        "L9H13_L15H12_L15H14_L13H30_L13H30"
+    ]
 
     abl_heads = []
     for group in ablation_heads[model_name]:
@@ -749,41 +992,50 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
     logit_tensor = t.load(logit_file, map_location=t.device(device))
     logit_tensor = logit_tensor.T
-    print("abl_heads:", abl_heads)
-    print("logit_tensor: ", logit_tensor.size())
 
     # {sent: idx}
     sent_ids = compute_accuracy(pred_file, outfile=None)
-    sent_ids_tuple = [(sent, idx) for sent, idx in sent_ids.items()]
+    sent_ids_tuple = []
+    for sent, idx in sent_ids.items():
+        if len(sent.split(" ")) > 9:
+            sent_ids_tuple.append(("[...] " + " ".join(sent.split(" ")[-9:]), idx))
+        else:
+            sent_ids_tuple.append((sent, idx))
+
+    #sent_ids_tuple = [("[...] " + " ".join(sent.split(" ")[-9:]), idx) for sent, idx in sent_ids.items()]
     sent_ids_tuple = sorted(sent_ids_tuple, key=lambda x: x[0][::-1])
     ids = [x[1] for x in sent_ids_tuple]
     sents = [x[0] for x in sent_ids_tuple] 
 
-    #sent_logits = defaultdict(list)
+    # Create tensor for [sentence x head]
     sent_logit_tensor = t.zeros(len(ids), len(abl_heads))
     for head_pos in range(len(abl_heads)):
         for sent_pos in range(len(ids)):
             sent_logit_tensor[sent_pos][head_pos] = logit_tensor[head_pos][ids[sent_pos]]
-    #         sent_logits[sent].append(logit_tensor[head_pos][idx])
-    
-    # df = pd.DataFrame({"sents": list(sent_logits.keys()), "logit_diffs": list(sent_logits.values())})
-    # print("df:", df)
-    sns.heatmap(sent_logit_tensor, xticklabels=abl_heads, yticklabels=sents)
-    save_plt(outfile)
 
-    #print(sent_logit_tensor.size())
+    # Reorder according to custom_order
+    reorder_indices = [abl_heads.index(name) for name in custom_order if name in abl_heads]
+    sent_logit_tensor = sent_logit_tensor[:, reorder_indices]
+    ordered_abl_heads = [abl_heads[i] for i in reorder_indices]
 
-    # fig = px.imshow(sent_logit_tensor.float(), title = "Sentence Logit Diffs per ablated head", x=abl_heads, y=sents, labels={"x":"Head Group", "y":"Sentence", "color":"Logit Ablation Score"}, color_continuous_midpoint=0.0)
+    # Plot heatmap
+    ax = sns.heatmap(sent_logit_tensor, xticklabels=ordered_abl_heads, yticklabels=sents, cbar_kws = {"label": 'Ablation Logit Score'})
+    ax.figure.axes[-1].yaxis.label.set_size(6)
+    ax.collections[0].colorbar.ax.tick_params(labelsize=6)
 
-    # if outfile:
-    #     fig.write_image(outfile)
-    # else:
-    #     fig.show()
+    plt.xticks(rotation=90, ha='right', fontsize=4)
+    plt.yticks(fontsize=4)
+    plt.tight_layout()
+
+    plt.xlabel("Ablation Group", fontsize=6)
+    plt.title("Ablation Logit Score", fontsize=8)
+
+    save_plt(outfile, dpi = 300, bbox_inches='tight')
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
     # pythia
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
@@ -800,13 +1052,13 @@ if __name__ == "__main__":
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
     # scores/ablation/Llama-3.2-1B-Instruct/ablation_formal_0_None.json
     # scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt
-    #scores/loss/Llama-3.2-1B-Instruct/loss_formal_0_None.pt
+    # scores/loss/Llama-3.2-1B-Instruct/loss_formal_0_None.pt
     # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_formal_0_None.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_formal_0_None.pt
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/pythia-1.4b/ablation_formal_0_None.json", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Llama-3.2-1B-Instruct/ablation_trans_0_None.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -832,20 +1084,21 @@ if __name__ == "__main__":
         if tensor_file.endswith(".json"):
             # Ablation
             os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
-            if img_file == None:
-                img_file = tensor_file.split('_')[1]
-            #f"./plots/{model_name}/ablation/{img_file}.txt"
-            #compute_accuracy(tensor_file, f"./plots/{model_name}/ablation/{img_file}_{model_name}.txt")
+            if img_file != None:
+                split = tensor_file.split('_')[1]
+                filename = f"./plots/{model_name}/ablation/{img_file}.txt"
+                heat_file = f"./plots/{model_name}/ablation/heat_{img_file}.png"
+            else:
+                filename = None
+                heat_file = None
 
-            #logit_file = f"scores/ablation/{model_name}/ablation_formal_0_None_logit.pt"
-            # loss_file = f"scores/ablation/{model_name}/ablation_formal_0_None_loss.pt"
-            # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/formal.png", model_name)
-            #plot_logit_diff_per_sent(logit_file, tensor_file, outfile=f"./plots/{model_name}/ablation/heat_formal_{model_name}.png", model_name=model_name)
+            compute_accuracy(tensor_file, filename)
 
             logit_file = f"scores/ablation/{model_name}/ablation_{img_file}_0_None_logit.pt"
-            # loss_file = f"scores/ablation/{model_name}/ablation_trans_0_None_loss.pt"
-            # plot_ablation(logit_file, loss_file, f"./plots/{model_name}/ablation/trans.png", model_name)
-            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=f"./plots/{model_name}/ablation/heat_{img_file}_{model_name}.png", model_name=model_name)
+            loss_file = f"scores/ablation/{model_name}/ablation_{img_file}_0_None_loss.pt"
+
+            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=filename, model_name=model_name)
+            plot_ablation(logit_file, loss_file, heat_file, model_name)
         else:
             loaded_tensor = t.load(tensor_file, map_location=t.device(device))
             # 2*((1/(1+e^-x))-0.5) -> Range ist -1 bis +1
