@@ -1,0 +1,8 @@
+
+The model generated 1200 correct answers.
+
+Accuracy: 43.46%
+
+Five correct outputs: ['<|endoftext|>‘You know, the panda who keeps an eye on', '<|endoftext|>‘I will keep an eye on', "<|endoftext|>Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or keep an eye on", '<|endoftext|>Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to keep an eye on', '<|endoftext|>So we must keep an eye on']
+
+Five incorrect outputs: [('But I will also be keeping an eye -> on', '<|endoftext|>But I will also be keeping an eye out'), ('Keep an eye -> on', '<|endoftext|>Keep an eye out'), ("She came to see me a year later, total loss of weight, total short of breath, hardly, she's struggling to keep body and soul -> together", "<|endoftext|>She came to see me a year later, total loss of weight, total short of breath, hardly, she's struggling to keep body and soul both"), ('Keep her eyes -> open', '<|endoftext|>Keep her eyes focused'), ('You keep your eyes -> open', '<|endoftext|>You keep your eyes focused')]
