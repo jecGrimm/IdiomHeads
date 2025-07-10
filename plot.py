@@ -669,7 +669,7 @@ def create_csv(model_name, device):
     #df_trans_literal_score["literal Score Std Trans"] = get_lh_std_scores(trans_literal_score)
     std_trans_literal_score = get_lh_std_scores(trans_literal_score)
     df_std_trans_literal_score = pd.DataFrame({"Component": list(std_trans_literal_score.keys()), "Literal Score Std Trans": list(std_trans_literal_score.values())})
-    df_trans_literal_score = pd.merge(df_trans_literal_score, df_std_trans_literal_score, on="Component",  how='left')
+    df_trans_literal_score = pd.merge(df_trans_literal_score, df_std_trans_literal_score, on="Component", how='left')
 
     # if "pythia" in model_name.lower():
     #     # Static
@@ -684,7 +684,8 @@ def create_csv(model_name, device):
 
     # ALL
     #df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_static_idiom_score, df_formal_literal_score, df_trans_literal_score, df_static_literal_score, df_formal_attr, df_trans_attr, df_static_attr], axis=1).set_index("Component")
-    df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_formal_literal_score, df_trans_literal_score, df_formal_attr, df_trans_attr], axis=1).set_index("Component")
+    #df = pd.merge()
+    df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_formal_literal_score, df_trans_literal_score, df_formal_attr, df_trans_attr], axis=1, join = "outer")
     df["Idiom Score Diff Formal Trans"] = df["Idiom Score Formal"] - df["Idiom Score Trans"]
     # df["Idiom Score Diff Static Trans"] = df["Idiom Score Static"] - df["Idiom Score Trans"]
     # df["Idiom Score Diff Static Formal"] = df["Idiom Score Static"] - df["Idiom Score Formal"]
@@ -704,7 +705,7 @@ def create_csv(model_name, device):
     df["DLA Diff Literal Formal Trans"] = df["DLA Literal Formal"] - df["DLA Literal Trans"]
     #df["DLA Diff Literal Static Trans"] = df["DLA Literal Static"] - df["DLA Literal Trans"]
 
-    df.to_csv(f"plots/{model_name}/{model_name}.csv", index_label = "Index") 
+    df.to_csv(f"plots/{model_name}/results_{model_name}.csv", index_label = "Index") 
 
 def compute_accuracy(pred_file, outfile = None):
     with open(pred_file, 'r', encoding = "utf-8") as f:
