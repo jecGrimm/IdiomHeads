@@ -8,6 +8,9 @@ False2Correct Changed Predictions: 0.00%
 Ablation has negative effect on rank of the correct token: 0.00%
 Ablation has positive effect on rank of the correct token: 0.00%
 Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L11H7
@@ -20,6 +23,12 @@ Ablation has negative effect on rank of the correct token: 12.32%
 Ablation has positive effect on rank of the correct token: 9.96%
 Worst Prediction: 595: However, the Hindu of Aug. 31 described the resignation as part of " the factional war of
  -> ' nerves', predicted: ' the'
+Best Prediction: -940: Remember the bit in Citizen Kane when Orson Welles stands for election as congressman, but is felled by a ‘Kane in Love
+ -> ' Nest', predicted: '’'
+Correct2False Prediction: Ablated rank 1: WINDHOEK in South Africa, where John Muafangejo died at the tragically early age of 44 in 1987, rings an immediate
+ -> ' bell', ablation predicted: ' and'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n']
 
 L19H14
@@ -32,6 +41,12 @@ Ablation has negative effect on rank of the correct token: 8.88%
 Ablation has positive effect on rank of the correct token: 16.16%
 Worst Prediction: 207: It gets very predictable from here, folks, as the grumpy Crane — a leading biologist who nevertheless has
  -> ' kittens', predicted: ' a'
+Best Prediction: -1303: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: 'heads'
+Correct2False Prediction: Ablated rank 1: Striking the
+ -> ' balance', ablation predicted: ' right'
+False2Correct Prediction: Original rank 1: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', originally predicted: ' attention'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L13H4
@@ -44,6 +59,12 @@ Ablation has negative effect on rank of the correct token: 15.65%
 Ablation has positive effect on rank of the correct token: 9.35%
 Worst Prediction: 763: ‘The barriers had ceased to be an effective protection for Names as those losing their
  -> ' shirts', predicted: ' Names'
+Best Prediction: -354: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: ' could'
+Correct2False Prediction: Ablated rank 1: Leave the haggling over the price to your agent and take his advice on the final choice of buyer, who should be well advanced in his own sale ; but do not be in any hurry to settle the matter without at least sleeping on
+ -> ' it', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: I do believe that a great work of art strikes a subtle
+ -> ' balance', originally predicted: ' chord'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L16H10
@@ -56,6 +77,12 @@ Ablation has negative effect on rank of the correct token: 8.95%
 Ablation has positive effect on rank of the correct token: 10.00%
 Worst Prediction: 289: Remember the bit in Citizen Kane when Orson Welles stands for election as congressman, but is felled by a ‘Kane in Love
  -> ' Nest', predicted: '’'
+Best Prediction: -480: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: ' could'
+Correct2False Prediction: Ablated rank 1: Keeping in
+ -> ' Touch', ablation predicted: ' touch'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L3H4
@@ -68,6 +95,13 @@ Ablation has negative effect on rank of the correct token: 12.86%
 Ablation has positive effect on rank of the correct token: 12.93%
 Worst Prediction: 1414: And revenge had been in his mind when playing the
  -> ' joke', predicted: ' game'
+Best Prediction: -935: WORLD PARTY
+ -> ' animal', predicted: '
+'
+Correct2False Prediction: Ablated rank 2: STARTING FROM
+ -> ' SCRATCH', ablation predicted: ' $'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n']
 
 L18H4
@@ -80,6 +114,12 @@ Ablation has negative effect on rank of the correct token: 11.23%
 Ablation has positive effect on rank of the correct token: 12.28%
 Worst Prediction: 521: However, the Hindu of Aug. 31 described the resignation as part of " the factional war of
  -> ' nerves', predicted: ' the'
+Best Prediction: -600: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: ' Boys'
+Correct2False Prediction: Ablated rank 1: Pleased with the group's healthy sales, Red Rhino allowed the band the luxury of a colour sleeve for their third release, the double A-side, ‘This Boy Can Wait’ and ‘You Should Always Keep In
+ -> ' Touch', ablation predicted: ' Mind'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L19H1
@@ -92,6 +132,12 @@ Ablation has negative effect on rank of the correct token: 9.89%
 Ablation has positive effect on rank of the correct token: 11.67%
 Worst Prediction: 405: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
  -> ' Loss', predicted: 'heads'
+Best Prediction: -547: Remember the bit in Citizen Kane when Orson Welles stands for election as congressman, but is felled by a ‘Kane in Love
+ -> ' Nest', predicted: '’'
+Correct2False Prediction: Ablated rank 2: Keeping in
+ -> ' Touch', ablation predicted: ' mind'
+False2Correct Prediction: Original rank 1: I do believe that a great work of art strikes a subtle
+ -> ' balance', originally predicted: ' chord'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n']
 
 L0H13
@@ -104,6 +150,12 @@ Ablation has negative effect on rank of the correct token: 12.43%
 Ablation has positive effect on rank of the correct token: 12.36%
 Worst Prediction: 1247: The writer often called the
  -> ' tune', predicted: ' "'
+Best Prediction: -1187: A SPITTING
+ -> ' Image', predicted: ' contest'
+Correct2False Prediction: Ablated rank 2: STARTING FROM
+ -> ' SCRATCH', ablation predicted: ' $'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n']
 
 L15H13
@@ -116,6 +168,12 @@ Ablation has negative effect on rank of the correct token: 10.25%
 Ablation has positive effect on rank of the correct token: 9.96%
 Worst Prediction: 410: Gets on me
  -> ' nerves', predicted: ' in'
+Best Prediction: -375: Remember the bit in Citizen Kane when Orson Welles stands for election as congressman, but is felled by a ‘Kane in Love
+ -> ' Nest', predicted: '’'
+Correct2False Prediction: Ablated rank 1: Pleased with the group's healthy sales, Red Rhino allowed the band the luxury of a colour sleeve for their third release, the double A-side, ‘This Boy Can Wait’ and ‘You Should Always Keep In
+ -> ' Touch', ablation predicted: ' Mind'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
 
 L18H9
@@ -128,6 +186,12 @@ Ablation has negative effect on rank of the correct token: 9.09%
 Ablation has positive effect on rank of the correct token: 8.48%
 Worst Prediction: 286: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
  -> ' Loss', predicted: 'heads'
+Best Prediction: -1117: SWEENEY BIG
+ -> ' Cheese', predicted: 'GS'
+Correct2False Prediction: Ablated rank 1: So that it er er push off the water, kept the water at
+ -> ' bay', ablation predicted: ' a'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L2H15
@@ -140,6 +204,12 @@ Ablation has negative effect on rank of the correct token: 13.41%
 Ablation has positive effect on rank of the correct token: 10.94%
 Worst Prediction: 1402: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
  -> ' Loss', predicted: ' could'
+Best Prediction: -1522: SWEENEY BIG
+ -> ' Cheese', predicted: 'GS'
+Correct2False Prediction: Ablated rank 2: STARTING FROM
+ -> ' SCRATCH', ablation predicted: ' $'
+False2Correct Prediction: Original rank 1: The bottom line
+ -> ' is', originally predicted: ':'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L14H5
@@ -152,6 +222,12 @@ Ablation has negative effect on rank of the correct token: 13.44%
 Ablation has positive effect on rank of the correct token: 12.36%
 Worst Prediction: 605: I beat a heavy
  -> ' retreat', predicted: 'weight'
+Best Prediction: -2468: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: 'heads'
+Correct2False Prediction: Ablated rank 4: WINDHOEK in South Africa, where John Muafangejo died at the tragically early age of 44 in 1987, rings an immediate
+ -> ' bell', ablation predicted: ' and'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L2H15_L3H4_L0H13
@@ -164,6 +240,12 @@ Ablation has negative effect on rank of the correct token: 12.75%
 Ablation has positive effect on rank of the correct token: 14.57%
 Worst Prediction: 2372: The writer often called the
  -> ' tune', predicted: ' "'
+Best Prediction: -1092: A SPITTING
+ -> ' Image', predicted: ','
+Correct2False Prediction: Ablated rank 5: STARTING FROM
+ -> ' SCRATCH', ablation predicted: ' $'
+False2Correct Prediction: Original rank 1: And then you make what a lot of people would be er consider er er a quantum
+ -> ' leap', originally predicted: ' computer'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n']
 
 L16H10_L11H7_L18H9
@@ -176,6 +258,13 @@ Ablation has negative effect on rank of the correct token: 12.21%
 Ablation has positive effect on rank of the correct token: 10.40%
 Worst Prediction: 444: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
  -> ' Loss', predicted: ' could'
+Best Prediction: -635: WORLD PARTY
+ -> ' animal', predicted: '
+'
+Correct2False Prediction: Ablated rank 1: Keeping in
+ -> ' Touch', ablation predicted: ' touch'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'I have kept my eyes\n ->  open, predicted:  on\n']
 
 L19H14_L19H1_L13H4
@@ -188,6 +277,12 @@ Ablation has negative effect on rank of the correct token: 12.90%
 Ablation has positive effect on rank of the correct token: 15.18%
 Worst Prediction: 1488: SWEENEY BIG
  -> ' Cheese', predicted: 'GS'
+Best Prediction: -1049: Gets on me
+ -> ' nerves', predicted: ' at'
+Correct2False Prediction: Ablated rank 1: Striking the
+ -> ' balance', ablation predicted: ' right'
+False2Correct Prediction: Original rank 1: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', originally predicted: ' attention'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
 
 L15H13_L19H1_L18H4
@@ -200,6 +295,12 @@ Ablation has negative effect on rank of the correct token: 11.16%
 Ablation has positive effect on rank of the correct token: 15.51%
 Worst Prediction: 358: The writer often called the
  -> ' tune', predicted: ' "'
+Best Prediction: -684: Remember the bit in Citizen Kane when Orson Welles stands for election as congressman, but is felled by a ‘Kane in Love
+ -> ' Nest', predicted: '’'
+Correct2False Prediction: Ablated rank 1: Keeping in
+ -> ' Touch', ablation predicted: ' mind'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n', 'I have kept my eyes\n ->  open, predicted:  on\n']
 
 L15H13_L19H1_L14H5
@@ -212,6 +313,12 @@ Ablation has negative effect on rank of the correct token: 13.04%
 Ablation has positive effect on rank of the correct token: 15.36%
 Worst Prediction: 743: I beat a heavy
  -> ' retreat', predicted: 'weight'
+Best Prediction: -2646: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: 'heads'
+Correct2False Prediction: Ablated rank 1: It was simply a case of striking a better
+ -> ' balance', ablation predicted: ' deal'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n']
 
 L2H15_L16H10_L19H14_L15H13_L15H13
@@ -225,6 +332,12 @@ Ablation has positive effect on rank of the correct token: 15.51%
 Worst Prediction: 1627: WORLD PARTY
  -> ' animal', predicted: '
 '
+Best Prediction: -861: Gets on me
+ -> ' nerves', predicted: ' in'
+Correct2False Prediction: Ablated rank 1: Striking the
+ -> ' balance', ablation predicted: ' right'
+False2Correct Prediction: Original rank 1: Your most startling, persuasive or important points should not go in the introduction ; do not let the introduction steal your
+ -> ' thunder', originally predicted: ' attention'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  on\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n']
 
 L3H4_L11H7_L19H1_L19H1_L19H1
@@ -237,6 +350,12 @@ Ablation has negative effect on rank of the correct token: 13.33%
 Ablation has positive effect on rank of the correct token: 14.24%
 Worst Prediction: 1348: And revenge had been in his mind when playing the
  -> ' joke', predicted: ' game'
+Best Prediction: -1083: I look forward to watching Rainbow attempt to get
+ -> ' religion', predicted: ' back'
+Correct2False Prediction: Ablated rank 3: STARTING FROM
+ -> ' SCRATCH', ablation predicted: ' $'
+False2Correct Prediction: Original rank 1: And then you make what a lot of people would be er consider er er a quantum
+ -> ' leap', originally predicted: ' computer'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep her eyes\n ->  open, predicted:  on\n', 'You keep your eyes\n ->  open, predicted:  on\n', 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n']
 
 L0H13_L18H9_L13H4_L18H4_L14H5
@@ -249,4 +368,10 @@ Ablation has negative effect on rank of the correct token: 17.21%
 Ablation has positive effect on rank of the correct token: 13.30%
 Worst Prediction: 3542: SWEENEY BIG
  -> ' Cheese', predicted: 'G'
+Best Prediction: -3323: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: 'heads'
+Correct2False Prediction: Ablated rank 1: Striking the
+ -> ' balance', ablation predicted: ' right'
+False2Correct Prediction: Original rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', originally predicted: ' and'
 Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
