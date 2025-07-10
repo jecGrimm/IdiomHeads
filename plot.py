@@ -543,6 +543,7 @@ def get_component_dict(tensor):
 
 def plot_all_components(full_tensor, filename = None, model_name = None):
     path = f"./plots/{model_name}/components"
+    os.makedirs(path, exist_ok=True)
 
     comp_dict = get_component_dict(full_tensor)
     orig_filename = filename
@@ -1181,7 +1182,7 @@ if __name__ == "__main__":
     # scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt
 
     # llama
-    # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
+    # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_formal_0_None_comp.pt
     # scores/idiom_scores/Llama-3.2-1B-Instruct/idiom_only_formal_0_None.pt
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_0_None_comp.pt
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
@@ -1195,7 +1196,7 @@ if __name__ == "__main__":
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_formal_0_None.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/Llama-3.2-1B-Instruct/idiom_formal_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
