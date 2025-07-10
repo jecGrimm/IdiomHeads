@@ -1,0 +1,10 @@
+Mean loss: 4.081406116485596
+Sentence with the minimum loss 1.880655288696289:
+Just when you thought it was safe to reveal a secret.
+Sentence with the maximum loss 9.326918601989746:
+uncomfortable fact
+
+Sentence with the minimum loss 1.880655288696289:
+Just when you thought it was safe to come out of the closet.
+Sentence with the maximum loss 9.326918601989746:
+Home truth
