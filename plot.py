@@ -506,8 +506,8 @@ def plot_idiom_scores(tensor, filename = None, model_name = None, scatter_file =
         os.makedirs(path, exist_ok=True)
 
     if filename and model_name:
-        plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
-        plot_line_std(tensor, f"{path}/std_line_{filename}.png")
+        plot_tensor_line(tensor, f"{path}/mean_{filename}.png")
+        plot_line_std(tensor, f"{path}/std_{filename}.png")
         plot_heatmap(tensor, f"{path}/heat_{filename}.png" )
         plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
         explore_scores(tensor, f"{path}/{filename}.txt")
@@ -1169,7 +1169,7 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="pythia-1.4b")
     # pythia
     # scores/ablation/pythia-1.4b/ablation_formal_0_None.json
     # scores/literal_components/pythia-1.4b/literal_only_formal_0_None_comp.pt
@@ -1196,7 +1196,7 @@ if __name__ == "__main__":
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/Llama-3.2-1B-Instruct/idiom_formal_0_None_comp.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_scores/pythia-1.4b/literal_trans_0_None.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
