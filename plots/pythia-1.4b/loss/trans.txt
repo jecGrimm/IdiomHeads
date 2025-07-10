@@ -1,0 +1,5 @@
+Mean loss: 4.454600811004639
+Sentence with the minimum loss 0.0:
+confessing
+Sentence with the maximum loss 10.30111312866211:
+performance history
