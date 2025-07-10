@@ -1,0 +1,5 @@
+Mean loss: 4.461063861846924
+Sentence with the minimum loss 2.479116201400757:
+The Centre for Alternative Technology ( CAT ) has worked out that, on average, 20 per cent of heating GOES THROUGH THE ROOF, 25 per cent through the walls, 10 per cent through the floor, 10 per cent through the windows and 10 per cent in draughts.
+Sentence with the maximum loss 10.30111312866211:
+performance history

@@ -1,0 +1,19 @@
+
+Average score: 0.10430908203125
+Maximum mean: L0H0 - 0.18310546875
+Minimum mean: L2H20 - 0.054168701171875
+Mean top 10: [('L0H0', array(0.1831, dtype=float16)), ('L9H13', array(0.1779, dtype=float16)), ('L0H17', array(0.1656, dtype=float16)), ('L9H26', array(0.1614, dtype=float16)), ('L0H20', array(0.161, dtype=float16)), ('L0H23', array(0.1603, dtype=float16)), ('L8H9', array(0.1523, dtype=float16)), ('L15H24', array(0.1519, dtype=float16)), ('L1H10', array(0.1517, dtype=float16)), ('L14H18', array(0.1508, dtype=float16))]
+Mean bottom 10: [('L2H20', array(0.05417, dtype=float16)), ('L1H23', array(0.0569, dtype=float16)), ('L5H10', array(0.05713, dtype=float16)), ('L8H19', array(0.05716, dtype=float16)), ('L2H26', array(0.0581, dtype=float16)), ('L7H12', array(0.05908, dtype=float16)), ('L13H22', array(0.05908, dtype=float16)), ('L1H22', array(0.05972, dtype=float16)), ('L4H16', array(0.0605, dtype=float16)), ('L13H21', array(0.06122, dtype=float16))]
+Mean distribution top 10 layer: defaultdict(<class 'int'>, {'first': 5, 'second': 3, 'third': 2})
+Mean distribution top 10 heads: defaultdict(<class 'int'>, {'first': 1, 'third': 3, 'second': 4, 'fourth': 2})
+Mean distribution bottom 10 layer: defaultdict(<class 'int'>, {'first': 6, 'second': 2, 'third': 2})
+Mean distribution bottom 10 heads: defaultdict(<class 'int'>, {'second': 7, 'third': 1, 'fourth': 2})
+
+Maximum std: L5H26 - 0.1702880859375
+Minimum std: L15H14 - 0.11993408203125
+Std top 10: [('L5H26', array(0.1703, dtype=float16)), ('L8H10', array(0.1654, dtype=float16)), ('L7H10', array(0.1644, dtype=float16)), ('L4H20', array(0.1638, dtype=float16)), ('L12H6', array(0.1638, dtype=float16)), ('L11H2', array(0.1635, dtype=float16)), ('L7H30', array(0.1632, dtype=float16)), ('L12H11', array(0.1632, dtype=float16)), ('L4H1', array(0.1631, dtype=float16)), ('L1H29', array(0.163, dtype=float16))]
+Std bottom 10: [('L15H14', array(0.11993, dtype=float16)), ('L9H12', array(0.1246, dtype=float16)), ('L0H2', array(0.132, dtype=float16)), ('L14H25', array(0.1327, dtype=float16)), ('L15H23', array(0.1375, dtype=float16)), ('L8H26', array(0.1382, dtype=float16)), ('L0H23', array(0.1392, dtype=float16)), ('L15H25', array(0.1407, dtype=float16)), ('L0H0', array(0.144, dtype=float16)), ('L15H24', array(0.1442, dtype=float16))]
+Std distribution top 10 layer: defaultdict(<class 'int'>, {'first': 4, 'second': 4, 'third': 2})
+Std distribution top 10 heads: defaultdict(<class 'int'>, {'second': 5, 'third': 1, 'fourth': 2, 'first': 2})
+Std distribution bottom 10 layer: defaultdict(<class 'int'>, {'third': 5, 'second': 2, 'first': 3})
+Std distribution bottom 10 heads: defaultdict(<class 'int'>, {'fourth': 5, 'third': 2, 'first': 2, 'second': 1})

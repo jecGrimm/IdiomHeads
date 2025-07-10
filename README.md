@@ -4,6 +4,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 ## Todos
 0. Awareness
 - static pythia 2570 DONE
+- fix loss: 
+    - formal und trans 11388 -> DONE
 1. Head detection
 - idiom score
     - static pythia 2917 failed because of long sentence 1773 -> 3500 (alle Sätze wegen new idiom pos) failed ohne Error bei 654 -> 3597 failed weil idiom positions nicht mit Datenlänge übereinstimmen (ab 654) -> 3599 (fixed idiom pos ab 654) failed weil der Hf-Data sich wieder in ein Dict umgewandelt hat -> 3600 (full run) failed Begrenzung für idiom pos vergessen -> 3601 (fix idiom pos begrenzung) failed OOM -> 3743 (ab 1817) failed OOM -> 3751 DONE
@@ -20,6 +22,8 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 4. zweites Modell: qwen oder olmo oder llama
     - nwp
         - llama 2565 failed cli None -> 2566 (fix none error) failed cli.start still in compute_awareness -> 2567 failed start und end verwechselt -> 2568 DONE
+        - fix loss: 
+            - formal und trans 11472 
     - Head detection
         - idiom score 2569 DONE 
         - literal score 2886 failed short model name -> 2890 (full model name), hat ohne Fehlermeldung nach formal 2282 aufgehört -> 3475 (formal ab 2285, trans full) -> 3513 (nur trans) DONE
@@ -50,6 +54,7 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - Evaluation
 - Discussion
 - Conclusion
+- Todos von Lea durchgehen
 6. Code cleanup
 - Readme
 - Notebook übertragen
@@ -66,6 +71,9 @@ This repository is part of the Master thesis "Spilling the beans: Interpreting A
 - alle Tensoren sollten die gleiche Größe haben
 - alle Funktionen testen (besonders plots)
 - Sigmoid in allen Skripten gleich
+- Plots nach gleichem Schema benennen
+- csv-File Index fixen
+- Todos von Lea durchgehen
 
 ### Optional
 - Duplizierende Methoden (eigl bereits abgedeckt):

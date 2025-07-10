@@ -10,6 +10,7 @@ import numpy as np
 from collections import defaultdict
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
+import matplotlib.cm as cm
 from transformer_lens import utils
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -46,8 +47,8 @@ def plot_loss(tensor, filename=None, model_name=None):
     if filename != None and model_name != None:
         path = f"./plots/{model_name}/loss/"
         os.makedirs(path, exist_ok=True)
-        line_file = path + filename + "_line.png"
-        hist_file = path + filename + "_hist.png"
+        line_file = path + "line_" +filename + ".png"
+        hist_file = path + filename + "_hist.png" # TODO: einheitlich machen
         box_file = path + filename + "_box.png"
         txt_file = path+filename+".txt"
  
@@ -97,15 +98,62 @@ def plot_box_per_head(tensor, filename = None):
 
     save_plt(filename)
 
-def plot_tensor_line(tensor, filename = None, title = "Average score per head and layer", ylabel = "Mean score"):
+def plot_tensor_line(tensor, filename = None, title = "Average score per head and layer", ylabel = "Mean score", logit_file = None):
     mean_tensor = get_mean_sentence_tensor(tensor)
     df = create_df_from_tensor(mean_tensor)
-    #df.plot.line(title= title, xlabel = "Layer", ylabel = ylabel, xticks = np.arange(mean_tensor.size(0)), colormap = "tab20", figsize=(25, 25))
-    df.plot(marker= '.', ms = 10, linestyle='none', title= title, xlabel = "Layer", ylabel = ylabel, xticks = np.arange(mean_tensor.size(0)), colormap = "tab20", legend = False)
-    #plt.legend(title = "Head", bbox_to_anchor=(2, 2), loc='upper left' )
-    #plt.legend(title = "Head")
-    #plt.tight_layout()
+
+    ax = df.plot(marker= '.', ms = 10, linestyle='none', title= title, xlabel = "Layer", ylabel = ylabel, xticks = np.arange(mean_tensor.size(0)), colormap = "tab20", legend = True)
+    
+    ax.legend(ncol=len(df.columns)/4, bbox_to_anchor=(0.5, -0.45), title = "Head", loc='lower center', fontsize=6)
+    plt.subplots_adjust(bottom=0.3, top=0.91)
+    #plt.subplots_adjust(bottom=2)
+    save_plt(filename, dpi = 300, bbox_inches='tight')
+
+def plot_tensor_line_logit(tensor, filename=None, title="Average score per head and layer", ylabel="Mean score", logit_file=None):
+    mean_tensor = get_mean_sentence_tensor(tensor)
+    df = create_df_from_tensor(mean_tensor)
+
+    if logit_file:
+        logit_tensor = t.load(logit_file, map_location="cpu")
+
+        if "Llama" in logit_file:
+            end = 16 * 32
+        else:
+            end = 24 * 16
+        mean_logit = get_mean_sentence_tensor(logit_tensor)[:end+1]
+
+        fig, ax = plt.subplots()
+        # Plot the lines with transparent markers first (or no markers)
+        df.plot(ax=ax, linestyle='none', marker='.', ms=10, alpha=0.3, legend=False)
+
+        # Flatten df to get x and y coordinates for scatter
+        # Assuming df rows correspond to layers, columns to heads/features
+        layers = np.arange(mean_tensor.size(0))
+        # Iterate over columns (heads) and plot points colored by mean_logit
+        for col_idx, col_name in enumerate(df.columns):
+            y = df[col_name].values
+            x = layers
+            # Use the corresponding mean_logit values for coloring
+            # Make sure mean_logit shape matches df shape
+            # If mean_logit shape differs, adjust accordingly
+            if mean_logit.shape[0] == len(y):
+                colors = mean_logit[:, col_idx].numpy() if isinstance(mean_logit, t.Tensor) else mean_logit[:, col_idx]
+            else:
+                # fallback to uniform color if shapes mismatch
+                colors = np.full_like(y, fill_value=np.nan)
+
+            sc = ax.scatter(x, y, c=colors, cmap='viridis', marker='.', s=50)
+        ax.set_title(title)
+        ax.set_xlabel("Layer")
+        ax.set_ylabel(ylabel)
+        ax.set_xticks(layers)
+        plt.colorbar(sc, ax=ax, label='Mean logit value')
+
+    else:
+        df.plot(marker='.', ms=10, linestyle='none', title=title, xlabel="Layer", ylabel=ylabel, xticks=np.arange(mean_tensor.size(0)), colormap="tab20", legend=False)
+
     save_plt(filename)
+
 
 def plot_line_std(tensor, filename = None, title = "Standard deviation of the score per head and layer", ylabel = "Standard deviation of the score"):
     std_tensor = t.std(tensor, dim=0)
@@ -121,7 +169,7 @@ def plot_tensor_hist(tensor, filename = None, title = "Distribution of the mean 
     mean_tensor = get_mean_sentence_tensor(tensor)
     len = mean_tensor.size(0) * mean_tensor.size(1)
     df = create_df_from_tensor(mean_tensor.view(len))
-    df.plot.hist(title=title, legend = False, xlabel=xlabel, yticks = range(0, 120, 10))
+    df.plot.hist(title=title, legend = False, xlabel=xlabel) # yticks = range(0, 120, 10)
     
     save_plt(filename)
 
@@ -147,14 +195,54 @@ def plot_heatmap(tensor, filename = None, title = "Scores"):
     else:
         fig.show()
 
-def plot_scatter(idiom_tensor, literal_tensor, filename = None):
+def plot_scatter(idiom_tensor, literal_tensor, filename = None, xlabel = "Idiom Score", ylabel = "Literal Score"):
     idiom_mean = get_lh_mean_scores(idiom_tensor) # dict layer.head = mean over all sentences
     literal_mean = get_lh_mean_scores(literal_tensor) 
 
-    #df = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values()), "literal_mean": list(literal_mean.values())}).set_index("layer.head")
     df = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values()), "literal_mean": list(literal_mean.values())})
-    df.plot.scatter(x='idiom_mean',y='literal_mean')
+    df.plot.scatter(x='idiom_mean',y='literal_mean', xlabel= xlabel, ylabel = ylabel)
 
+    save_plt(filename)
+
+def plot_scatter_idiom_logit(model_name, filename=None):
+    device = "cuda" if t.cuda.is_available() else "cpu"
+
+    x_labels = {
+        "pythia-14m": [["L0H0", "L0H1", "L0H2", "L0H3", "L1H0", "L1H1", "L1H2", "L1H3", "L2H0", "L2H1", "L2H2", "L2H3", "L3H0", "L3H1", "L3H2", "L3H3", "L4H0", "L4H1", "L4H2", "L4H3", "L5H0", "L5H1", "L5H2", "L5H3", "0_mlp_out", "1_mlp_out", "2_mlp_out", "3_mlp_out", "4_mlp_out", "5_mlp_out", "embed", "bias"]],
+        "pythia-1.4b": [['L0H0', 'L0H1', 'L0H2', 'L0H3', 'L0H4', 'L0H5', 'L0H6', 'L0H7', 'L0H8', 'L0H9', 'L0H10', 'L0H11', 'L0H12', 'L0H13', 'L0H14', 'L0H15'], ['L1H0', 'L1H1', 'L1H2', 'L1H3', 'L1H4', 'L1H5', 'L1H6', 'L1H7', 'L1H8', 'L1H9', 'L1H10', 'L1H11', 'L1H12', 'L1H13', 'L1H14', 'L1H15'], ['L2H0', 'L2H1', 'L2H2', 'L2H3', 'L2H4', 'L2H5', 'L2H6', 'L2H7', 'L2H8', 'L2H9', 'L2H10', 'L2H11', 'L2H12', 'L2H13', 'L2H14', 'L2H15'], ['L3H0', 'L3H1', 'L3H2', 'L3H3', 'L3H4', 'L3H5', 'L3H6', 'L3H7', 'L3H8', 'L3H9', 'L3H10', 'L3H11', 'L3H12', 'L3H13', 'L3H14', 'L3H15'], ['L4H0', 'L4H1', 'L4H2', 'L4H3', 'L4H4', 'L4H5', 'L4H6', 'L4H7', 'L4H8', 'L4H9', 'L4H10', 'L4H11', 'L4H12', 'L4H13', 'L4H14', 'L4H15'], ['L5H0', 'L5H1', 'L5H2', 'L5H3', 'L5H4', 'L5H5', 'L5H6', 'L5H7', 'L5H8', 'L5H9', 'L5H10', 'L5H11', 'L5H12', 'L5H13', 'L5H14', 'L5H15'], ['L6H0', 'L6H1', 'L6H2', 'L6H3', 'L6H4', 'L6H5', 'L6H6', 'L6H7', 'L6H8', 'L6H9', 'L6H10', 'L6H11', 'L6H12', 'L6H13', 'L6H14', 'L6H15'], ['L7H0', 'L7H1', 'L7H2', 'L7H3', 'L7H4', 'L7H5', 'L7H6', 'L7H7', 'L7H8', 'L7H9', 'L7H10', 'L7H11', 'L7H12', 'L7H13', 'L7H14', 'L7H15'], ['L8H0', 'L8H1', 'L8H2', 'L8H3', 'L8H4', 'L8H5', 'L8H6', 'L8H7', 'L8H8', 'L8H9', 'L8H10', 'L8H11', 'L8H12', 'L8H13', 'L8H14', 'L8H15'], ['L9H0', 'L9H1', 'L9H2', 'L9H3', 'L9H4', 'L9H5', 'L9H6', 'L9H7', 'L9H8', 'L9H9', 'L9H10', 'L9H11', 'L9H12', 'L9H13', 'L9H14', 'L9H15'], ['L10H0', 'L10H1', 'L10H2', 'L10H3', 'L10H4', 'L10H5', 'L10H6', 'L10H7', 'L10H8', 'L10H9', 'L10H10', 'L10H11', 'L10H12', 'L10H13', 'L10H14', 'L10H15'], ['L11H0', 'L11H1', 'L11H2', 'L11H3', 'L11H4', 'L11H5', 'L11H6', 'L11H7', 'L11H8', 'L11H9', 'L11H10', 'L11H11', 'L11H12', 'L11H13', 'L11H14', 'L11H15'], ['L12H0', 'L12H1', 'L12H2', 'L12H3', 'L12H4', 'L12H5', 'L12H6', 'L12H7', 'L12H8', 'L12H9', 'L12H10', 'L12H11', 'L12H12', 'L12H13', 'L12H14', 'L12H15'], ['L13H0', 'L13H1', 'L13H2', 'L13H3', 'L13H4', 'L13H5', 'L13H6', 'L13H7', 'L13H8', 'L13H9', 'L13H10', 'L13H11', 'L13H12', 'L13H13', 'L13H14', 'L13H15'], ['L14H0', 'L14H1', 'L14H2', 'L14H3', 'L14H4', 'L14H5', 'L14H6', 'L14H7', 'L14H8', 'L14H9', 'L14H10', 'L14H11', 'L14H12', 'L14H13', 'L14H14', 'L14H15'], ['L15H0', 'L15H1', 'L15H2', 'L15H3', 'L15H4', 'L15H5', 'L15H6', 'L15H7', 'L15H8', 'L15H9', 'L15H10', 'L15H11', 'L15H12', 'L15H13', 'L15H14', 'L15H15'], ['L16H0', 'L16H1', 'L16H2', 'L16H3', 'L16H4', 'L16H5', 'L16H6', 'L16H7', 'L16H8', 'L16H9', 'L16H10', 'L16H11', 'L16H12', 'L16H13', 'L16H14', 'L16H15'], ['L17H0', 'L17H1', 'L17H2', 'L17H3', 'L17H4', 'L17H5', 'L17H6', 'L17H7', 'L17H8', 'L17H9', 'L17H10', 'L17H11', 'L17H12', 'L17H13', 'L17H14', 'L17H15'], ['L18H0', 'L18H1', 'L18H2', 'L18H3', 'L18H4', 'L18H5', 'L18H6', 'L18H7', 'L18H8', 'L18H9', 'L18H10', 'L18H11', 'L18H12', 'L18H13', 'L18H14', 'L18H15'], ['L19H0', 'L19H1', 'L19H2', 'L19H3', 'L19H4', 'L19H5', 'L19H6', 'L19H7', 'L19H8', 'L19H9', 'L19H10', 'L19H11', 'L19H12', 'L19H13', 'L19H14', 'L19H15'], ['L20H0', 'L20H1', 'L20H2', 'L20H3', 'L20H4', 'L20H5', 'L20H6', 'L20H7', 'L20H8', 'L20H9', 'L20H10', 'L20H11', 'L20H12', 'L20H13', 'L20H14', 'L20H15'], ['L21H0', 'L21H1', 'L21H2', 'L21H3', 'L21H4', 'L21H5', 'L21H6', 'L21H7', 'L21H8', 'L21H9', 'L21H10', 'L21H11', 'L21H12', 'L21H13', 'L21H14', 'L21H15'], ['L22H0', 'L22H1', 'L22H2', 'L22H3', 'L22H4', 'L22H5', 'L22H6', 'L22H7', 'L22H8', 'L22H9', 'L22H10', 'L22H11', 'L22H12', 'L22H13', 'L22H14', 'L22H15'], ['L23H0', 'L23H1', 'L23H2', 'L23H3', 'L23H4', 'L23H5', 'L23H6', 'L23H7', 'L23H8', 'L23H9', 'L23H10', 'L23H11', 'L23H12', 'L23H13', 'L23H14', 'L23H15'], ['0_mlp_out', '1_mlp_out', '2_mlp_out', '3_mlp_out', '4_mlp_out', '5_mlp_out', '6_mlp_out', '7_mlp_out', '8_mlp_out', '9_mlp_out', '10_mlp_out', '11_mlp_out', '12_mlp_out', '13_mlp_out', '14_mlp_out', '15_mlp_out', '16_mlp_out', '17_mlp_out', '18_mlp_out', '19_mlp_out', '20_mlp_out', '21_mlp_out', '22_mlp_out', '23_mlp_out'], ['embed', 'bias']],
+        "Llama-3.2-1B-Instruct" : [[f"L{i}H{j}" for j in range(32)] for i in range(16)] + [['0_mlp_out', '1_mlp_out', '2_mlp_out', '3_mlp_out', '4_mlp_out', '5_mlp_out', '6_mlp_out', '7_mlp_out', '8_mlp_out', '9_mlp_out', '10_mlp_out', '11_mlp_out', '12_mlp_out', '13_mlp_out', '14_mlp_out', '15_mlp_out'], ['embed', 'bias']]
+    }
+
+    components = []
+    for comp_group in x_labels[model_name]:
+        for comp in comp_group:
+            components.append(comp)
+
+    # DLA
+    # Formal
+    logit_formal_file = f"scores/logit_attribution/{model_name}/grouped_attr_formal_0_None.pt"
+    formal_logits = t.load(logit_formal_file, map_location=t.device(device))
+    mean_formal_logits = get_mean_sentence_tensor(formal_logits)
+    df_formal_attr = pd.DataFrame(mean_formal_logits.numpy().T, index = components, columns=['DLA Idiom Formal', 'DLA Literal Formal'])
+    # df_formal_attr["Components"] = components
+    # df_formal_attr.set_index("Components")
+    #print("df_formal_attr\n",  df_formal_attr)
+    df_formal_attr_heads = df_formal_attr.filter(regex=r"L\d+H\d+", axis="index")
+    #print("df_formal_attr_heads\n", df_formal_attr_heads)
+
+    idiom_tensor = t.load(f"scores/idiom_scores/{model_name}/idiom_formal_0_None.pt", map_location=t.device(device))
+    idiom_mean = get_lh_mean_scores(idiom_tensor) # dict layer.head = mean over all sentences
+
+    #df = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values()), "literal_mean": list(literal_mean.values())}).set_index("layer.head")
+    df_idiom = pd.DataFrame({"layer.head": list(idiom_mean.keys()), "idiom_mean": list(idiom_mean.values())}).set_index("layer.head")
+    
+    #df = pd.concat([df_idiom, df_formal_attr_heads], axis="index")
+    df = df_formal_attr_heads.join(df_idiom)
+    #print(df.loc["L15H13"])
+    df.plot.scatter(x='idiom_mean',y='DLA Idiom Formal', xlabel= "Idiom Score", ylabel = "Direct Logit Attribution", title = "Scatter plot for DLA and Idiom Scores")
+
+    # if filename != None:
+    #     filename = f"./plots/{model_name}/{filename}.png"
     save_plt(filename)
 
 def plot_scatter_components(comp_dict, filename = None):
@@ -371,7 +459,7 @@ def get_head_info(layer_head, tensor):
     ranked_mean = list(create_df_from_dict(mean_scores).sort_values(by="scores", ascending = False).index)
     std_scores = get_lh_std_scores(tensor)
 
-    print(f"\nHead: {layer_head}\n\tScore: {mean_scores[layer_head]}\n\tStd: {std_scores[layer_head]}\n\tRank: {ranked_mean.index(layer_head)+1}")
+    print(f"\nHead: {layer_head}\n\tScore: {mean_scores[layer_head]}\n\tStd: {std_scores[layer_head]}\n\tRank: {ranked_mean.index(layer_head)+1} of {len(ranked_mean)}")
 
 def get_logit_info(num, tensor, model_name):
     mean_logit_attr = get_mean_sentence_tensor(tensor)
@@ -403,12 +491,20 @@ def plot_logit_attribution_split(logit_attr: t.Tensor, title: str = "", x_labels
     else:
         fig.show()
 
-def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
-    path = f"./plots/{model_name}/scores"
+def plot_idiom_scores(tensor, filename = None, model_name = None, scatter_file = None):
+    if filename:
+        if "idiom" in filename: 
+            path = f"./plots/{model_name}/idiom_scores"
+        elif "literal" in filename:
+            path = f"./plots/{model_name}/literal_scores"
+        else:
+            path = f"./plots/{model_name}/scores"
+        os.makedirs(path, exist_ok=True)
+
     if filename and model_name:
         plot_tensor_line(tensor, f"{path}/mean_line_{filename}.png")
         plot_line_std(tensor, f"{path}/std_line_{filename}.png")
-        plot_heatmap(tensor, f"{path}/heat_{filename}.png")
+        plot_heatmap(tensor, f"{path}/heat_{filename}.png" )
         plot_tensor_hist(tensor, f"{path}/hist_{filename}.png")
         explore_scores(tensor, f"{path}/{filename}.txt")
     else:
@@ -419,14 +515,17 @@ def plot_all(tensor, filename = None, model_name = None, scatter_file = None):
         explore_scores(tensor)
 
     if scatter_file != None:
-        device = "cuda" if t.cuda.is_available() else "cpu"
-        scatter_tensor = t.load(scatter_file, map_location=t.device(device))
-        print(f"Loaded tensor with size: {scatter_tensor.size()}")
+        if "literal" in scatter_file:
+            device = "cuda" if t.cuda.is_available() else "cpu"
+            scatter_tensor = t.load(scatter_file, map_location=t.device(device))
+            print(f"Loaded tensor with size: {scatter_tensor.size()}")
 
-        if filename and model_name:
-            plot_scatter(tensor, scatter_tensor, f"plots/{model_name}/scatter_{filename}_literal.png")
-        else:
-            plot_scatter(tensor, scatter_tensor)
+            if filename and model_name:
+                plot_scatter(tensor, scatter_tensor, f"plots/{model_name}/scatter_{filename}_literal_{model_name}.png")
+            else:
+                plot_scatter(tensor, scatter_tensor)
+        elif "attr" in scatter_file and model_name:
+            plot_scatter_idiom_logit(model_name=model_name, filename=f"{path}/scatter_{filename}_logit_{model_name}.png")
     
 def get_component_dict(tensor):
     comp_dict = {
@@ -534,17 +633,18 @@ def create_csv(model_name, device):
     df_std_trans_idiom_score = pd.DataFrame({"Component": list(std_trans_idiom_score.keys()), "Idiom Score Std Trans": list(std_trans_idiom_score.values())})
     df_trans_idiom_score = pd.merge(df_trans_idiom_score, df_std_trans_idiom_score, on="Component",  how='left')
 
-    # Static
-    # idiom_score_static_file = f"scores/idiom_scores/{model_name}/idiom_only_static_0_None.pt"
-    # #trans_idiom_comps = t.load(idiom_score_trans_file, map_location=t.device(device))
-    # static_idiom_score = t.load(idiom_score_static_file, map_location=t.device(device))
-    # #trans_idiom_score = t.sigmoid(t.sum(trans_idiom_comps, dim = -1))
-    # mean_static_idiom_score = get_lh_mean_scores(static_idiom_score)
-    # df_static_idiom_score = pd.DataFrame({"Component": list(mean_static_idiom_score.keys()), "Idiom Score Static": list(mean_static_idiom_score.values())})
-    # #df_trans_idiom_score["Idiom Score Std Trans"] = get_lh_std_scores(trans_idiom_score)
-    # std_static_idiom_score = get_lh_std_scores(static_idiom_score)
-    # df_std_static_idiom_score = pd.DataFrame({"Component": list(std_static_idiom_score.keys()), "Idiom Score Std Static": list(std_static_idiom_score.values())})
-    # df_static_idiom_score = pd.merge(df_static_idiom_score, df_std_static_idiom_score, on="Component",  how='left')
+    # # Static
+    # if "pythia" in model_name.lower():
+    #     idiom_score_static_file = f"scores/idiom_scores/{model_name}/idiom_only_static_0_None.pt"
+    #     #trans_idiom_comps = t.load(idiom_score_trans_file, map_location=t.device(device))
+    #     static_idiom_score = t.load(idiom_score_static_file, map_location=t.device(device))
+    #     #trans_idiom_score = t.sigmoid(t.sum(trans_idiom_comps, dim = -1))
+    #     mean_static_idiom_score = get_lh_mean_scores(static_idiom_score)
+    #     df_static_idiom_score = pd.DataFrame({"Component": list(mean_static_idiom_score.keys()), "Idiom Score Static": list(mean_static_idiom_score.values())})
+    #     #df_trans_idiom_score["Idiom Score Std Trans"] = get_lh_std_scores(trans_idiom_score)
+    #     std_static_idiom_score = get_lh_std_scores(static_idiom_score)
+    #     df_std_static_idiom_score = pd.DataFrame({"Component": list(std_static_idiom_score.keys()), "Idiom Score Std Static": list(std_static_idiom_score.values())})
+    #     df_static_idiom_score = pd.merge(df_static_idiom_score, df_std_static_idiom_score, on="Component",  how='left')
 
     # LITERAL SCORE
     # Formal
@@ -567,15 +667,16 @@ def create_csv(model_name, device):
     df_std_trans_literal_score = pd.DataFrame({"Component": list(std_trans_literal_score.keys()), "Literal Score Std Trans": list(std_trans_literal_score.values())})
     df_trans_literal_score = pd.merge(df_trans_literal_score, df_std_trans_literal_score, on="Component",  how='left')
 
-    # Static
-    # literal_score_static_file = f"scores/literal_scores/{model_name}/literal_only_static_0_2761.pt"
-    # static_literal_score = t.load(literal_score_static_file, map_location=t.device(device))
-    # mean_static_literal_score = get_lh_mean_scores(static_literal_score)
-    # df_static_literal_score = pd.DataFrame({"Component": list(mean_static_literal_score.keys()), "Literal Score Static": list(mean_static_literal_score.values())})
-    # #df_trans_literal_score["literal Score Std Trans"] = get_lh_std_scores(trans_literal_score)
-    # std_static_literal_score = get_lh_std_scores(static_literal_score)
-    # df_std_static_literal_score = pd.DataFrame({"Component": list(std_static_literal_score.keys()), "Literal Score Std Static": list(std_static_literal_score.values())})
-    # df_static_literal_score = pd.merge(df_static_literal_score, df_std_static_literal_score, on="Component",  how='left')
+    # if "pythia" in model_name.lower():
+    #     # Static
+    #     literal_score_static_file = f"scores/literal_scores/{model_name}/literal_only_static_0_2761.pt"
+    #     static_literal_score = t.load(literal_score_static_file, map_location=t.device(device))
+    #     mean_static_literal_score = get_lh_mean_scores(static_literal_score)
+    #     df_static_literal_score = pd.DataFrame({"Component": list(mean_static_literal_score.keys()), "Literal Score Static": list(mean_static_literal_score.values())})
+    #     #df_trans_literal_score["literal Score Std Trans"] = get_lh_std_scores(trans_literal_score)
+    #     std_static_literal_score = get_lh_std_scores(static_literal_score)
+    #     df_std_static_literal_score = pd.DataFrame({"Component": list(std_static_literal_score.keys()), "Literal Score Std Static": list(std_static_literal_score.values())})
+    #     df_static_literal_score = pd.merge(df_static_literal_score, df_std_static_literal_score, on="Component",  how='left')
 
     # ALL
     #df = pd.concat([df_comp, df_formal_idiom_score, df_trans_idiom_score, df_static_idiom_score, df_formal_literal_score, df_trans_literal_score, df_static_literal_score, df_formal_attr, df_trans_attr, df_static_attr], axis=1).set_index("Component")
@@ -641,7 +742,7 @@ def compute_accuracy(pred_file, outfile = None):
                 worst_pred[name] = "No rank differences"
 
             if best_rank != 0:
-                best_rank_idx = int((rank_diffs == best_rank).nonzero())
+                best_rank_idx = int((rank_diffs == best_rank).nonzero()[0])
                 best_pred[name] = f"{best_rank}: {predictions["prompt"][best_rank_idx]}\n -> '{predictions["correct_token"][best_rank_idx]}', predicted: '{predictions[name+"_prediction"][best_rank_idx]}'" 
                 sent_ids[predictions["prompt"][best_rank_idx] + " " + predictions["correct_token"][best_rank_idx]] =  best_rank_idx
             else:
@@ -895,15 +996,39 @@ def plot_ablation(logit_file, loss_file, outfile=None, model_name=None):
         ]
     }
 
-    custom_order = [
-        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
-        "L10H3", "L13H30", "L12H30",
-        "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
-        "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
-        "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
-    ]
+    custom_order = {
+        "pythia-1.4b": [
+            "L2H15", "L3H4", "L0H13", # top 3 idiom score
+            "L16H10", "L11H7", "L18H9", # top 3 idiom diff
+            "L19H14", "L19H1", "L13H4", # top 3 dla
+            "L15H13", "L18H4", # top 3 dla diff formal
+            "L14H5", # top 3 dla diff idiom
+            "L2H15\nL3H4\nL0H13", "L16H10\nL11H7\nL18H9", "L19H14\nL19H1\nL13H4", "L15H13\nL19H1\nL18H4", "L15H13\nL19H1\nL14H5", # top3 per experiment
+            "L2H15\nL16H10\nL19H14\nL15H13\nL15H13", # top 1 all
+            "L3H4\nL11H7\nL19H1\nL19H1\nL19H1", # top2 all
+            "L0H13\nL18H9\nL13H4\nL18H4\nL14H5" # top 3 all
+        ],
+        "Llama-3.2-1B-Instruct": [
+            "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+            "L10H3", "L13H30", "L12H30",
+            "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
+            "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
+            "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
+        ]
+    }
 
-    separators = ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"]
+    # custom_order = [
+    #     "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+    #     "L10H3", "L13H30", "L12H30",
+    #     "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
+    #     "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
+    #     "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
+    # ]
+
+    separators = {
+        "pythia-1.4b": ["L0H13", "L18H9", "L13H4", "L18H4", "L14H5", "L15H13\nL19H1\nL14H5"],
+        "Llama-3.2-1B-Instruct": ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"]
+    }
 
     section_titles = [
         "Idiom Score", "Idiom Diff", "DLA", "DLA Formal", "DLA Idiom",
@@ -929,17 +1054,17 @@ def plot_ablation(logit_file, loss_file, outfile=None, model_name=None):
         "loss": mean_loss_tensor.numpy()
     })
 
-    df["layer.head"] = pd.Categorical(df["layer.head"], categories=custom_order, ordered=True)
+    df["layer.head"] = pd.Categorical(df["layer.head"], categories=custom_order[model_name], ordered=True)
     df = df.sort_values("layer.head").reset_index(drop=True)
 
-    ax = df.plot.bar(x="layer.head", rot=0, fontsize=4)
+    ax = df.plot.bar(x="layer.head", rot=0, fontsize=4, ylim = (-1, 2))
     plt.xlabel("Ablation Group", fontsize=6)
     plt.ylabel("Score", fontsize=6)
     plt.title("Ablation Scores", fontsize=8)
 
     # Separator lines
     separator_indices = []
-    for sep_label in separators:
+    for sep_label in separators[model_name]:
         if sep_label in df["layer.head"].values:
             idx = df[df["layer.head"] == sep_label].index[0]
             separator_indices.append(idx + 0.5)
@@ -957,8 +1082,6 @@ def plot_ablation(logit_file, loss_file, outfile=None, model_name=None):
     plt.legend(prop={'size': 6})
     save_plt(outfile, dpi = 300, bbox_inches='tight')
 
-
-
 def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name = None):
     ablation_heads = {
         "pythia-14m": ["L0H0", "L5H3"],
@@ -966,13 +1089,27 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
         "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]]
     }
 
-    custom_order = [
-        "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
-        "L10H3", "L13H30", "L12H30",
-        "L0H0_L0H17_L9H13", "L12H8_L10H29_L15H12", "L15H8_L15H10_L15H14", "L0H21_L10H3_L13H30",
-        "L10H3_L12H30_L13H30", "L0H0_L12H8_L15H8_L0H21_L10H3", "L0H17_L10H29_L15H10_L10H3_L12H30",
-        "L9H13_L15H12_L15H14_L13H30_L13H30"
-    ]
+    # [(15, 13), (19, 1), (14, 5)]]
+    custom_order = {
+        "pythia-1.4b": [
+            "L2H15", "L3H4", "L0H13", # top 3 idiom score
+            "L16H10", "L11H7", "L18H9", # top 3 idiom diff
+            "L19H14", "L19H1", "L13H4", # top 3 dla
+            "L15H13", "L18H4", # top 3 dla diff formal
+            "L14H5", # top 3 dla diff idiom
+            "L2H15_L3H4_L0H13", "L16H10_L11H7_L18H9", "L19H14_L19H1_L13H4", "L15H13_L19H1_L18H4", "L15H13_L19H1_L14H5", # top3 per experiment
+            "L2H15_L16H10_L19H14_L15H13_L15H13", # top 1 all
+            "L3H4_L11H7_L19H1_L19H1_L19H1", # top2 all
+            "L0H13_L18H9_L13H4_L18H4_L14H5" # top 3 all
+        ],
+        "Llama-3.2-1B-Instruct": [
+            "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
+            "L10H3", "L13H30", "L12H30",
+            "L0H0_L0H17_L9H13", "L12H8_L10H29_L15H12", "L15H8_L15H10_L15H14", "L0H21_L10H3_L13H30",
+            "L10H3_L12H30_L13H30", "L0H0_L12H8_L15H8_L0H21_L10H3", "L0H17_L10H29_L15H10_L10H3_L12H30",
+            "L9H13_L15H12_L15H14_L13H30_L13H30"
+        ]
+    }
 
     abl_heads = []
     for group in ablation_heads[model_name]:
@@ -1005,7 +1142,7 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
             sent_logit_tensor[sent_pos][head_pos] = logit_tensor[head_pos][ids[sent_pos]]
 
     # Reorder according to custom_order
-    reorder_indices = [abl_heads.index(name) for name in custom_order if name in abl_heads]
+    reorder_indices = [abl_heads.index(name) for name in custom_order[model_name] if name in abl_heads]
     sent_logit_tensor = sent_logit_tensor[:, reorder_indices]
     ordered_abl_heads = [abl_heads[i] for i in reorder_indices]
 
@@ -1034,6 +1171,9 @@ if __name__ == "__main__":
     # scores/literal_components/pythia-1.4b/literal_only_static_0_2761_comp.pt
     # scores/idiom_components/pythia-1.4b/idiom_only_formal_0_None_comp.pt
     # scores/logit_attribution/pythia-1.4b/grouped_attr_static_0_2761.pt
+    # scores/loss/pythia-1.4b/loss_formal_0_None.pt
+    # scores/idiom_scores/pythia-1.4b/idiom_formal_0_None.pt
+    # scores/logit_attribution/pythia-1.4b/grouped_attr_formal_0_None.pt
 
     # llama
     # scores/idiom_components/Llama-3.2-1B-Instruct/idiom_only_formal_0_None_comp.pt
@@ -1050,7 +1190,7 @@ if __name__ == "__main__":
 
     # tiny
     # scores/idiom_scores/TinyStories-Instruct-33M/idiom_only_formal_0_None.pt
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/logit_attribution/Llama-3.2-1B-Instruct/grouped_attr_trans_0_None.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/literal_scores/Llama-3.2-1B-Instruct/literal_trans_0_None.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -1060,15 +1200,22 @@ if __name__ == "__main__":
     scatter_file = parser.parse_args().scatter_file
     device = "cuda" if t.cuda.is_available() else "cpu"
 
-    os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
+    # Single Head information
+    # loaded_tensor = t.load(tensor_file, map_location=t.device(device))
+    # get_head_info(layer_head = "L15H13", tensor = loaded_tensor)
 
     # Scatter 
     # loaded_tensor = t.load(tensor_file, map_location=t.device(device))
-    # scatter_tensor = t.load(scatter_file, map_location=t.device(device))
+    #scatter_tensor = t.load(scatter_file, map_location=t.device(device))
+    # # scatter_tensor = scatter_tensor[:, 0,:24*16]
+    # # print(f"Scatter tensor with size: {scatter_tensor.size()}")
+    # # scatter_tensor = scatter_tensor.reshape((2760, 24, 16))
     # #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
     # print(f"Loaded tensor with size: {loaded_tensor.size()}")
     # print(f"Scatter tensor with size: {scatter_tensor.size()}")
-    # plot_scatter(loaded_tensor, scatter_tensor, f"plots/{model_name}/scores/scatter_formal_idiom_literal.png")
+
+    #plot_scatter(loaded_tensor, scatter_tensor, f"plots/{model_name}/scores/scatter_formal_idiom_logit.png", xlabel = "Idiom Score", ylabel = "Direct Logit Attribution")
+    #plot_scatter_idiom_logit(model_name=model_name, filename=img_file)
 
     if tensor_file == "None":
         create_csv(model_name, device)
@@ -1083,6 +1230,8 @@ if __name__ == "__main__":
             else:
                 filename = None
                 heat_file = None
+                txt_file = None
+                png_file = None
 
             compute_accuracy(tensor_file, txt_file)
 
@@ -1090,8 +1239,8 @@ if __name__ == "__main__":
             logit_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_logit.pt"
             loss_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_loss.pt"
 
-            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=png_file, model_name=model_name)
-            plot_ablation(logit_file, loss_file, heat_file, model_name)
+            plot_logit_diff_per_sent(logit_file, tensor_file, outfile=heat_file, model_name=model_name)
+            plot_ablation(logit_file, loss_file, png_file, model_name)
         else:
             loaded_tensor = t.load(tensor_file, map_location=t.device(device))
             # 2*((1/(1+e^-x))-0.5) -> Range ist -1 bis +1
@@ -1151,9 +1300,7 @@ if __name__ == "__main__":
             elif "loss" in tensor_file:
                 plot_loss(loaded_tensor, img_file, model_name)
             else:
-                os.makedirs(f"./plots/{model_name}/scores", exist_ok=True)
-                #loaded_tensor = t.sigmoid(t.sum(loaded_tensor, dim = -1))
-                plot_all(loaded_tensor, img_file, model_name, scatter_file)
+                plot_idiom_scores(loaded_tensor, img_file, model_name, scatter_file)
 
 
     

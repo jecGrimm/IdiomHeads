@@ -82,6 +82,7 @@ if __name__ == "__main__":
     # scores/contribution/Llama-3.2-1B-Instruct/grouped_contr_formal_0_None.pt
     # scores/literal_components/Llama-3.2-1B-Instruct/literal_only_formal_2285_None_comp.pt
     # scores/literal_scores/Llama-3.2-1B-Instruct/literal_only_trans_0_None.pt
+    # scores/loss/Llama-3.2-1B-Instruct/loss_formal_0_None.pt
 
     # tiny
     # scores/loss/TinyStories-Instruct-33M/loss_formal_0_None.pt
