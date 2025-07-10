@@ -1,6 +1,0 @@
-
-The model generated 0 correct answers.
-
-Accuracy: 0.00%
-Five correct outputs: []
-Five incorrect outputs: [('‘You know, the panda who watches overs attentively -> my', '<|endoftext|>‘You know, the panda who watches overs attentively."'), ('But I will also be watching you closely. -> ’', '<|endoftext|>But I will also be watching you closely. I'), ('‘I will be watching him -> carefully,', '<|endoftext|>‘I will be watching him when')]

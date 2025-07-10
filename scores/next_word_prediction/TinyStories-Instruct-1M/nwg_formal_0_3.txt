@@ -1,6 +1,0 @@
-
-The model generated 1 correct answers.
-
-Accuracy: 33.33%
-Five correct outputs: ['<|endoftext|>But I will also be keeping an eye on']
-Five incorrect outputs: [('‘You know, the panda who keeps an eye -> on', '<|endoftext|>‘You know, the panda who keeps an eye just'), ('‘I will keep an eye -> on', '<|endoftext|>‘I will keep an eye outside')]
