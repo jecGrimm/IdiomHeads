@@ -7,17 +7,28 @@ import json
 
 class Cage:
     def __init__(self, model):
+        """
+        This class cages parts of the residual stream.
+
+        @params
+            model: caged model
+        """
         self.model = model
         self.model.cfg.use_attn_result = True
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.batch_num = 0
 
     def cage_batched(self, batch, path):
+        """
+        This method performs the caging on a batch of sentences.
+
+        @params
+            batch: batch of sentences
+            path: output directory
+        """
         residual = None
         for i in range(len(batch["sentence"])):
             cache = self.get_cache(batch["sentence"][i])
-             
-            # TODO: Bist auf Result wird nur die Datei 0 gespeichert
             t.save(cache.stack_activation("pattern"), f"{path}/pattern/{self.batch_num}.pt")
             t.save(cache.stack_activation("result"), f"{path}/result/{self.batch_num}.pt")
             
