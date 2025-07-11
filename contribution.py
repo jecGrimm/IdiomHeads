@@ -10,7 +10,7 @@ import os
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 
 class Contribution:
-    def __init__(self, model, filename: str = "llama_formal_idiom_pos.json"):
+    def __init__(self, model, filename: str = "llama_formal_idiom_pos_contribution.json"):
         """
         This class computes the contribution of a head.
 
