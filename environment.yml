@@ -1,7 +1,10 @@
 name: idiom
 channels:
   - pytorch
+  - nvidia
   - defaults
+  - microsoft
+  - conda-forge
   - https://repo.anaconda.com/pkgs/main
   - https://repo.anaconda.com/pkgs/r
 dependencies:
@@ -10,19 +13,16 @@ dependencies:
   - blas=1.0=mkl
   - brotli-python=1.0.9=py312h6a678d5_9
   - bzip2=1.0.8=h5eee18b_6
-  - ca-certificates=2025.2.25=h06a4308_0
+  - ca-certificates=2025.4.26=hbd8a1cb_0
   - certifi=2025.1.31=py312h06a4308_0
   - charset-normalizer=3.3.2=pyhd3eb1b0_0
-  - cuda-cudart=12.4.127=h99ab3db_0
-  - cuda-cudart_linux-64=12.4.127=hd681fbe_0
-  - cuda-cupti=12.4.127=h6a678d5_1
-  - cuda-libraries=12.4.1=h06a4308_1
-  - cuda-nvrtc=12.4.127=h99ab3db_1
-  - cuda-nvtx=12.4.127=h6a678d5_1
-  - cuda-opencl=12.4.127=h6a678d5_0
-  - cuda-runtime=12.4.1=hb982923_0
+  - cuda-cudart=11.8.89=0
+  - cuda-cupti=11.8.87=0
+  - cuda-libraries=11.8.0=0
+  - cuda-nvrtc=11.8.89=0
+  - cuda-nvtx=11.8.86=0
+  - cuda-runtime=11.8.0=0
   - cuda-version=12.4=hbda6634_3
-  - datasets=3.3.2=py312h06a4308_0
   - expat=2.6.4=h6a678d5_0
   - ffmpeg=4.3=hf484d3e_0
   - filelock=3.13.1=py312h06a4308_0
@@ -32,39 +32,44 @@ dependencies:
   - gmpy2=2.2.1=py312h5eee18b_0
   - gnutls=3.6.15=he1e5248_0
   - huggingface_hub=0.29.2=py312h06a4308_0
+  - icu=73.2=h59595ed_0
   - idna=3.7=py312h06a4308_0
   - intel-openmp=2023.1.0=hdb19cb5_46306
   - jinja2=3.1.6=py312h06a4308_0
   - jpeg=9e=h5eee18b_3
+  - json5=0.12.0=pyhd8ed1ab_0
   - lame=3.100=h7b6447c_0
   - lcms2=2.16=hb9589c4_0
   - ld_impl_linux-64=2.40=h12ee557_0
   - lerc=4.0.0=h6a678d5_0
-  - libcublas=12.4.5.8=h99ab3db_1
-  - libcufft=11.2.1.3=h99ab3db_1
+  - libcublas=11.11.3.6=0
+  - libcufft=10.9.0.58=0
   - libcufile=1.9.1.3=h99ab3db_1
   - libcurand=10.3.5.147=h99ab3db_1
-  - libcusolver=11.6.1.9=h99ab3db_1
-  - libcusparse=12.3.1.170=h99ab3db_1
+  - libcusolver=11.4.1.48=0
+  - libcusparse=11.7.5.86=0
   - libdeflate=1.22=h5eee18b_0
   - libffi=3.4.4=h6a678d5_1
-  - libgcc-ng=11.2.0=h1234567_1
-  - libgomp=11.2.0=h1234567_1
+  - libgcc=14.2.0=h767d61c_2
+  - libgcc-ng=14.2.0=h69a702a_2
+  - libgomp=14.2.0=h767d61c_2
   - libiconv=1.16=h5eee18b_3
   - libidn2=2.3.4=h5eee18b_0
   - libjpeg-turbo=2.0.0=h9bf148f_0
-  - libnpp=12.2.5.30=h99ab3db_1
-  - libnvfatbin=12.4.127=h7934f7d_2
+  - libnpp=11.8.0.86=0
   - libnvjitlink=12.4.127=h99ab3db_1
-  - libnvjpeg=12.3.1.117=h6a678d5_1
+  - libnvjpeg=11.9.0.86=0
   - libpng=1.6.39=h5eee18b_0
-  - libstdcxx-ng=11.2.0=h1234567_1
+  - libstdcxx=14.2.0=h8f9b012_2
+  - libstdcxx-ng=14.2.0=h4852527_2
   - libtasn1=4.19.0=h5eee18b_0
   - libtiff=4.5.1=hffd6297_1
   - libunistring=0.9.10=h27cfd23_0
   - libuuid=1.41.5=h5eee18b_0
+  - libuv=1.48.0=hd590300_0
   - libwebp=1.3.2=h11a3e52_0
   - libwebp-base=1.3.2=h5eee18b_1
+  - libzlib=1.2.13=h4ab18f5_6
   - llvm-openmp=14.0.6=h9e868ea_0
   - lz4-c=1.9.4=h6a678d5_1
   - markupsafe=3.0.2=py312h5eee18b_0
@@ -78,16 +83,16 @@ dependencies:
   - ncurses=6.4=h6a678d5_0
   - nettle=3.7.3=hbbd107a_1
   - networkx=3.4.2=py312h06a4308_0
-  - ocl-icd=2.3.2=h5eee18b_1
+  - nodejs=20.12.2=hb753e55_0
   - openh264=2.1.1=h4ff587b_0
-  - openssl=3.0.16=h5eee18b_0
+  - openssl=3.5.0=h7b32b05_0
   - pillow=9.4.0=py312h6a678d5_1
-  - pip=25.0=py312h06a4308_0
+  - pip=25.1=pyh8b19718_0
   - pysocks=1.7.1=py312h06a4308_0
   - python=3.12.7=h5148396_0
   - python-xxhash=3.5.0=py312h5eee18b_0
-  - pytorch=2.5.1=py3.12_cuda12.4_cudnn9.1.0_0
-  - pytorch-cuda=12.4=hc786d27_7
+  - pytorch=2.5.1=py3.12_cuda11.8_cudnn9.1.0_0
+  - pytorch-cuda=11.8=h7e8668a_6
   - pytorch-mutex=1.0=cuda
   - pyyaml=6.0.2=py312h5eee18b_0
   - readline=8.2=h5eee18b_0
@@ -95,11 +100,9 @@ dependencies:
   - sqlite=3.45.3=h5eee18b_0
   - tbb=2021.8.0=hdb19cb5_0
   - tk=8.6.14=h39e8969_0
-  - tokenizers=0.19.1=py312ha11519a_0
   - torchdata=0.9.0=py312
   - torchtriton=3.1.0=py312
-  - torchvision=0.20.1=py312_cu124
-  - transformers=4.44.1=py312h06a4308_0
+  - torchvision=0.20.1=py312_cu118
   - typing-extensions=4.12.2=py312h06a4308_0
   - typing_extensions=4.12.2=py312h06a4308_0
   - urllib3=2.3.0=py312h06a4308_0
@@ -107,7 +110,8 @@ dependencies:
   - xxhash=0.8.0=h7f8727e_3
   - xz=5.6.4=h5eee18b_1
   - yaml=0.2.5=h7b6447c_0
-  - zlib=1.2.13=h5eee18b_1
+  - yarn=4.9.1=hd25539a_1
+  - zlib=1.2.13=h4ab18f5_6
   - zstd=1.5.6=hc292b87_0
   - pip:
       - absl-py==2.2.1
@@ -128,6 +132,7 @@ dependencies:
       - beartype==0.14.1
       - beautifulsoup4==4.13.3
       - better-abc==0.0.3
+      - bitsandbytes==0.45.5
       - black==25.1.0
       - bleach==6.2.0
       - blinker==1.9.0
@@ -139,6 +144,7 @@ dependencies:
       - comm==0.2.2
       - contourpy==1.3.1
       - cycler==0.12.1
+      - datasets==3.5.0
       - debugpy==1.8.13
       - decorator==5.2.1
       - defusedxml==0.7.1
@@ -148,10 +154,13 @@ dependencies:
       - distro==1.9.0
       - docker-pycreds==0.4.0
       - einops==0.8.1
+      - entrypoints==0.4
       - executing==2.2.0
+      - faker==37.1.0
       - fancy-einsum==0.0.3
       - fastdtw==0.3.4
       - fastjsonschema==2.21.1
+      - favicon==0.7.0
       - flask==3.1.0
       - fonttools==4.56.0
       - fqdn==1.5.1
@@ -163,6 +172,7 @@ dependencies:
       - gitpython==3.1.44
       - grpcio==1.71.0
       - h11==0.14.0
+      - htbuilder==0.9.0
       - httpcore==1.0.7
       - httpx==0.28.1
       - huggingface-hub==0.30.1
@@ -175,11 +185,10 @@ dependencies:
       - ipywidgets==8.1.5
       - isoduration==20.11.0
       - itsdangerous==2.2.0
-      - jaxtyping==0.3.0
+      - jaxtyping==0.2.25
       - jedi==0.19.2
       - jiter==0.9.0
       - joblib==1.4.2
-      - json5==0.10.0
       - jsonpointer==3.0.0
       - jsonschema==4.23.0
       - jsonschema-specifications==2024.10.1
@@ -195,11 +204,15 @@ dependencies:
       - jupyterlab-pygments==0.3.0
       - jupyterlab-server==2.27.3
       - jupyterlab-widgets==3.0.13
+      - kaleido==0.2.1
       - kiwisolver==1.4.8
       - levenshtein==0.27.1
+      - llm-transparency-tool==0.1
       - llvmlite==0.44.0
+      - lxml==5.4.0
       - markdown==3.7
       - markdown-it-py==3.0.0
+      - markdownlit==0.0.7
       - matplotlib==3.10.1
       - matplotlib-inline==0.1.7
       - mdurl==0.1.2
@@ -259,6 +272,8 @@ dependencies:
       - pydeck==0.9.1
       - pygame==2.6.1
       - pygments==2.19.1
+      - pyinstrument==5.0.1
+      - pymdown-extensions==10.15
       - pyparsing==3.2.3
       - pytest==8.3.5
       - python-dateutil==2.9.0.post0
@@ -276,20 +291,33 @@ dependencies:
       - safetensors==0.5.3
       - scikit-learn==1.6.1
       - scipy==1.15.2
+      - seaborn==0.13.2
       - send2trash==1.8.3
       - sentence-transformers==4.0.1
       - sentencepiece==0.2.0
       - sentry-sdk==2.25.0
       - setproctitle==1.3.5
-      - setuptools==78.1.0
+      - setuptools==80.0.0
       - six==1.17.0
       - smmap==5.0.2
       - sniffio==1.3.1
       - soupsieve==2.6
       - spacy-alignments==0.9.1
+      - st-annotated-text==4.0.2
+      - st-theme==1.2.3
       - stack-data==0.6.3
-      - streamlit==1.44.0
+      - streamlit==1.44.1
+      - streamlit-avatar==0.1.3
+      - streamlit-camera-input-live==0.2.0
+      - streamlit-card==1.0.2
       - streamlit-chat==0.1.1
+      - streamlit-embedcode==0.1.2
+      - streamlit-extras==0.6.0
+      - streamlit-faker==0.0.3
+      - streamlit-image-coordinates==0.1.9
+      - streamlit-keyup==0.3.0
+      - streamlit-toggle-switch==1.0.2
+      - streamlit-vertical-slider==2.5.5
       - sympy==1.13.1
       - tenacity==9.0.0
       - tensorboard==2.19.0
@@ -297,6 +325,7 @@ dependencies:
       - terminado==0.18.1
       - threadpoolctl==3.6.0
       - tinycss2==1.4.0
+      - tokenizers==0.21.1
       - toml==0.10.2
       - torch==2.6.0
       - torchaudio==2.6.0+cu126
@@ -305,6 +334,7 @@ dependencies:
       - tqdm==4.67.1
       - traitlets==5.14.3
       - transformer-lens==2.9.0
+      - transformers==4.51.3
       - transformers-stream-generator==0.0.5
       - triton==3.2.0
       - typeguard==2.13.3
@@ -313,6 +343,7 @@ dependencies:
       - tzdata==2025.2
       - ukkonen==1.0.1
       - uri-template==1.3.0
+      - validators==0.34.0
       - virtualenv==20.30.0
       - wadler-lindig==0.1.4
       - wandb==0.19.8
