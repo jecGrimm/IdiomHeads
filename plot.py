@@ -12,26 +12,21 @@ from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
 import matplotlib.cm as cm
 from transformer_lens import utils
-from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from helper import get_logit_component
 import json
-import re
 from data import EPIE_Data
 import seaborn as sns
 
-# %pip install jaxtyping
-# %pip install git+https://github.com/callummcdougall/CircuitsVis.git#subdirectory=python
-
-def plot_attention_heads(model, cache, str_tokens):
-    for layer in range(model.cfg.n_layers):
-        attention_pattern = cache["pattern", layer]
-        display(cv.attention.attention_patterns(tokens=str_tokens, attention=attention_pattern, attention_head_names=[f"L{layer}H{i}" for i in range(model.cfg.n_heads)]))
-
-        del attention_pattern
-        t.cuda.empty_cache()
-
 def create_df_from_dict(score_per_head: dict):
+    """
+    This function transforms a dictionary into a pandas Dataframe.
+
+    @params
+        score_per_head: score dictionary
+    @returns
+        dataframe with the scores 
+    """
     return pd.DataFrame({"layer.head": list(score_per_head.keys()), "scores": list(score_per_head.values())}).set_index("layer.head")
 
 def create_df_from_tensor(tensor):
