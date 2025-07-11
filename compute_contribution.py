@@ -1,6 +1,5 @@
 from cli import CLI
 import os
-from transformer_lens import HookedTransformer
 from data import EPIE_Data
 from contribution import Contribution
 import torch as t
@@ -13,7 +12,7 @@ cli = CLI() # parses arguments
 os.makedirs(f"./scores/contribution/{cli.model_name}", exist_ok=True)
 t.set_grad_enabled(False)
 
-model = TransformerLensTransparentLlm("meta-llama/Llama-3.2-1B-Instruct", dtype = t.bfloat16) # cannot load bfloat16 because logit_attr does not work with that dtype
+model = TransformerLensTransparentLlm("meta-llama/Llama-3.2-1B-Instruct", dtype = t.bfloat16)
 
 epie = EPIE_Data()
 scorer = Contribution(model, filename=cli.idiom_file)
@@ -28,6 +27,7 @@ for i in range(len(cli.data_split)):
     start = cli.start[i]
     end = cli.end[i]
 
+    # prepare data
     split = cli.data_split[i]
     print("\nProcessing split: ", split)
     if split == "formal":
@@ -39,6 +39,7 @@ for i in range(len(cli.data_split)):
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
+    # get or create idiom positions
     if scorer.idiom_positions == []:
         data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
         scorer.store_all_idiom_pos(cli.idiom_file)

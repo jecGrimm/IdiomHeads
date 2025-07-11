@@ -1,62 +1,63 @@
-from transformer_lens import (
-    HookedTransformer,
-)
+from transformer_lens import HookedTransformer
 from data import EPIE_Data
 from idiom_score import IdiomScorer
 import os
 import torch as t
-import argparse
+from cli import CLI
 
-parser = argparse.ArgumentParser(prog='idiom head detector')
-parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="EleutherAI/pythia-1.4b")
-parser.add_argument('--data', '-d', help='list of data split that should be processed', nargs='*', default=["formal"], type=str)
-parser.add_argument('--start', '-s', help='start index (inclusive)', default = 0, type=int)
-parser.add_argument('--end', '-e', help='end index (exclusive)', default = None)
-parser.add_argument('--batch_size', '-b', help='batch size', nargs='*', default = [None])
+cli = CLI()
+os.makedirs(f"./scores/idiom_components/{cli.model_name}", exist_ok=True)
+os.makedirs(f"./scores/idiom_scores/{cli.model_name}", exist_ok=True)
 
-model_name = parser.parse_args().model_name
-data_split = parser.parse_args().data
-start = parser.parse_args().start
+# Saves computation time
+t.set_grad_enabled(False)
 
-end = parser.parse_args().end
-if end:
-    end = int(end)
-batch_sizes = parser.parse_args().batch_size
-
-if not os.path.isdir("./scores"):
-    os.mkdir("./scores")
-
-if not os.path.isdir("./scores/idiom_scores"):
-    os.mkdir("./scores/idiom_scores")
-
-if not os.path.isdir(f"./scores/idiom_scores/{model_name.split('/')[-1]}"):
-    os.mkdir(f"./scores/idiom_scores/{model_name.split('/')[-1]}")
-
-model: HookedTransformer = HookedTransformer.from_pretrained(model_name)
+model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16")
+model.eval()
 epie = EPIE_Data()
-scorer = IdiomScorer(model)
-print(f"Running on device {scorer.device}.")
+scorer = IdiomScorer(model, filename = cli.idiom_file)
 
-for i in range(len(data_split)):
-    split = data_split[i]
+print(f"Running compute_idiom_score on device {scorer.device}.")
+
+for i in range(len(cli.data_split)):
+    # data
+    if cli.batch_sizes[i] == None:
+        batch_size = 1
+    else:
+        batch_size = int(cli.batch_sizes[i])
+
+    split = cli.data_split[i]
+    print("\nProcessing split: ", split)
+
+    start = cli.start[i]
+    end = cli.end[i]
+
     if split == "formal":
         data = epie.create_hf_dataset(epie.formal_sents[start:end], epie.tokenized_formal_sents[start:end], epie.tags_formal[start:end])
     elif split == "trans":
         data = epie.create_hf_dataset(epie.trans_formal_sents[start:end], epie.tokenized_trans_formal_sents[start:end], epie.tags_formal[start:end])
+    elif split == "static":
+        data = epie.create_hf_dataset(epie.static_sents[start:end], epie.tokenized_static_sents[start:end], epie.tags_static[start:end])
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
+    # get idiom positions
+    if scorer.idiom_positions == []:
+        data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
+        scorer.store_all_idiom_pos(cli.idiom_file)
     data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
-
-    if batch_sizes[i] == None:
-        batch_size = 1
-    else:
-        batch_size = int(batch_sizes[i])
     
-    ckp_file = f"./scores/idiom_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}_ckp.pt"
-    data.map(lambda batch: scorer.create_data_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
-    #data.map(lambda batch: scorer.create_idiom_score_tensor(batch, ckp_file), batched=True, batch_size = batch_size)
+    #scorer.cage_dir = f"./cage/{cli.model_name}/{split}"
+    comp_file = f"./scores/idiom_components/{cli.model_name}/idiom_only_{split}_{start}_{end}_comp.pt"
+    
+    data.map(lambda batch: scorer.create_idiom_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
+    print("components first sentence and head: ", scorer.components[0][0][0])
+    print("component size: ", scorer.components.size())
 
-    t.save(scorer.scores, f"./scores/idiom_scores/{model_name.split('/')[-1]}/{split}_{start}_{end}.pt")
+    t.save(scorer.scores, f"./scores/idiom_scores/{cli.model_name}/idiom_only_{split}_{start}_{end}.pt")
+    
+    scorer.scores = None
+    scorer.components = None
+    t.cuda.empty_cache()

@@ -1,10 +1,9 @@
 from cli import CLI
 import os
-from transformer_lens import HookedTransformer, HookedEncoder, loading_from_pretrained
+from transformer_lens import HookedTransformer
 import torch as t
 from data import EPIE_Data
 from idiom_awareness import IdiomAwareness
-from transformers import AutoTokenizer, BertForMaskedLM
 
 cli = CLI()
 os.makedirs(f"./scores/loss/{cli.model_name}", exist_ok=True)
@@ -30,6 +29,7 @@ for i in range(len(cli.data_split)):
     start = cli.start[i]
     end = cli.end[i]
 
+    # get data
     if split == "formal":
         data = epie.create_hf_dataset(epie.formal_sents[start:end], epie.tokenized_formal_sents[start:end], epie.tags_formal[start:end])
     elif split == "trans":
@@ -39,11 +39,13 @@ for i in range(len(cli.data_split)):
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
+    # get idiom positions
     if scorer.idiom_positions == []:
         data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
         scorer.store_all_idiom_pos(cli.idiom_file)
     data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
     
+    # perform experiment
     ckp_file = f"./scores/loss/{cli.model_name}/loss_{split}_{start}_{end}.pt"
     
     print("\nLoss:\n")

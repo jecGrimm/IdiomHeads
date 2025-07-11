@@ -23,6 +23,7 @@ for i in range(len(cli.data_split)):
     else:
         batch_size = int(cli.batch_sizes[i])
     
+    # prepare data
     start = cli.start[i]
     end = cli.end[i]
 
@@ -37,19 +38,18 @@ for i in range(len(cli.data_split)):
     else:
         raise Exception(f"Split {split} not in the dataset, please choose either formal or trans as optional argument -d")
     
+    # get idiom positions
     if scorer.idiom_positions == []:
         data.map(lambda batch: scorer.get_all_idiom_pos(batch), batched=True, batch_size=batch_size)
         scorer.store_all_idiom_pos(cli.idiom_file)
     data = data.add_column("idiom_pos", scorer.idiom_positions[start:end])
     
+    # perform experiment
     grouped_file = f"./scores/logit_attribution/{cli.model_name}/grouped_attr_{split}_{start}_{end}.pt"
     
     data.map(lambda batch: scorer.compute_logit_attr_batched(batch, grouped_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
-
-    # PLOT
-    #plot_logit_attribution_split(scorer.split_attr, title = "Mean logit attribution: Idiom vs. Literal", x_labels = scorer.labels, filename = f"./plots/{cli.model_name}/heat_{split}_logit_attr.png")
     
     scorer.split_attr = None
     t.cuda.empty_cache()
