@@ -1,6 +1,9 @@
 import argparse
 class CLI:
     def __init__(self):
+        """
+        This class defines the cli used for our experiments.
+        """
         parser = argparse.ArgumentParser()
         parser.add_argument('--model_name', '-m', help='model to run the experiment with', default = "EleutherAI/pythia-1.4b")
         parser.add_argument('--data', '-d', help='list of data split that should be processed', nargs='*', default=["formal"], type=str)
