@@ -7,11 +7,19 @@ import json
 
 class Ablation():
     def __init__(self, model, ablation_heads = [(0, 0)], start = 0):
+        """
+        This class performs the ablation study.
+
+        @params
+            model: examined model
+            ablation_heads: list of heads that are ablated
+            start: first sentence ID
+        """
         self.model = model
         self.model.cfg.use_attn_result = True
         self.ablation_heads = [[comp] for comp in set([head for head_group in ablation_heads for head in head_group])]
         self.ablation_heads += ablation_heads
-        for i in range(3):
+        for i in range(3): # create top groups
             top_group = []
             for group in ablation_heads:
                 top_group.append(group[i])    
@@ -26,8 +34,15 @@ class Ablation():
         self.loss_diffs = None
 
         self.sent_idx = start
-    
+
     def load_predictions(self, prediction_path):
+        """
+        This method loads the original predictions if available.
+
+        @params
+            prediction path: path to the original predictions
+        @returns None if no predictions available
+        """
         orig_pred_file = prediction_path + "predictions_original.json"
         orig_loss_file = prediction_path + "loss_original.pt"
 
@@ -38,11 +53,16 @@ class Ablation():
             self.orig_loss = t.load(orig_loss_file, map_location=t.device(self.device))
         except:
             return None
-        
     
     def create_original_predictions(self, batch):
+        """
+        This method creates the original predictions.
+
+        @params
+            batch: batch of samples
+        """
         batched_orig_loss = t.zeros(len(batch["sentence"]), dtype=t.float16, device=self.device)
-        add_loss = True
+        add_loss = True # Only add loss if the sentence has more than one token.
         for i in range(len(batch["sentence"])):
             loss = self.clean_run(batch["tags"][i], batch["tokenized"][i])
             if loss != None:
@@ -61,6 +81,14 @@ class Ablation():
         t.cuda.empty_cache()
 
     def clean_run(self, tags, tokenized):
+        """
+        This method predicts the last idiom token with the full model graph.
+
+        @params
+            tags: Idiom tags per token
+            tokenized: tokenized sentence
+        @returns loss of the prompt for the full model
+        """
         prompt, correct_tok = self.get_correct_toks(tags, tokenized)
 
         if prompt != None and correct_tok != None:
@@ -80,6 +108,13 @@ class Ablation():
             return None
     
     def ablate_head_batched(self, batch, ckp_file):
+        """
+        This method predicts the last idiom token with the ablated model graph.
+
+        @params
+            batch: batch of samples
+            ckp_file: checkpoint file for intermediate results
+        """
         if self.sent_idx < len(self.predictions["prompt"]):
             batched_logit_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
             batched_loss_diff = t.zeros(len(batch["sentence"]), len(self.ablation_heads), dtype=t.float16, device=self.device)
@@ -108,6 +143,16 @@ class Ablation():
                 json.dump(self.predictions, f)  
 
     def ablate_head(self, prompt, correct_idx):
+        """
+        This method ablates the head for a single prompt.
+
+        @params
+            prompt: curent prompt sample
+            correct_idx: ID of the correct token
+        @returns
+            logit_diff: difference between the logits for the correct token after the original and ablated run
+            loss_diff: difference between the loss for the prompt after the original and ablated run
+        """
         # clean run
         clean_logit = self.model(prompt, return_type = "logits").to(self.device).squeeze()
         clean_pred, clean_rank = self.get_prediction(clean_logit, correct_idx)
@@ -115,6 +160,7 @@ class Ablation():
         self.predictions["original_rank"].append(clean_rank)
         clean_loss = self.orig_loss[self.sent_idx]
 
+        # ablation run
         loss_diff = t.zeros(len(self.ablation_heads), dtype=t.float16, device=self.device)
         logit_diff = t.zeros(len(self.ablation_heads), dtype=t.float16, device=self.device)        
         for i in range(len(self.ablation_heads)):
@@ -149,7 +195,6 @@ class Ablation():
             ablated_pred, ablated_rank = self.get_prediction(ablated_logits, correct_idx)
             self.predictions[f"{name}_prediction"].append(ablated_pred)
             self.predictions[f"{name}_rank"].append(int(ablated_rank))
-            #self.predictions[f"L{layer_to_ablate}H{head_index_to_ablate}"].append(self.get_prediction(ablated_logits))
 
             del ablated_logits
             del ablated_loss
@@ -166,6 +211,15 @@ class Ablation():
         return logit_diff, loss_diff
 
     def get_correct_toks(self, tags, toks):
+        """
+        This method extracts the correct next token.
+
+        @params
+            tags: idiom labels
+            toks: tokenized sentence
+        @returns
+            string of the correct token
+        """
         if len(toks) > 1:
             correct_id = max([i for i in range(len(tags)) if "IDIOM" in tags[i]])
 
@@ -177,10 +231,12 @@ class Ablation():
         
     def remove_spaces(self, sent_list: list):
         '''
-        This method transforms the tokenized sentences into normal sentences.
+        This method transforms the tokenized sentences into natural sentences.
 
-        @param sent_list: tokenized sentences 
-        @returns cleaned_sents: list of the normal sentences
+        @params 
+            sent_list: tokenized sentences 
+        @returns 
+            cleaned_sents: list of the natural sentences
         '''
         cleaned_sents = []
         for sent in sent_list:
@@ -192,46 +248,40 @@ class Ablation():
             cleaned_sents.append(sent)
         return cleaned_sents
         
+    def head_ablation_hook(self, value, hook, head_index_to_ablate):
+        """
+        This method zero-ablates a head.
 
-    # We define a head ablation hook
-    # The type annotations are NOT necessary, they're just a useful guide to the reader
-    #
-    def head_ablation_hook(
-        self,
-        value,#: Float[torch.Tensor, "batch pos head_index d_head"]
-        hook, #: HookPoint
-        head_index_to_ablate
-    ):# -> Float[torch.Tensor, "batch pos head_index d_head"]:
-        #print(f"Shape of the value tensor: {value.shape}")
+        @params
+            value: parameters
+            hook: hook
+            head_index_to_ablate: index of the ablated head
+        @returns
+            value: zero-ablated parameters
+        """
         value[:, :, head_index_to_ablate, :] = 0.0
         return value
     
     def get_prediction(self, logits, correct_idx):
+        """
+        This method transforms the logits into the final prediction via greedy decoding.
+
+        @params
+            logits: output logits
+            correct_idx: idx of the correct token
+        @returns
+            top_pred: prediction
+            rank: rank of the correct token
+        """
         sorted_probs = logits.softmax(dim=-1)[-1].argsort(descending = True)
         top_pred = self.model.to_string(sorted_probs[0]) 
         rank = int(t.where(correct_idx == sorted_probs)[0])
         return top_pred, rank
     
-    def get_ablation_function(ablate_to_mean, head_to_ablate, component="HEAD"):
-        # @deprecated
-        def head_ablation_hook(
-            value, #: TT["batch", "pos", "head_index", "d_head"],  # noqa: F821
-            hook, #: HookPoint,
-        ): # -> TT["batch", "pos", "head_index", "d_head"]:  # noqa: F821
-            print(f"Shape of the value tensor: {value.shape}")
-
-            if ablate_to_mean:
-                value[:, :, head_to_ablate, :] = value[
-                    :, :, head_to_ablate, :
-                ].mean(dim=-1, keepdim=True)
-            else:
-                value[:, :, head_to_ablate, :] = 0.0
-            return value
-        
-        if component == "HEAD":
-            return head_ablation_hook
-    
     def explore_tensor(self):
+        """
+        Sanity function to check the results of the ablation study.
+        """
         print(f"The logit diff of the first sentence for the first ablated head is: {self.logit_diffs[0][0]}")
         print(f"The loss diff of the first sentence for the first ablated head is: {self.loss_diffs[0][0]}")
         
@@ -241,7 +291,7 @@ class Ablation():
             print("\nNo predictions available!")
 
 if __name__ == "__main__":
-    model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m", dtype="bfloat16") # bfloat 16, weil float 16 manchmal auf der CPU nicht geht
+    model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m", dtype="bfloat16") # bfloat16, because float16 can lead to errors on a cpu
     model.cfg.use_attn_result = True
     logits, cache = model.run_with_cache("Test this")
     print(cache.keys())
