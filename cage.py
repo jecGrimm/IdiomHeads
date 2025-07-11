@@ -18,7 +18,7 @@ class Cage:
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.batch_num = 0
 
-    def cage_batched(self, batch, path):
+    def cage_batched(self, batch, path: str):
         """
         This method performs the caging on a batch of sentences.
 
@@ -29,11 +29,11 @@ class Cage:
         residual = None
         for i in range(len(batch["sentence"])):
             cache = self.get_cache(batch["sentence"][i])
-            t.save(cache.stack_activation("pattern"), f"{path}/pattern/{self.batch_num}.pt")
+            t.save(cache.stack_activation("pattern"), f"{path}/pattern/{self.batch_num}.pt") # store attention params
             t.save(cache.stack_activation("result"), f"{path}/result/{self.batch_num}.pt")
             
             if self.batch_num == 0:
-                residual, labels = cache.get_full_resid_decomposition(expand_neurons=False, return_labels=True)
+                residual, labels = cache.get_full_resid_decomposition(expand_neurons=False, return_labels=True) # get residual stream
 
                 with open(f"{path}/residual/labels.json", 'w', encoding="utf-8") as f:
                     json.dump(labels, f)   
@@ -51,12 +51,23 @@ class Cage:
             self.batch_num += 1
 
 
-    def get_cache(self, sent):
+    def get_cache(self, sent: str):
+        """
+        This method creates the activation cache for a sentence.
+
+        @params
+            sent: processed sentence
+        @returns
+            activation cache on the device
+        """
         idiom_tokens = self.model.to_tokens(sent)
         _, cache = self.model.run_with_cache(idiom_tokens, remove_batch_dim=True)
         return cache.to(self.device)
     
-    def explore_tensor(self, path):
+    def explore_tensor(self, path: str):
+        """
+        Sanity function to check if the run produces results.
+        """
         pattern = t.load(f"{path}/pattern/0.pt")
         print(f"Pattern: {pattern.size()}")
 
