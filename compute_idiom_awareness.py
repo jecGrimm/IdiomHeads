@@ -13,18 +13,20 @@ os.makedirs(f"./scores/next_word_prediction/{cli.model_name}", exist_ok=True)
 t.set_grad_enabled(False)
 
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name)
-epie = EPIE_Data()
+
 scorer = IdiomAwareness(model, filename = cli.idiom_file)
 print(f"\nRunning compute_idiom_awareness on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
+    split = cli.data_split[i]
+    print(f"\nProcessing split {split}:")
+
+    epie = EPIE_Data(experiment="awareness", model_id=cli.model_name, split=split)
+
     if cli.batch_sizes[i] == None:
         batch_size = 1
     else:
         batch_size = int(cli.batch_sizes[i])
-
-    split = cli.data_split[i]
-    print("\nProcessing split: ", split)
 
     start = cli.start[i]
     end = cli.end[i]

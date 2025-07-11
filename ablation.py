@@ -6,7 +6,7 @@ from collections import defaultdict
 import json
 
 class Ablation():
-    def __init__(self, model, ablation_heads = [(0, 0)], start = 0):
+    def __init__(self, model, ablation_heads: list = [(0, 0)], start: int = 0):
         """
         This class performs the ablation study.
 
@@ -35,7 +35,7 @@ class Ablation():
 
         self.sent_idx = start
 
-    def load_predictions(self, prediction_path):
+    def load_predictions(self, prediction_path: str):
         """
         This method loads the original predictions if available.
 
@@ -80,7 +80,7 @@ class Ablation():
         del batched_orig_loss
         t.cuda.empty_cache()
 
-    def clean_run(self, tags, tokenized):
+    def clean_run(self, tags: list, tokenized: list):
         """
         This method predicts the last idiom token with the full model graph.
 
@@ -107,7 +107,7 @@ class Ablation():
         else:
             return None
     
-    def ablate_head_batched(self, batch, ckp_file):
+    def ablate_head_batched(self, batch, ckp_file: str):
         """
         This method predicts the last idiom token with the ablated model graph.
 
@@ -142,7 +142,7 @@ class Ablation():
             with open(ckp_file + "_ckp.json", "w", encoding = "utf-8") as f:
                 json.dump(self.predictions, f)  
 
-    def ablate_head(self, prompt, correct_idx):
+    def ablate_head(self, prompt: str, correct_idx: int):
         """
         This method ablates the head for a single prompt.
 
@@ -210,7 +210,7 @@ class Ablation():
         
         return logit_diff, loss_diff
 
-    def get_correct_toks(self, tags, toks):
+    def get_correct_toks(self, tags: list, toks: list):
         """
         This method extracts the correct next token.
 
@@ -248,7 +248,7 @@ class Ablation():
             cleaned_sents.append(sent)
         return cleaned_sents
         
-    def head_ablation_hook(self, value, hook, head_index_to_ablate):
+    def head_ablation_hook(self, value, hook, head_index_to_ablate: int):
         """
         This method zero-ablates a head.
 
@@ -262,7 +262,7 @@ class Ablation():
         value[:, :, head_index_to_ablate, :] = 0.0
         return value
     
-    def get_prediction(self, logits, correct_idx):
+    def get_prediction(self, logits, correct_idx: int):
         """
         This method transforms the logits into the final prediction via greedy decoding.
 

@@ -11,13 +11,17 @@ os.makedirs(f"./plots/{cli.model_name}", exist_ok=True)
 t.set_grad_enabled(False)
 
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="float16") # cannot load bfloat16 because logit_attr does not work with that dtype
-
 model.eval()
-epie = EPIE_Data()
+
 scorer = LogitAttribution(model, filename = cli.idiom_file)
 print(f"Running logit attribution on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
+    split = cli.data_split[i]
+    print(f"\nProcessing split {split}:")
+
+    epie = EPIE_Data(experiment="dla", model_id=cli.model_name, split=split)
+
     if cli.batch_sizes[i] == None:
         batch_size = 1
     else:
@@ -50,6 +54,6 @@ for i in range(len(cli.data_split)):
     data.map(lambda batch: scorer.compute_logit_attr_batched(batch, grouped_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
-    
+
     scorer.split_attr = None
     t.cuda.empty_cache()

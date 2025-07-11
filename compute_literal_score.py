@@ -12,13 +12,17 @@ os.makedirs(f"./scores/literal_scores/{cli.model_name}", exist_ok=True)
 t.set_grad_enabled(False)
 
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16")
-
 model.eval()
-epie = EPIE_Data()
+
 scorer = LiteralScorer(model, filename = cli.idiom_file)
 print(f"Running compute_literal_score on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
+    split = cli.data_split[i]
+    print(f"\nProcessing split {split}:")
+
+    epie = EPIE_Data(experiment="literal_score", model_id=cli.model_name, split=split)
+
     if cli.batch_sizes[i] == None:
         batch_size = 1
     else:

@@ -2,8 +2,13 @@ import re
 from datasets import Dataset
 
 class EPIE_Data:
-    def __init__(self):
-        formal_idioms_labels = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Labels.txt")# Sentence at pos 1231 is so long that it causes memory errors
+    def __init__(self, experiment: str = "", split: str = "", model_id: str = ""):
+        """
+        This class preprocesses the Labelled EPIE dataset.
+
+
+        """
+        formal_idioms_labels = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Labels.txt")
         translated_sentences = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/translated_sentences.txt")
         formal_idioms_words = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Words.txt")
         formal_idioms_tags = self.read_file("./EPIE_Corpus/Formal_Idioms_Corpus/Formal_Idioms_Tags.txt")
@@ -17,31 +22,30 @@ class EPIE_Data:
         self.formal_sents = self.remove_spaces(self.tokenized_formal_sents)
         self.trans_formal_sents = self.remove_spaces(self.tokenized_trans_formal_sents)
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
-
-        #TODO: Experiment-Argument und dann je nach Experiment poppen
-        # experiment_sents = {
-        #     "nwp_formal_pythia-1.4b": None, 
-        #     "idiom_formal_pythia-1.4b": [1231],
-        #     "literal_formal_pythia-1.4b": [1231],
-        #     "dla_formal_pythia-1.4b": [1231],
-        #     "ablation_formal_pythia-1.4b": [1231],
-        #     "nwp_formal_Llama-3.2-1B-Instruct": [1231], 
-        #     "idiom_formal_Llama-3.2-1B-Instruct": [1231],
-        #     "literal_formal_Llama-3.2-1B-Instruct": [1231],
-        #     "dla_formal_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1386, 2210],
-        #     "dla_trans_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210],
-        #     "ablation_formal_Llama-3.2-1B-Instruct": [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210],
-        # }
-        # 1231 ab idiom pythia
-        # 1280, 1281, 1282, 1386, 2210 ab logit llama formal
-        # 1379, 2200, 2201 ab logit llama trans
-        # formal_long_sent_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210] 
-        # for sent_idx in formal_long_sent_ids:
-        #     self.formal_sents.pop(sent_idx)
-        #     self.tokenized_formal_sents.pop(sent_idx)
-        #     self.trans_formal_sents.pop(sent_idx)
-        #     self.tokenized_trans_formal_sents.pop(sent_idx)
-        #     self.tags_formal.pop(sent_idx)
+        
+        if experiment == "awareness":
+            if model_id == "Llama-3.2-1B-Instruct":
+                excluded_ids = [1231]
+        elif experiment in ["idiom_score", "literal_score"]: #, , "dla", "ablation"]:
+            excluded_ids = [1231]
+        elif experiment == "dla":
+            if model_id == "Pythia-1.4B":
+                excluded_ids = [1231]
+            elif model_id == "Llama-3.2-1B-Instruct":
+                if split == "formal":
+                    excluded_ids = [1231, 1280, 1281, 1282, 1386, 2210]
+                elif split == "trans":
+                    excluded_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210]
+        elif experiment == "ablation":
+            if model_id == "Llama-3.2-1B-Instruct":
+                excluded_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210]
+        
+        for sent_idx in excluded_ids:
+            self.formal_sents.pop(sent_idx)
+            self.tokenized_formal_sents.pop(sent_idx)
+            self.trans_formal_sents.pop(sent_idx)
+            self.tokenized_trans_formal_sents.pop(sent_idx)
+            self.tags_formal.pop(sent_idx)
 
         # # # 1773 und 1817 ab pythia idiom score
         # static_long_sent_ids = [1773, 1817]
@@ -54,7 +58,10 @@ class EPIE_Data:
         '''
         This method reads the files from the EPIE_Corpus and stores them in a list.
 
-        @param path: Path of the file
+        @params
+            path: path of the corpus file
+        @returns
+            lines of text in the file
         '''
         with open(path, 'r', encoding = "utf-8") as file:
             return file.readlines()
@@ -85,16 +92,14 @@ class EPIE_Data:
                 self.tokenized_trans_literal_sents.append(translated_sentences[i].strip())
                 self.tags_literal.append(formal_idioms_tags[i].strip())
 
-        # self.tokenized_formal_sents.pop(1231)
-        # self.tokenized_trans_formal_sents.pop(1231)
-        # self.tags_formal.pop(1231)
-
     def remove_spaces(self, sent_list: list):
         '''
         This method transforms the tokenized sentences into normal sentences.
 
-        @param sent_list: tokenized sentences 
-        @returns cleaned_sents: list of the normal sentences
+        @params
+            sent_list: tokenized sentences 
+        @returns 
+            cleaned_sents: list of the normal sentences
         '''
         cleaned_sents = []
         for sent in sent_list:
@@ -113,11 +118,22 @@ class EPIE_Data:
         @params 
             tokenized_sent: tokenized sentence
             tags: tags of the words 
-        @returns list of idiom tokens in the sentence
+        @returns 
+            list of idiom tokens in the sentence
         '''
         return [tokenized_sent[i] for i in range(len(tokenized_sent)) if "IDIOM" in tags[i]]
     
     def create_hf_dataset(self, sents: list, tokenized_sents: list, tags: list):
+        """
+        This method transforms the processed dataset into a Hugging Face dataset.
+
+        @params
+            sents: list of sentences
+            tokenized_sents: tokenized sentences
+            tags: idiom labels
+        @returns
+            hf_dataset: Hugging Face dataset
+        """
         data = {
             "sentence": sents,
             "tokenized": [sent.split(' ') for sent in tokenized_sents],
@@ -129,12 +145,4 @@ class EPIE_Data:
     
 if __name__ == "__main__":
     epie = EPIE_Data()
-    # print(len(epie.static_sents[1817]))
-
-    # for i in range(2761):
-    #     if len(epie.static_sents[i]) >= 196:
-    #         print(i)
-    #print(epie.trans_formal_sents[1497])
-    #print(epie.create_hf_dataset(epie.formal_sents, epie.tokenized_formal_sents, epie.tags_formal))
-
     print([sent for sent in epie.formal_sents if "spill" in sent.lower()])

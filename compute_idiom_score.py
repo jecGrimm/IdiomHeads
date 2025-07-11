@@ -14,20 +14,22 @@ t.set_grad_enabled(False)
 
 model: HookedTransformer = HookedTransformer.from_pretrained(cli.full_model_name, dtype="bfloat16")
 model.eval()
-epie = EPIE_Data()
+
 scorer = IdiomScorer(model, filename = cli.idiom_file)
 
 print(f"Running compute_idiom_score on device {scorer.device}.")
 
 for i in range(len(cli.data_split)):
+    split = cli.data_split[i]
+    print(f"\nProcessing split {split}:")
+
+    epie = EPIE_Data(experiment="idiom_score", model_id=cli.model_name, split=split)
+
     # data
     if cli.batch_sizes[i] == None:
         batch_size = 1
     else:
         batch_size = int(cli.batch_sizes[i])
-
-    split = cli.data_split[i]
-    print("\nProcessing split: ", split)
 
     start = cli.start[i]
     end = cli.end[i]
