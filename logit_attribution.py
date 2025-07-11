@@ -1,16 +1,19 @@
 import torch as t
 import os
 import json
-from transformer_lens.utils import Slice
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 
 class LogitAttribution:
-    def __init__(self, model, filename = "pythia_formal_idiom_pos.json"):
+    def __init__(self, model, filename: str = "pythia_formal_idiom_pos_dla.json"):
+        """
+        This class computes the DLA scores.
+
+        @params
+            model: examined model
+            filename: file with the idiom positions
+        """
         self.model = model
         self.model.cfg.use_attn_result = True
-        if self.model.cfg.normalization_type in ["LN", "LNPre", "RMS", "RMSPre"]:
-            print("\nModel uses LayerNorm!\n")
-
         self.device = "cuda" if t.cuda.is_available() else "cpu"
         self.token_attr = None
         self.split_attr = None
@@ -20,7 +23,14 @@ class LogitAttribution:
         self.residual_stack = None
         self.aligner = PythonGreedyCoverageAligner()
 
-    def load_all_idiom_pos(self, filename):
+    def load_all_idiom_pos(self, filename: str):
+        """
+        This methods loads the idiom positions.
+
+        @params
+            filename: file with the idiom positions
+        @returns the loaded idiom positions
+        """
         if os.path.isfile(filename):
             with open(filename, 'r', encoding = "utf-8") as f:
                 return json.load(f) 
@@ -28,6 +38,12 @@ class LogitAttribution:
             return [] 
         
     def get_all_idiom_pos(self, batch):
+        """
+        This method extracts the idiom positions of a batch.
+
+        @params
+            batch: batch of sentences
+        """
         for i in range(len(batch["sentence"])):
             sent = batch["sentence"][i]
             model_str_tokens= self.model.to_str_tokens(sent)
@@ -35,12 +51,29 @@ class LogitAttribution:
             self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
 
     def align_tokens(self, sent: str, tokenized_sent: list, model_str_tokens: list):
+        """
+        This method aligns the tokenizations by EPIE and by the model.
+
+        @params
+            sent: natural sentence
+            tokenized_sent: tokenization by EPIE
+            model_str_tokens: tokenization by the model
+        @returns
+            list of the aligned token positions
+        """
         aligned = self.aligner.align(
             types.TokenizedSet(tokens=[tokenized_sent, model_str_tokens], text=sent)
         )
         return list(aligned[0])
     
     def get_idiom_pos(self, aligned_positions, tags: list):
+        """
+        This method extract the position of the idiom.
+
+        @params
+            aligned_positions: aligned EPIE and model tokenizations
+            tags: idiom labels
+        """
         epie_idiom_pos = [i for i in range(len(tags)) if "IDIOM" in tags[i]]
 
         start = None
@@ -56,34 +89,83 @@ class LogitAttribution:
         assert start != None and end != None
         return (start, end)
 
-    def store_all_idiom_pos(self, filename):
+    def store_all_idiom_pos(self, filename: str):
+        """
+        This method saves the idiom positions.
+
+        @params
+          filename: output file
+        """
         with open(filename, 'w', encoding = "utf-8") as f:
             json.dump(self.idiom_positions, f)   
 
-    def get_cache(self, sent):
+    def get_cache(self, sent: str):
+        """
+        This method creates the activation cache for a sentence.
+
+        @params
+            sent: processed sentence
+        @returns
+            activation cache on the device
+        """
         _, self.cache = self.model.run_with_cache(sent, remove_batch_dim=True)
         self.cache.to(self.device)
 
-    def split_logit_attribution(self, logit_attr, idiom_pos):
+    def split_logit_attribution(self, logit_attr, idiom_pos: tuple):
+        """
+        This method groups the logit attribution by idiom and literal tokens.
+
+        @params
+            logit_attr: DLA scores for the sentence
+            idiom_pos: start and end position of the idiom
+        @returns
+            stacked grouped DLA
+        """
         idiom_attr = self.mean_idiom_attribution(logit_attr, idiom_pos)
         literal_attr = self.mean_literal_attribution(logit_attr, idiom_pos)
         return t.vstack((idiom_attr, literal_attr))
 
-    def mean_idiom_attribution(self, logit_attr, idiom_pos):
+    def mean_idiom_attribution(self, logit_attr, idiom_pos: tuple):
+        """
+        This method computes the averga DLA for the idiom.
+
+        @params
+            logit_attr: DLA scores for the sentence
+            idiom_pos: start and end position of the idiom
+        @returns
+            mean DLA of the idiom
+        """
         idiom_tensor = logit_attr[idiom_pos[0]:idiom_pos[1]+1]
         if idiom_tensor.size(0) == 0:
             return t.zeros(logit_attr.size(1), dtype=t.float16, device = self.device)
         else:
             return t.mean(idiom_tensor, dim = 0)
 
-    def mean_literal_attribution(self, logit_attr, idiom_pos):
+    def mean_literal_attribution(self, logit_attr, idiom_pos: tuple):
+        """
+        This method computes the averga DLA for the literals.
+
+        @params
+            logit_attr: DLA scores for the sentence
+            idiom_pos: start and end position of the idiom
+        @returns
+            mean DLA of the literals
+        """
         literal_tensor = t.cat((logit_attr[:idiom_pos[0]], logit_attr[idiom_pos[1]+1:]))
         if literal_tensor.size(0) == 0:
             return t.zeros(logit_attr.size(1), dtype=t.float16, device = self.device)
         else:
             return t.mean(literal_tensor, dim = 0)
     
-    def compute_logit_attr(self, sent):
+    def compute_logit_attr(self, sent: str):
+        """
+        This method computes the DLA score for one sentence.
+
+        @params
+            sent: processed sentence
+        @returns
+            DLA scores of the idiom and the literal tokens in the sentence
+        """
         if self.cache == None:
             self.get_cache(sent)
         tokens = self.model.to_tokens(sent)
@@ -100,7 +182,14 @@ class LogitAttribution:
 
             return t.einsum("ij->ji", logit_attr)
         
-    def compute_logit_attr_batched(self, batch, split_file):
+    def compute_logit_attr_batched(self, batch, split_file: str):
+        """
+        This method computes the DLA score for a batch.
+
+        @params
+            batch: batch of sentences
+            split_file: file for the intermediate results
+        """
         if self.labels == None:
             self.get_labels(batch["sentence"][0])
         
@@ -127,114 +216,48 @@ class LogitAttribution:
         del batch_split_attr
         t.cuda.empty_cache()
 
-    def get_labels(self, sent):
+    def get_labels(self, sent: str):
+        """
+        This method extracts the component labels.
+        """
         self.get_cache(sent)
 
         with t.inference_mode():
             self.residual_stack, self.labels = self.cache.get_full_resid_decomposition(expand_neurons=False, return_labels=True)
         print(f"\nComputing logit attribution for the following components:\n{self.labels}")
     
-    def logit_attrs(
-        self,
-        tokens,
-        incorrect_tokens = None,
-        pos_slice = None,
-        batch_slice = None,
-        has_batch_dim: bool = True,
-    ):
+    def logit_attrs(self, tokens, has_batch_dim: bool = False):
         """
-        AUS TRANSFORMERLENS: https://github.com/TransformerLensOrg/TransformerLens/blob/main/transformer_lens/ActivationCache.py#L561
-        Logit Attributions.
+        This method computes the DLA score for a sentence.
 
-        Takes a residual stack (typically the residual stream decomposed by components), and
-        calculates how much each item in the stack "contributes" to specific tokens.
-
-        It does this by:
-            1. Getting the residual directions of the tokens (i.e. reversing the unembed)
-            2. Taking the dot product of each item in the residual stack, with the token residual
-               directions.
-
-        Note that if incorrect tokens are provided, it instead takes the difference between the
-        correct and incorrect tokens (to calculate the residual directions). This is useful as
-        sometimes we want to know e.g. which components are most responsible for selecting the
-        correct token rather than an incorrect one. For example in the `Interpretability in the Wild
-        paper <https://arxiv.org/abs/2211.00593>` prompts such as "John and Mary went to the shops,
-        John gave a bag to" were investigated, and it was therefore useful to calculate attribution
-        for the :math:`\\text{Mary} - \\text{John}` residual direction.
-
-        Warning:
-
-        Choosing the correct `tokens` and `incorrect_tokens` is both important and difficult. When
-        investigating specific components it's also useful to look at it's impact on all tokens
-        (i.e. :math:`\\text{final_ln}(\\text{residual_stack_item}) W_U`).
-
-        Args:
-            residual_stack:
-                Stack of components of residual stream to get logit attributions for.
-            tokens:
-                Tokens to compute logit attributions on.
-            incorrect_tokens:
-                If provided, compute attributions on logit difference between tokens and
-                incorrect_tokens. Must have the same shape as tokens.
-            pos_slice:
-                The slice to apply layer norm scaling on. Defaults to None, do nothing.
-            batch_slice:
-                The slice to take on the batch dimension during layer norm scaling. Defaults to
-                None, do nothing.
-            has_batch_dim:
-                Whether residual_stack has a batch dimension. Defaults to True.
-
-        Returns:
-            A tensor of the logit attributions or logit difference attributions if incorrect_tokens
-            was provided.
+        @params
+            tokens: tokenized sentence
+            has_batch_dim: True if the calculation is performed on a batch
+        @returns
+            logit_attrs: DLA scores
         """
-        if not isinstance(pos_slice, Slice):
-            pos_slice = Slice(pos_slice)
-
-        if not isinstance(batch_slice, Slice):
-            batch_slice = Slice(batch_slice)
-
         if isinstance(tokens, str):
             tokens = t.as_tensor(self.model.to_single_token(tokens))
-
         elif isinstance(tokens, int):
             tokens = t.as_tensor(tokens)
 
         logit_directions = self.model.tokens_to_residual_directions(tokens)
 
-        if incorrect_tokens is not None:
-            if isinstance(incorrect_tokens, str):
-                incorrect_tokens = t.as_tensor(self.model.to_single_token(incorrect_tokens))
-
-            elif isinstance(incorrect_tokens, int):
-                incorrect_tokens = t.as_tensor(incorrect_tokens)
-
-            if tokens.shape != incorrect_tokens.shape:
-                raise ValueError(
-                    f"tokens and incorrect_tokens must have the same shape! \
-                        (tokens.shape={tokens.shape}, \
-                        incorrect_tokens.shape={incorrect_tokens.shape})"
-                )
-
-            # If incorrect_tokens was provided, take the logit difference
-            logit_directions = logit_directions - self.model.tokens_to_residual_directions(
-                incorrect_tokens
-            )
-
         scaled_residual_stack = self.cache.apply_ln_to_stack(
             self.residual_stack,
             layer=-1,
-            pos_slice=pos_slice,
-            batch_slice=batch_slice,
+            pos_slice=None,
+            batch_slice=None,
             has_batch_dim=has_batch_dim,
         ) 
 
-        # Element-wise multiplication and sum over the d_model dimension
-        #logit_attrs = (residual_stack * logit_directions).sum(dim=-1)
         logit_attrs = (scaled_residual_stack * logit_directions).sum(dim=-1)
         return logit_attrs
         
     def explore_tensor(self):
+        """
+        Sanity check for the results.
+        """
         print(f"The grouped attribution of the first sentence for {self.labels[0]} is:\n{self.split_attr[0, :, 0]}")
 
 if __name__ == "__main__":

@@ -53,7 +53,7 @@ for i in range(len(cli.data_split)):
     # perform experiment
     comp_file = f"./scores/literal_components/{cli.model_name}/literal_only_{split}_{start}_{end}_comp.pt"
     
-    data.map(lambda batch: scorer.create_data_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)
+    data.map(lambda batch: scorer.create_literal_score_tensor(batch, comp_file), batched=True, batch_size = batch_size)
 
     scorer.explore_tensor()
 

@@ -1,6 +1,0 @@
-slurmstepd-basalt: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
-slurmstepd-basalt: error: Setting TMPDIR to /tmp
-Loaded pretrained model EleutherAI/pythia-14m into HookedTransformer
-Running on device cuda.
-The score of the first sentence for the layer 0 and head 0 is:
-0.9061493873596191

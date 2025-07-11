@@ -1,4 +1,3 @@
-from data import EPIE_Data
 import torch as t 
 from collections import Counter
 import json
