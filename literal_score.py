@@ -1,17 +1,20 @@
 from data import EPIE_Data
 import torch as t 
-from collections import Counter, defaultdict
-import pandas as pd
+from collections import Counter
 import json
-from tqdm import tqdm
-from transformer_lens import (
-    HookedTransformer,
-)
+from transformer_lens import HookedTransformer
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 import os
 
 class LiteralScorer:
-    def __init__(self, model, filename: str = "pythia_formal_idiom_pos.json"):
+    def __init__(self, model, filename: str = "pythia_formal_idiom_pos_literal_score.json"):
+        """
+        This class calculates the Literal Score.
+
+        @params
+            model: examined model
+            filename: file with the idiom positions
+        """
         self.model = model
         self.model.cfg.use_attn_result = True
         self.aligner = PythonGreedyCoverageAligner()
@@ -21,7 +24,14 @@ class LiteralScorer:
         self.features = 5
         self.idiom_positions = self.load_all_idiom_pos(filename)
 
-    def load_all_idiom_pos(self, filename):
+    def load_all_idiom_pos(self, filename: str):
+        """
+        This methods loads the idiom positions.
+
+        @params
+            filename: file with the idiom positions
+        @returns the loaded idiom positions
+        """
         if os.path.isfile(filename):
             with open(filename, 'r', encoding = "utf-8") as f:
                 return json.load(f) 
@@ -29,6 +39,12 @@ class LiteralScorer:
             return [] 
         
     def get_all_idiom_pos(self, batch):
+        """
+        This method extracts the idiom positions of a batch.
+
+        @params
+            batch: batch of sentences
+        """
         for i in range(len(batch["sentence"])):
             sent = batch["sentence"][i]
             model_str_tokens= self.model.to_str_tokens(sent)
@@ -36,10 +52,23 @@ class LiteralScorer:
             self.idiom_positions.append(self.get_idiom_pos(aligned_positions, batch["tags"][i]))
 
     def store_all_idiom_pos(self, filename):
+        """
+        This method saves the idiom positions.
+
+        @params
+          filename: output file
+        """
         with open(filename, 'w', encoding = "utf-8") as f:
             json.dump(self.idiom_positions, f)   
 
-    def create_data_score_tensor(self, batch, comp_file):
+    def create_literal_score_tensor(self, batch, comp_file: str):
+        """
+        This method computes the Literal Score for a batch.
+
+        @params
+            batch: batch of instances
+            comp_file: file for the intermediate component results 
+        """
         batch_scores = t.zeros(len(batch["sentence"]), self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device)
 
         for i in range(len(batch["sentence"])):
@@ -60,13 +89,20 @@ class LiteralScorer:
         del batch_scores
         t.cuda.empty_cache()
 
-        #t.save(self.scores, ckp_file)  
         t.save(self.components, comp_file)    
 
-    def create_feature_tensor(self, sent, idiom_pos):
+    def create_feature_tensor(self, sent: str, idiom_pos: tuple):
+        """
+        This method computes the features for the Literal Score.
+
+        @params
+            sent: processed sentence
+            idiom_pos: start and end pos of the idiom
+        @returns layer_head_features: features for all heads
+        """
         cache = self.get_cache(sent)
 
-        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device) # self.features features (self.features idiom feats)
+        layer_head_features = t.zeros(self.model.cfg.n_layers, self.model.cfg.n_heads, self.features, dtype=t.float16, device = self.device)
         for layer in range(self.model.cfg.n_layers):
             for head in range(self.model.cfg.n_heads):
                 attention_pattern = cache["pattern", layer][head].to(dtype=t.float16)
@@ -82,7 +118,15 @@ class LiteralScorer:
 
         return layer_head_features
     
-    def get_cache(self, sent):
+    def get_cache(self, sent: str):
+        """
+        This method creates the activation cache for a sentence.
+
+        @params
+            sent: processed sentence
+        @returns
+            activation cache on the device
+        """
         _, cache = self.model.run_with_cache(sent, remove_batch_dim=True)
         return cache.to(self.device)
     
@@ -112,8 +156,12 @@ class LiteralScorer:
         '''
         This method computes the components of the idiom score for one head and one sentence.
 
-        @param attention_pattern: attention scores for one head and one sentence
-        @returns mean on the scores attending to idiom tokens, standard deviation of the mean, probability of an idiom token being the maximum score of the row/column, fraction of idiom tokens within the max idiom_len-scores
+        @param 
+            attention_pattern: attention scores for one head and one sentence
+            head_result: attention result
+            idiom_pos: start and end position of the idiom
+        @returns
+            mean attention scores for the literals, standard deviation of the mean, Single Max Score, Phrase Max Score, Contribution
         '''
         idiom_positions = t.arange(idiom_pos[0], idiom_pos[1]+1, device=self.device)
         sent_positions = t.arange(attention_pattern.size(-1)).to(self.device)
@@ -145,7 +193,8 @@ class LiteralScorer:
         @params 
             idiom_positons: tensor with the positions of the idiom tokens
             sent_positions: tensor with the positions of all tokens in the sentence
-        @returns idiom_combinations: list of position tuples of the scores attending to idiom tokens
+        @returns 
+            list of position tuples of the scores attending to literal tokens
         '''
         return [(i, j) for i in sent_positions for j in sent_positions if i >= j and i not in idiom_positions and j not in idiom_positions]
     
@@ -156,16 +205,20 @@ class LiteralScorer:
         @params
             attention_pattern: attention scores for one head and one sentence
             combined_positions: list of position tuples
-        @returns tensor with the values of the given positions 
+        @returns 
+            tensor with the values of the given positions 
         '''
         return t.tensor([attention_pattern[combined_positions[i][0]][combined_positions[i][1]] for i in range(len(combined_positions))], dtype=t.float16, device=self.device)
     
-    def mean_qk_max(self, attention_pattern, idiom_pos):
+    def mean_qk_max(self, attention_pattern, idiom_pos: tuple):
         '''
-        This method computes the mean fraction of idioms tokens having the highest score for the whole attention pattern.
+        This method computes the mean fraction of literal tokens having the highest score for the whole attention pattern.
 
-        @param attention_pattern: attention scores for one head and one sentence
-        @returns mean of the row and column fractions
+        @param 
+            attention_pattern: attention scores for one head and one sentence
+            idiom_pos: start and end position of the idiom
+        @returns 
+            mean of the row and column fractions
         '''
         literal_argmax_k = t.cat((t.argmax(attention_pattern, dim = 1)[:idiom_pos[0]], t.argmax(attention_pattern, dim = 1)[idiom_pos[1]+1:])) 
         literal_argmax_q = t.cat((t.argmax(attention_pattern, dim = 0)[:idiom_pos[0]], t.argmax(attention_pattern, dim = 0)[idiom_pos[1]+1:]))
@@ -186,12 +239,15 @@ class LiteralScorer:
 
         return (q2k + k2q)/2
     
-    def max_idiom_toks(self, argmax_list: list, idiom_pos):
+    def max_idiom_toks(self, argmax_list: list, idiom_pos: tuple):
         '''
-        This method computes the fraction of idiom tokens with a maximum score in a row or column of the attention pattern.
+        This method computes the fraction of literal tokens with a maximum score in a row or column of the attention pattern.
 
-        @param argmax_list: list with the tokens with the maximum score in a row/column
-        @returns idiom_frac: fraction of idiom tokens with the maximum score
+        @param 
+            argmax_list: list with the tokens with the maximum score in a row/column
+            idiom_pos: start and end position of the idiom
+        @returns 
+            literal_frac: fraction of literal tokens with the maximum score
         '''
         num_toks = len(argmax_list)
         max_counter = Counter(argmax_list)
@@ -203,23 +259,30 @@ class LiteralScorer:
             literal_frac = 0.0
         return literal_frac
     
-    def mean_qk_phrase(self, attention_pattern, idiom_pos):
+    def mean_qk_phrase(self, attention_pattern, idiom_pos: tuple):
         '''
         This method computes the mean of the maximum phrase attention scores for the whole attention matrix.
 
-        @param attention_pattern: attention scores for one head and one sentence
-        @returns mean of the maximum phrase attention scores per row/column
+        @param 
+            attention_pattern: attention scores for one head and one sentence
+            idiom_pos: start and end position of the idiom
+        @returns 
+            mean of the maximum phrase attention scores per row/column
         '''
         q2k = self.compute_phrase_attention(attention_pattern, idiom_pos, dim = 1)
         k2q = self.compute_phrase_attention(attention_pattern, idiom_pos, dim = 0)
         return (q2k + k2q)/2
     
-    def compute_phrase_attention(self, attention_pattern, idiom_pos, dim):
+    def compute_phrase_attention(self, attention_pattern, idiom_pos: tuple, dim: int):
         '''
-        This method computes the fraction of idiom tokens in the number_of_idiom_toks max scores per row.
+        This method computes the fraction of literal tokens in the k max scores per row.
 
-        @param attention_pattern: attention scores for one head and one sentence
-        @returns mean fraction of idiom tokens in the top-idiom_len scores per row 
+        @param 
+            attention_pattern: attention scores for one head and one sentence
+            idiom_pos: start and end position of the idiom
+            dim: dimension of the tensor (row or column)
+        @returns 
+            mean fraction of literal tokens in the top-k scores per row 
         '''
         sorted_tensor = t.sort(attention_pattern, dim=dim, stable=True, descending = True)[1]
         literal_fractions = []
@@ -253,7 +316,16 @@ class LiteralScorer:
         else:
             return 0.0
 
-    def get_attn_contribution(self, head_result, idiom_pos):
+    def get_attn_contribution(self, head_result, idiom_pos: tuple):
+        """
+        This method computes the mean of the attention results for the literals.
+
+        @params
+            head_result: attention result
+            idiom_pos: start and end of the idiom
+        @returns
+            mean of the attention result for the literals
+        """
         # seq_len x dmodel
         literal_result = t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:]))
         if literal_result.size(0) == 0:
@@ -262,12 +334,11 @@ class LiteralScorer:
             return t.mean(t.cat((head_result[:idiom_pos[0]], head_result[idiom_pos[1]+1:])))
         
     def explore_tensor(self):
+        """
+        Sanity check for the results.
+        """
         print(f"The score of the first sentence for the layer 0 and head 0 is:\n{self.scores[0][0][0]}")
 
     
 if __name__ == "__main__":
     model: HookedTransformer = HookedTransformer.from_pretrained("EleutherAI/pythia-14m")
-    epie = EPIE_Data()
-    tensor = t.randn(17, 17)
-    scorer = LiteralScorer(model)
-    scorer.compute_phrase_attention(tensor, (9, 12), dim = 1)

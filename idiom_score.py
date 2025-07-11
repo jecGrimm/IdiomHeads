@@ -1,15 +1,9 @@
 import torch as t 
-from collections import Counter, defaultdict
-import pandas as pd
+from collections import Counter
 import json
-from tqdm import tqdm
-from transformer_lens import (
-    HookedTransformer,
-    head_detector
-)
+from transformer_lens import HookedTransformer
 from merge_tokenizers import PythonGreedyCoverageAligner, types
 import os
-import einops
 
 class IdiomScorer:
     def __init__(self, model, filename: str = "pythia_formal_idiom_pos_idiom_score.json", start: int = 0, cage_dir: str = ""):
