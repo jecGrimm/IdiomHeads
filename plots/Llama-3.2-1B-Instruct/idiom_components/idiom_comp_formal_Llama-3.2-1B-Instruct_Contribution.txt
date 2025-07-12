@@ -1,0 +1,11 @@
+
+Average score: 2.980232238769531e-07
+Maximum mean: L15H14 - 0.00275421142578125
+Minimum mean: L9H2 - -0.0003211498260498047
+Mean top 10: [('L15H14', array(0.002754, dtype=float16)), ('L7H14', array(0.0006557, dtype=float16)), ('L8H31', array(0.000402, dtype=float16)), ('L8H20', array(0.000391, dtype=float16)), ('L15H25', array(0.0003588, dtype=float16)), ('L13H25', array(0.0003233, dtype=float16)), ('L15H10', array(0.000315, dtype=float16)), ('L9H6', array(0.00031, dtype=float16)), ('L10H17', array(0.0002744, dtype=float16)), ('L7H15', array(0.0002677, dtype=float16))]
+Mean bottom 10: [('L9H2', array(-0.0003211, dtype=float16)), ('L8H28', array(-0.000239, dtype=float16)), ('L5H21', array(-0.0002381, dtype=float16)), ('L9H30', array(-0.0002344, dtype=float16)), ('L7H9', array(-0.0002334, dtype=float16)), ('L6H23', array(-0.0002297, dtype=float16)), ('L7H25', array(-0.0002297, dtype=float16)), ('L7H10', array(-0.0002292, dtype=float16)), ('L8H22', array(-0.0002233, dtype=float16)), ('L6H0', array(-0.0002223, dtype=float16))]
+
+Maximum std: L15H14 - 0.0012540817260742188
+Minimum std: L0H31 - 7.748603820800781e-07
+Std top 10: [('L15H14', array(0.001254, dtype=float16)), ('L15H23', array(0.0008173, dtype=float16)), ('L14H25', array(0.0005603, dtype=float16)), ('L14H10', array(0.0004165, dtype=float16)), ('L9H30', array(0.0004013, dtype=float16)), ('L15H25', array(0.0003393, dtype=float16)), ('L10H3', array(0.000331, dtype=float16)), ('L15H6', array(0.0003257, dtype=float16)), ('L11H11', array(0.0003252, dtype=float16)), ('L12H30', array(0.0003116, dtype=float16))]
+Std bottom 10: [('L0H31', array(8.e-07, dtype=float16)), ('L0H14', array(2.44e-06, dtype=float16)), ('L0H29', array(2.44e-06, dtype=float16)), ('L5H11', array(2.74e-06, dtype=float16)), ('L0H19', array(3.1e-06, dtype=float16)), ('L0H30', array(3.6e-06, dtype=float16)), ('L0H16', array(3.76e-06, dtype=float16)), ('L0H13', array(5.54e-06, dtype=float16)), ('L1H14', array(5.84e-06, dtype=float16)), ('L0H27', array(6.3e-06, dtype=float16))]

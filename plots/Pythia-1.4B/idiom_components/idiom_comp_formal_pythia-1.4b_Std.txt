@@ -1,0 +1,11 @@
+
+Average score: -0.18115234375
+Maximum mean: L0H2 - -0.06695556640625
+Minimum mean: L13H4 - -0.229736328125
+Mean top 10: [('L0H2', array(-0.06696, dtype=float16)), ('L2H15', array(-0.07715, dtype=float16)), ('L2H1', array(-0.08136, dtype=float16)), ('L0H13', array(-0.08307, dtype=float16)), ('L3H0', array(-0.0835, dtype=float16)), ('L3H4', array(-0.088, dtype=float16)), ('L2H10', array(-0.09344, dtype=float16)), ('L1H8', array(-0.09595, dtype=float16)), ('L5H15', array(-0.0964, dtype=float16)), ('L1H4', array(-0.09766, dtype=float16))]
+Mean bottom 10: [('L13H4', array(-0.2297, dtype=float16)), ('L14H3', array(-0.2297, dtype=float16)), ('L16H8', array(-0.2297, dtype=float16)), ('L17H2', array(-0.2297, dtype=float16)), ('L0H0', array(-0.2294, dtype=float16)), ('L16H9', array(-0.2294, dtype=float16)), ('L22H5', array(-0.2289, dtype=float16)), ('L5H4', array(-0.2286, dtype=float16)), ('L22H14', array(-0.2285, dtype=float16)), ('L20H4', array(-0.2281, dtype=float16))]
+
+Maximum std: L0H7 - 0.1099853515625
+Minimum std: L1H4 - 0.04705810546875
+Std top 10: [('L0H7', array(0.11, dtype=float16)), ('L0H9', array(0.1046, dtype=float16)), ('L20H2', array(0.0997, dtype=float16)), ('L9H15', array(0.09705, dtype=float16)), ('L7H12', array(0.0969, dtype=float16)), ('L7H15', array(0.09656, dtype=float16)), ('L9H9', array(0.096, dtype=float16)), ('L11H1', array(0.0956, dtype=float16)), ('L7H6', array(0.0948, dtype=float16)), ('L23H8', array(0.09467, dtype=float16))]
+Std bottom 10: [('L1H4', array(0.04706, dtype=float16)), ('L0H2', array(0.04874, dtype=float16)), ('L0H13', array(0.05164, dtype=float16)), ('L0H6', array(0.05292, dtype=float16)), ('L3H4', array(0.05405, dtype=float16)), ('L0H4', array(0.05417, dtype=float16)), ('L2H10', array(0.0542, dtype=float16)), ('L8H4', array(0.05435, dtype=float16)), ('L11H2', array(0.05505, dtype=float16)), ('L5H0', array(0.05515, dtype=float16))]

@@ -1,0 +1,11 @@
+
+Average score: -7.748603820800781e-07
+Maximum mean: L15H14 - 0.0013303756713867188
+Minimum mean: L9H2 - -0.0003056526184082031
+Mean top 10: [('L15H14', array(0.00133, dtype=float16)), ('L7H14', array(0.0006623, dtype=float16)), ('L8H20', array(0.0003843, dtype=float16)), ('L8H31', array(0.0003588, dtype=float16)), ('L15H10', array(0.0003297, dtype=float16)), ('L9H6', array(0.0002995, dtype=float16)), ('L10H17', array(0.0002692, dtype=float16)), ('L7H15', array(0.000262, dtype=float16)), ('L15H25', array(0.0002496, dtype=float16)), ('L13H25', array(0.0002338, dtype=float16))]
+Mean bottom 10: [('L9H2', array(-0.0003057, dtype=float16)), ('L5H21', array(-0.0002422, dtype=float16)), ('L7H25', array(-0.0002335, dtype=float16)), ('L7H10', array(-0.0002334, dtype=float16)), ('L7H9', array(-0.0002301, dtype=float16)), ('L8H28', array(-0.0002261, dtype=float16)), ('L8H22', array(-0.0002239, dtype=float16)), ('L6H1', array(-0.0002142, dtype=float16)), ('L10H2', array(-0.0002104, dtype=float16)), ('L7H20', array(-0.0002086, dtype=float16))]
+
+Maximum std: L15H14 - 0.0006475448608398438
+Minimum std: L0H19 - 2.682209014892578e-06
+Std top 10: [('L15H14', array(0.0006475, dtype=float16)), ('L14H25', array(0.0003433, dtype=float16)), ('L15H23', array(0.0003242, dtype=float16)), ('L13H28', array(0.0002325, dtype=float16)), ('L15H6', array(0.0002229, dtype=float16)), ('L9H13', array(0.000213, dtype=float16)), ('L14H5', array(0.0002075, dtype=float16)), ('L9H12', array(0.000207, dtype=float16)), ('L14H6', array(0.0001997, dtype=float16)), ('L14H17', array(0.0001962, dtype=float16))]
+Std bottom 10: [('L0H19', array(2.7e-06, dtype=float16)), ('L5H11', array(3.76e-06, dtype=float16)), ('L0H27', array(4.1e-06, dtype=float16)), ('L0H25', array(5.1e-06, dtype=float16)), ('L0H13', array(5.7e-06, dtype=float16)), ('L0H18', array(6.1e-06, dtype=float16)), ('L0H14', array(6.5e-06, dtype=float16)), ('L0H29', array(7.03e-06, dtype=float16)), ('L1H14', array(7.33e-06, dtype=float16)), ('L2H20', array(7.7e-06, dtype=float16))]

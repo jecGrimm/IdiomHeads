@@ -454,7 +454,7 @@ def get_component_dict(tensor):
     }
     return comp_dict
 
-def plot_all_components(full_tensor, filename: str = None, model_name: str = None):
+def plot_all_components(full_tensor, filename: str = None, model_name: str = None, path: str = ""):
     """
     This function plots the components of the Idiom Scores.
 
@@ -463,9 +463,6 @@ def plot_all_components(full_tensor, filename: str = None, model_name: str = Non
         filename: filename without ending
         model_name: model ID
     """
-    path = f"./plots/{model_name}/components"
-    os.makedirs(path, exist_ok=True)
-
     comp_dict = get_component_dict(full_tensor)
     orig_filename = filename
     for comp, tensor in comp_dict.items():
@@ -888,8 +885,8 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_scores/Pythia-1.4B/idiom_formal_0_None.pt", type=str)
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/Llama-3.2-1B-Instruct/idiom_trans_0_None_comp.pt", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -928,8 +925,12 @@ if __name__ == "__main__":
             print(f"Loaded tensor with size: {loaded_tensor.size()}")
 
             if tensor_file.endswith("_comp.pt"):
-                os.makedirs(f"./plots/{model_name}/components", exist_ok=True)
-                plot_all_components(loaded_tensor, img_file, model_name)
+                if "idiom" in tensor_file:
+                    path = f"./plots/{model_name}/idiom_components"
+                elif "literal" in tensor_file:
+                    path = f"./plots/{model_name}/literal_components"
+                os.makedirs(path, exist_ok=True)
+                plot_all_components(loaded_tensor, img_file, model_name, path = path)
             elif "grouped" in tensor_file:
                 if "contr" in tensor_file:
                     path = f"./plots/{model_name}/contribution"

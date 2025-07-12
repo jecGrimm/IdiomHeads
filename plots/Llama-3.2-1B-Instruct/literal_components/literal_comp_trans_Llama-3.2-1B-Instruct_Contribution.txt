@@ -1,0 +1,11 @@
+
+Average score: -4.172325134277344e-07
+Maximum mean: L15H14 - 0.0014286041259765625
+Minimum mean: L9H2 - -0.00030732154846191406
+Mean top 10: [('L15H14', array(0.001429, dtype=float16)), ('L7H14', array(0.000656, dtype=float16)), ('L8H20', array(0.0003865, dtype=float16)), ('L8H31', array(0.0003684, dtype=float16)), ('L15H10', array(0.0003335, dtype=float16)), ('L9H6', array(0.0003014, dtype=float16)), ('L10H17', array(0.0002801, dtype=float16)), ('L15H25', array(0.0002565, dtype=float16)), ('L7H15', array(0.0002544, dtype=float16)), ('L8H29', array(0.0002416, dtype=float16))]
+Mean bottom 10: [('L9H2', array(-0.0003073, dtype=float16)), ('L5H21', array(-0.0002456, dtype=float16)), ('L7H25', array(-0.0002406, dtype=float16)), ('L8H28', array(-0.0002356, dtype=float16)), ('L8H22', array(-0.0002353, dtype=float16)), ('L7H10', array(-0.0002322, dtype=float16)), ('L7H9', array(-0.0002272, dtype=float16)), ('L10H2', array(-0.0002112, dtype=float16)), ('L9H7', array(-0.0002061, dtype=float16)), ('L8H17', array(-0.0002028, dtype=float16))]
+
+Maximum std: L15H14 - 0.0006933212280273438
+Minimum std: L0H19 - 2.562999725341797e-06
+Std top 10: [('L15H14', array(0.0006933, dtype=float16)), ('L15H23', array(0.0003378, dtype=float16)), ('L14H25', array(0.000329, dtype=float16)), ('L13H28', array(0.0002313, dtype=float16)), ('L9H13', array(0.0002155, dtype=float16)), ('L15H6', array(0.000214, dtype=float16)), ('L9H12', array(0.0002123, dtype=float16)), ('L14H5', array(0.0002079, dtype=float16)), ('L14H6', array(0.0002034, dtype=float16)), ('L15H0', array(0.0001994, dtype=float16))]
+Std bottom 10: [('L0H19', array(2.56e-06, dtype=float16)), ('L0H27', array(3.76e-06, dtype=float16)), ('L5H11', array(3.76e-06, dtype=float16)), ('L0H14', array(5.1e-06, dtype=float16)), ('L0H25', array(5.2e-06, dtype=float16)), ('L0H13', array(5.4e-06, dtype=float16)), ('L0H18', array(6.3e-06, dtype=float16)), ('L0H29', array(6.5e-06, dtype=float16)), ('L1H14', array(7.15e-06, dtype=float16)), ('L2H20', array(7.2e-06, dtype=float16))]

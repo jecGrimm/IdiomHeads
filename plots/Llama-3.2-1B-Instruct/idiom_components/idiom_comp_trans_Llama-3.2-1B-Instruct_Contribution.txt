@@ -1,0 +1,11 @@
+
+Average score: 4.76837158203125e-07
+Maximum mean: L15H14 - 0.0020236968994140625
+Minimum mean: L9H2 - -0.00031185150146484375
+Mean top 10: [('L15H14', array(0.002024, dtype=float16)), ('L7H14', array(0.00063, dtype=float16)), ('L8H20', array(0.0003898, dtype=float16)), ('L8H31', array(0.0003884, dtype=float16)), ('L15H10', array(0.000324, dtype=float16)), ('L10H17', array(0.0002997, dtype=float16)), ('L13H25', array(0.000294, dtype=float16)), ('L15H25', array(0.0002933, dtype=float16)), ('L9H6', array(0.000254, dtype=float16)), ('L7H15', array(0.00025, dtype=float16))]
+Mean bottom 10: [('L9H2', array(-0.0003119, dtype=float16)), ('L8H28', array(-0.000252, dtype=float16)), ('L7H11', array(-0.0002494, dtype=float16)), ('L5H21', array(-0.0002415, dtype=float16)), ('L6H23', array(-0.0002263, dtype=float16)), ('L7H25', array(-0.0002244, dtype=float16)), ('L7H9', array(-0.0002241, dtype=float16)), ('L10H2', array(-0.0002164, dtype=float16)), ('L11H1', array(-0.0002098, dtype=float16)), ('L8H17', array(-0.0002081, dtype=float16))]
+
+Maximum std: L15H14 - 0.0013074874877929688
+Minimum std: L0H31 - 8.940696716308594e-07
+Std top 10: [('L15H14', array(0.0013075, dtype=float16)), ('L15H23', array(0.00087, dtype=float16)), ('L14H25', array(0.0005536, dtype=float16)), ('L9H30', array(0.0003521, dtype=float16)), ('L14H10', array(0.0003507, dtype=float16)), ('L15H25', array(0.000309, dtype=float16)), ('L9H12', array(0.0003083, dtype=float16)), ('L15H6', array(0.0003045, dtype=float16)), ('L15H0', array(0.000299, dtype=float16)), ('L9H26', array(0.000289, dtype=float16))]
+Std bottom 10: [('L0H31', array(9.e-07, dtype=float16)), ('L0H29', array(2.6e-06, dtype=float16)), ('L5H11', array(3.04e-06, dtype=float16)), ('L0H19', array(3.4e-06, dtype=float16)), ('L0H30', array(4.3e-06, dtype=float16)), ('L0H14', array(5.36e-06, dtype=float16)), ('L0H13', array(6.44e-06, dtype=float16)), ('L0H27', array(6.56e-06, dtype=float16)), ('L2H20', array(6.8e-06, dtype=float16)), ('L1H14', array(7.4e-06, dtype=float16))]
