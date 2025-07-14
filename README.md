@@ -41,7 +41,7 @@ streamlit run llm_transparency_tool/server/app.py -- config/local.json
 ``` 
 Please make sure that you have access to Llama-3.2-1B-Instruct via Hugging Face and that the required access token is active before executing the tool. 
 
-## Scripts
+## Content
 ### EPIE_Corpus
 This directory contains the Labelled EPIE dataset (Saxena et al. 2021)
 
@@ -127,7 +127,7 @@ This directory contains the loss scores.
 This directory contains the code for the library TransformerLens (Nanda et al. 2022). The experiments are based on this library.
 
 ### visualizations
-This directory contains additional visualizations.
+This directory contains additional visualizations. The attention pattern visualizations can be created with the notebook `visualize_pattern.ipynb`. The contribution pattern can be created with the LM Transparency Tool.
 
 ### ablation.py
 This script contains the class Ablation for the ablation study.
