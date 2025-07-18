@@ -23,10 +23,11 @@ class EPIE_Data:
         self.trans_formal_sents = self.remove_spaces(self.tokenized_trans_formal_sents)
         self.static_sents = self.remove_spaces(self.tokenized_static_sents)
         
+        excluded_ids = []
         if experiment == "awareness":
             if model_id == "Llama-3.2-1B-Instruct":
                 excluded_ids = [1231]
-        elif experiment in ["idiom_score", "literal_score"]: #, , "dla", "ablation"]:
+        elif experiment in ["idiom_score", "literal_score"]:
             excluded_ids = [1231]
         elif experiment == "dla":
             if model_id == "Pythia-1.4B":
@@ -37,7 +38,9 @@ class EPIE_Data:
                 elif split == "trans":
                     excluded_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210]
         elif experiment == "ablation":
-            if model_id == "Llama-3.2-1B-Instruct":
+            if model_id == "Pythia-1.4B":
+                excluded_ids = [1231]
+            elif model_id == "Llama-3.2-1B-Instruct":
                 excluded_ids = [1231, 1280, 1281, 1282, 1379, 1386, 2200, 2201, 2210]
         
         for sent_idx in excluded_ids:
