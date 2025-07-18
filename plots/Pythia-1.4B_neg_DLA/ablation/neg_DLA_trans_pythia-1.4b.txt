@@ -1,0 +1,86 @@
+
+original
+Accuracy: 16.26%
+Mean Rank Difference: 0.0
+Total Changed Predictions: 0.00%
+Correct2False Changed Predictions: 0.00%
+False2Correct Changed Predictions: 0.00%
+Ablation has negative effect on rank of the correct token: 0.00%
+Ablation has positive effect on rank of the correct token: 0.00%
+Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n", 'So we must watch Bruno Casanova\n ->  closely., predicted: ,\n']
+
+L10H5
+Accuracy: 17.13%
+Mean Rank Difference: 1.4858490228652954
+Total Changed Predictions: 97.02%
+Correct2False Changed Predictions: 14.40%
+False2Correct Changed Predictions: 15.28%
+Ablation has negative effect on rank of the correct token: 50.11%
+Ablation has positive effect on rank of the correct token: 46.92%
+Worst Prediction: 24634: Will you undertake as much again, if this yields
+ -> ' desired', predicted: ' pay'
+Best Prediction: -26065: Jake smiled sadistically as he prepared to make him
+ -> ' unexpected', predicted: ' care'
+Correct2False Prediction: Ablated rank 101: We we think we agree completely with
+ -> ' the', ablation predicted: ' who'
+False2Correct Prediction: Original rank 15: Staff need, however, to find a delicate
+ -> ' compromise', originally predicted: ' balance'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', 'Keep it in the quarantine tank, cease medication and watch it closely\n ->  for, predicted:  the\n', '‘As you can see from the state of this place, I have someone call in regularly to watch it\n ->  closely., predicted:  the\n', "Mary organized the plates and watched his carving\n ->  carefully., predicted: 's\n", "Watch your local\n ->  press, predicted: 's\n"]
+
+L15H12
+Accuracy: 17.71%
+Mean Rank Difference: -3.9285194873809814
+Total Changed Predictions: 97.10%
+Correct2False Changed Predictions: 14.22%
+False2Correct Changed Predictions: 15.67%
+Ablation has negative effect on rank of the correct token: 49.89%
+Ablation has positive effect on rank of the correct token: 47.21%
+Worst Prediction: 25522: Will you undertake as much again, if this yields
+ -> ' desired', predicted: ' pay'
+Best Prediction: -26065: Jake smiled sadistically as he prepared to make him
+ -> ' unexpected', predicted: ' care'
+Correct2False Prediction: Ablated rank 83: We we think we agree completely with
+ -> ' the', ablation predicted: ' who'
+False2Correct Prediction: Original rank 15: Staff need, however, to find a delicate
+ -> ' compromise', originally predicted: ' balance'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ,\n', 'But I will also be watching you closely.\n ->  ’, predicted: ,\n', 'Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: ’\n', 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n', 'Keep it in the quarantine tank, cease medication and watch it closely\n ->  for, predicted:  the\n']
+
+L12H7
+Accuracy: 17.42%
+Mean Rank Difference: -5.459724426269531
+Total Changed Predictions: 97.21%
+Correct2False Changed Predictions: 14.40%
+False2Correct Changed Predictions: 15.57%
+Ablation has negative effect on rank of the correct token: 50.29%
+Ablation has positive effect on rank of the correct token: 46.92%
+Worst Prediction: 26461: Will you undertake as much again, if this yields
+ -> ' desired', predicted: ' pay'
+Best Prediction: -26065: Jake smiled sadistically as he prepared to make him
+ -> ' unexpected', predicted: ' care'
+Correct2False Prediction: Ablated rank 85: We we think we agree completely with
+ -> ' the', ablation predicted: ' who'
+False2Correct Prediction: Original rank 15: Staff need, however, to find a delicate
+ -> ' compromise', originally predicted: ' balance'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', 'Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: ’\n', 'So we must watch Bruno Casanova\n ->  closely., predicted: ’\n', 'Keep it in the quarantine tank, cease medication and watch it closely\n ->  for, predicted:  the\n', '‘As you can see from the state of this place, I have someone call in regularly to watch it\n ->  closely., predicted:  the\n']
+
+L12H7_L15H12_L10H5
+Accuracy: 15.78%
+Mean Rank Difference: 6.761973857879639
+Total Changed Predictions: 66.29%
+Correct2False Changed Predictions: 1.23%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 31.35%
+Ablation has positive effect on rank of the correct token: 34.94%
+Worst Prediction: 2819: ‘help you,’
+ -> ' Newman', predicted: ' ‘'
+Best Prediction: -1223: And if they look into you — you could be in a
+ -> ' troublesome', predicted: ' lot'
+Correct2False Prediction: Ablated rank 2: And er when I first came to the shop, the mo m A lot of them used to come by train and you know taxis or meeting and at the station and and away from Holyhead they used to visit
+ -> ' the', ablation predicted: ' and'
+False2Correct Prediction: Original rank 1: By the time it reaches the coasts of West Spitsbergen, the largest of the Svalbard group, the current, although much reduced in strength, still has enough energy, when coupled with the summer sun, to warm the sea temperature enough to keep the ice at
+ -> ' a', originally predicted: ' bay'
+Wrong Predictions: ['‘You know, the panda who watches overs attentively\n ->  my, predicted: ’\n', 'But I will also be watching you closely.\n ->  ’, predicted:  I\n', '‘I will be watching him\n ->  carefully,, predicted:  closely\n', "Moreover, international operations director Richard Ferry claims that the Bracknell, Berkshire-based company's services are unique — although most rivals can offer centralised expertise, he says, no-one else can monitor computer systems remotely, or watch over attentively\n ->  such, predicted:  the\n", "Once Duncan had managed to fire off a report and stop his watch-replacement from stumbling on the terrorists, he had settled down to monitor the gang\n ->  closely., predicted: 's\n"]

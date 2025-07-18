@@ -612,9 +612,14 @@ def compute_accuracy(pred_file: str, outfile: str = None):
     false2corr_pred = defaultdict(str)
 
     sent_ids = defaultdict(int) 
-    for k, v in predictions.items():
+    for k, val in predictions.items():
         name = k.split('_')[:-1]
         name = '_'.join(name)
+
+        if len(val) != num_sents:
+            v = val[:num_sents]
+        else:
+            v = val
 
         if "rank" in k:
             acc[name] = t.sum((t.tensor(v) == 0))/num_sents
@@ -624,7 +629,7 @@ def compute_accuracy(pred_file: str, outfile: str = None):
             worst_rank = max(rank_diffs)
             best_rank = min(rank_diffs)
             if worst_rank != 0:
-                worst_rank_idx = int((rank_diffs == worst_rank).nonzero())
+                worst_rank_idx = int((rank_diffs == worst_rank).nonzero()[0])
                 worst_pred[name] = f"{worst_rank}: {predictions["prompt"][worst_rank_idx]}\n -> '{predictions["correct_token"][worst_rank_idx]}', predicted: '{predictions[name+"_prediction"][worst_rank_idx]}'" 
                 sent_ids[predictions["prompt"][worst_rank_idx] + " " + predictions["correct_token"][worst_rank_idx]] =  worst_rank_idx
             else:
@@ -728,7 +733,9 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
             [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)],
             [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)],
             [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)],
-        ]
+        ],
+        "Pythia-1.4B_static": [[(18, 4)], [(19, 14)], [(13, 4)], [(0, 10)], [(3, 4)], [(23, 9)], [(12, 12)], [(17, 2)], [(1, 13)], [(2, 15)], [(3, 4), (2, 15), (0, 10)], [(19, 14), (13, 4), (17, 2)], [(18, 4), (23, 9), (12, 12)], [(19, 14), (1, 13), (23, 9)], [(3, 4), (19, 14), (18, 4), (19, 14)], [(2, 15), (13, 4), (23, 9), (1, 13)], [(0, 10), (17, 2), (12, 12), (23, 9)]],
+        "Pythia-1.4B_neg_DLA": [[(10, 5)], [(15, 12)], [(12, 7)], [(12, 7), (15, 12), (10, 5)], [(12, 7)], [(15, 12)], [(10, 5)]]
     }
 
     custom_order = {
@@ -749,18 +756,40 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
             "L0H0\nL0H17\nL9H13", "L12H8\nL10H29\nL15H12", "L15H8\nL15H10\nL15H14", "L0H21\nL10H3\nL13H30",
             "L10H3\nL12H30\nL13H30", "L0H0\nL12H8\nL15H8\nL0H21\nL10H3", "L0H17\nL10H29\nL15H10\nL10H3\nL12H30",
             "L9H13\nL15H12\nL15H14\nL13H30\nL13H30"
-        ]
+        ],
+        "Pythia-1.4B_static": [
+            "L3H4", "L2H15", "L0H10",
+            "L19H14", "L13H4", "L17H2", 
+            "L18H4", "L23H9", "L12H12",
+            "L1H13",
+            "L3H4\nL2H15\nL0H10", "L19H14\nL13H4\nL17H2", "L18H4\nL23H9\nL12H12", "L19H14\nL1H13\nL23H9",
+            "L3H4\nL19H14\nL18H4\nL19H14", "L2H15\nL13H4\nL23H9\nL1H13", "L0H10\nL17H2\nL12H12\nL23H9"
+        ],
+        "Pythia-1.4B_neg_DLA": [
+            "L12H7", "L15H12", "L10H5",
+            "L12H7\nL15H12\nL10H5"            
+        ]   
     }
 
     separators = {
         "Pythia-1.4B": ["L0H13", "L18H9", "L13H4", "L18H4", "L14H5", "L15H13\nL19H1\nL14H5"],
-        "Llama-3.2-1B-Instruct": ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"]
+        "Llama-3.2-1B-Instruct": ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"],
+        "Pythia-1.4B_static": ["L0H10", "L17H2", "L12H12", "L1H13", "L19H14\nL1H13\nL23H9"],
+        "Pythia-1.4B_neg_DLA": ["L10H5", "L12H7\nL15H12\nL10H5"]
     }
 
-    section_titles = [
-        "Idiom Score", "Idiom Diff", "DLA", "DLA Formal", "DLA Idiom",
-        "Top Per Experiment", "Top All Experiments"
-    ]
+    if "static" in logit_file:
+        section_titles = [
+            "Idiom Score", "Idiom Diff", "DLA", "DLA Idiom",
+            "Top Per Experiment", "Top All Experiments"
+        ]
+    elif "neg_DLA" in model_name:
+        section_titles = ["Bottom DLA", "Top per Experiment"]
+    else:
+        section_titles = [
+            "Idiom Score", "Idiom Diff", "DLA", "DLA Formal", "DLA Idiom",
+            "Top Per Experiment", "Top All Experiments"
+        ]
 
     abl_heads = []
     for group in ablation_heads[model_name]:
@@ -817,7 +846,8 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
         "Pythia-14M": ["L0H0", "L5H3"],
         "Pythia-1.4B": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
         "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]],
-        #"Pythia-1.4B_static": [[(3, 4)], [(2, 15)], [(0, 10)], [(19, 14)], [(13, 4)], [(17, 2)], [(18, 4)], [(23, 9)], [(12, 12)], [(19, 14)], [(1, 13)], [(23, 9)]],
+        "Pythia-1.4B_static": [[(18, 4)], [(19, 14)], [(13, 4)], [(0, 10)], [(3, 4)], [(23, 9)], [(12, 12)], [(17, 2)], [(1, 13)], [(2, 15)], [(3, 4), (2, 15), (0, 10)], [(19, 14), (13, 4), (17, 2)], [(18, 4), (23, 9), (12, 12)], [(19, 14), (1, 13), (23, 9)], [(3, 4), (19, 14), (18, 4), (19, 14)], [(2, 15), (13, 4), (23, 9), (1, 13)], [(0, 10), (17, 2), (12, 12), (23, 9)]],
+        "Pythia-1.4B_neg_DLA": [[(10, 5)], [(15, 12)], [(12, 7)], [(12, 7), (15, 12), (10, 5)], [(12, 7)], [(15, 12)], [(10, 5)]]
     }
 
     custom_order = {
@@ -836,8 +866,21 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
             "L0H0", "L0H17", "L9H13", "L12H8", "L10H29", "L15H12", "L15H8", "L15H10", "L15H14", "L0H21",
             "L10H3", "L13H30", "L12H30",
             "L0H0_L0H17_L9H13", "L12H8_L10H29_L15H12", "L15H8_L15H10_L15H14", "L0H21_L10H3_L13H30",
-            "L10H3_L12H30_L13H30", "L0H0_L12H8_L15H8_L0H21_L10H3", "L0H17_L10H29_L15H10_L10H3_L12H30",
+            "L10H3_L12H30_L13H30", 
+            "L0H0_L12H8_L15H8_L0H21_L10H3", "L0H17_L10H29_L15H10_L10H3_L12H30",
             "L9H13_L15H12_L15H14_L13H30_L13H30"
+        ],
+        "Pythia-1.4B_static": [
+            "L3H4", "L2H15", "L0H10",
+            "L19H14", "L13H4", "L17H2", 
+            "L18H4", "L23H9", "L12H12",
+            "L1H13", 
+            "L3H4_L2H15_L0H10", "L19H14_L13H4_L17H2", "L18H4_L23H9_L12H12", "L19H14_L1H13_L23H9",
+            "L3H4_L19H14_L18H4_L19H14", "L2H15_L13H4_L23H9_L1H13", "L0H10_L17H2_L12H12_L23H9"
+        ],
+        "Pythia-1.4B_neg_DLA": [
+            "L12H7", "L15H12", "L10H5",
+            "L12H7_L15H12_L10H5"
         ]
     }
 
@@ -892,8 +935,8 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761.json", type=str)
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B_neg_DLA")
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Pythia-1.4B_neg_DLA/ablation_trans_0_None.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -927,11 +970,16 @@ if __name__ == "__main__":
 
             compute_accuracy(tensor_file, txt_file)
 
-            split = tensor_file.split('_')[1]
+            splits = tensor_file.split('_')
+            split = ""
+            for part in splits:
+                if part in ["formal", "trans", "static"]:
+                    split = part
 
             if "static" in tensor_file:
                 logit_file = f"future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761_logit.pt"
                 loss_file = f"future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761_loss.pt"
+                model_name = "Pythia-1.4B_static"
             else:
                 logit_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_logit.pt"
                 loss_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_loss.pt"

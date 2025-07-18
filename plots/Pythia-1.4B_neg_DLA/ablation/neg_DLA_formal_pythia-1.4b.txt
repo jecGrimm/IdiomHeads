@@ -1,0 +1,87 @@
+
+original
+Accuracy: 60.14%
+Mean Rank Difference: 0.0
+Total Changed Predictions: 0.00%
+Correct2False Changed Predictions: 0.00%
+False2Correct Changed Predictions: 0.00%
+Ablation has negative effect on rank of the correct token: 0.00%
+Ablation has positive effect on rank of the correct token: 0.00%
+Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']
+
+L10H5
+Accuracy: 62.10%
+Mean Rank Difference: 0.0028985508251935244
+Total Changed Predictions: 62.28%
+Correct2False Changed Predictions: 23.48%
+False2Correct Changed Predictions: 25.43%
+Ablation has negative effect on rank of the correct token: 30.04%
+Ablation has positive effect on rank of the correct token: 32.25%
+Worst Prediction: 12070: She's got to rack her
+ -> ' brain', predicted: ' could'
+Best Prediction: -11977: WORLD PARTY
+ -> ' animal', predicted: ' chord'
+Correct2False Prediction: Ablated rank 1: Staff need, however, to strike a delicate
+ -> ' balance', ablation predicted: ' fat'
+False2Correct Prediction: Original rank 247: Quantum
+ -> ' leaps', originally predicted: '-'
+Wrong Predictions: ["She came to see me a year later, total loss of weight, total short of breath, hardly, she's struggling to keep body and soul\n ->  together, predicted:  on\n", "Struggling peasants they'd be for the most part, trying to keep body and soul\n ->  together, predicted:  on\n", "I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  on\n", 'Their education, he said, was irrelevant to their duties, their poverty such that they had to spend most of their time keeping body and soul\n ->  together, predicted:  on\n', 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n']
+
+L15H12
+Accuracy: 62.68%
+Mean Rank Difference: -4.894927501678467
+Total Changed Predictions: 61.81%
+Correct2False Changed Predictions: 23.12%
+False2Correct Changed Predictions: 25.65%
+Ablation has negative effect on rank of the correct token: 29.57%
+Ablation has positive effect on rank of the correct token: 32.25%
+Worst Prediction: 9704: She's got to rack her
+ -> ' brain', predicted: ' could'
+Best Prediction: -11977: WORLD PARTY
+ -> ' animal', predicted: ' chord'
+Correct2False Prediction: Ablated rank 1: Staff need, however, to strike a delicate
+ -> ' balance', ablation predicted: ' fat'
+False2Correct Prediction: Original rank 247: Quantum
+ -> ' leaps', originally predicted: '-'
+Wrong Predictions: ["She came to see me a year later, total loss of weight, total short of breath, hardly, she's struggling to keep body and soul\n ->  together, predicted:  on\n", "Struggling peasants they'd be for the most part, trying to keep body and soul\n ->  together, predicted:  on\n", "I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  on\n", 'Their education, he said, was irrelevant to their duties, their poverty such that they had to spend most of their time keeping body and soul\n ->  together, predicted:  on\n', 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n']
+
+L12H7
+Accuracy: 62.39%
+Mean Rank Difference: -4.86884069442749
+Total Changed Predictions: 62.03%
+Correct2False Changed Predictions: 23.44%
+False2Correct Changed Predictions: 25.69%
+Ablation has negative effect on rank of the correct token: 29.78%
+Ablation has positive effect on rank of the correct token: 32.25%
+Worst Prediction: 10106: She's got to rack her
+ -> ' brain', predicted: ' could'
+Best Prediction: -11977: WORLD PARTY
+ -> ' animal', predicted: ' chord'
+Correct2False Prediction: Ablated rank 1: Staff need, however, to strike a delicate
+ -> ' balance', ablation predicted: ' fat'
+False2Correct Prediction: Original rank 247: Quantum
+ -> ' leaps', originally predicted: '-'
+Wrong Predictions: ["She came to see me a year later, total loss of weight, total short of breath, hardly, she's struggling to keep body and soul\n ->  together, predicted:  on\n", "Struggling peasants they'd be for the most part, trying to keep body and soul\n ->  together, predicted:  on\n", "I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  on\n", 'Their education, he said, was irrelevant to their duties, their poverty such that they had to spend most of their time keeping body and soul\n ->  together, predicted:  on\n', 'Nails, getting the taste of it, stopped being terrified and began to keep his eyes\n ->  open, predicted:  on\n']
+
+L12H7_L15H12_L10H5
+Accuracy: 58.88%
+Mean Rank Difference: 7.164855003356934
+Total Changed Predictions: 28.04%
+Correct2False Changed Predictions: 2.03%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 19.46%
+Ablation has positive effect on rank of the correct token: 8.59%
+Worst Prediction: 3133: But it had been years, even then, since Elvis was top of the Hit Parade, and if all he had to offer the world was slicked-back hair and a sulky pout, the Dead
+ -> ' Loss', predicted: ' could'
+Best Prediction: -522: A SPITTING
+ -> ' Image', predicted: ' contest'
+Correct2False Prediction: Ablated rank 1: In checking to ensure that your employers have striven to strike a fair
+ -> ' balance', ablation predicted: ' and'
+False2Correct Prediction: Original rank 1: , Accounts and, from the Mill, tied the
+ -> ' knot', originally predicted: '
+'
+Wrong Predictions: ["I will take some Bovril up for'er too, and some sausage rolls, we all'ave to keep body an' soul\n ->  together, predicted:  in\n", 'Keep your eyes\n ->  open, predicted:  on\n', 'If she kept her eyes\n ->  open, predicted:  closed\n', 'Gareth Holmroyd, Ted Hurwitz, Mike Sparrow, Ralph Absalom — they were all keeping their eyes\n ->  open, predicted:  on\n', 'And the point is that wherever you go you tend to keep your eye\n ->  open, predicted:  on\n']

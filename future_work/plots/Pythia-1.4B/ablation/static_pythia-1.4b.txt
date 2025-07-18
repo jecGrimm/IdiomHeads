@@ -1,0 +1,320 @@
+
+original
+Accuracy: 71.06%
+Mean Rank Difference: 0.0
+Total Changed Predictions: 0.00%
+Correct2False Changed Predictions: 0.00%
+False2Correct Changed Predictions: 0.00%
+Ablation has negative effect on rank of the correct token: 0.00%
+Ablation has positive effect on rank of the correct token: 0.00%
+Worst Prediction: No rank differences
+Best Prediction: No rank differences
+Correct2False Prediction: 
+False2Correct Prediction: 
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L18H4
+Accuracy: 71.42%
+Mean Rank Difference: 0.12893879413604736
+Total Changed Predictions: 14.63%
+Correct2False Changed Predictions: 0.72%
+False2Correct Changed Predictions: 1.09%
+Ablation has negative effect on rank of the correct token: 7.28%
+Ablation has positive effect on rank of the correct token: 7.35%
+Worst Prediction: 307: Cyrus Vance, the US secretary of state, the Iranian foreign minister, and other senior officials were well below the
+ -> ' salt', predicted: ' minimum'
+Best Prediction: -154: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Correct2False Prediction: Ablated rank 1: For some prey, it becomes a matter of safety in
+ -> ' numbers', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: The whole thing kicked off with a state of the
+ -> ' art', originally predicted: ' union'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L19H14
+Accuracy: 71.24%
+Mean Rank Difference: -0.26693227887153625
+Total Changed Predictions: 16.04%
+Correct2False Changed Predictions: 0.91%
+False2Correct Changed Predictions: 1.09%
+Ablation has negative effect on rank of the correct token: 6.48%
+Ablation has positive effect on rank of the correct token: 9.56%
+Worst Prediction: 144: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Best Prediction: -124: We long for nights when their aircraft can not attack us, and at the moment we are rejoicing in a
+ -> ' fog', predicted: ' new'
+Correct2False Prediction: Ablated rank 1: In any discussion of ‘the state of the
+ -> ' art', ablation predicted: ' union'
+False2Correct Prediction: Original rank 1: I mean suddenly we had the example of a women's support group from the miner's strike th that we had the idea you know fr from that erm and Yona really put it in a
+ -> ' nutshell', originally predicted: ' way'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L13H4
+Accuracy: 70.30%
+Mean Rank Difference: 0.4237595200538635
+Total Changed Predictions: 16.66%
+Correct2False Changed Predictions: 1.38%
+False2Correct Changed Predictions: 0.62%
+Ablation has negative effect on rank of the correct token: 10.90%
+Ablation has positive effect on rank of the correct token: 5.76%
+Worst Prediction: 102: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Best Prediction: -129: Cyrus Vance, the US secretary of state, the Iranian foreign minister, and other senior officials were well below the
+ -> ' salt', predicted: ' $'
+Correct2False Prediction: Ablated rank 1: In any discussion of ‘the state of the
+ -> ' art', ablation predicted: ' union'
+False2Correct Prediction: Original rank 1: For Jane, that slice of
+ -> ' life', originally predicted: ' the'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L0H10
+Accuracy: 70.30%
+Mean Rank Difference: 0.07569721341133118
+Total Changed Predictions: 18.62%
+Correct2False Changed Predictions: 1.81%
+False2Correct Changed Predictions: 1.05%
+Ablation has negative effect on rank of the correct token: 10.87%
+Ablation has positive effect on rank of the correct token: 7.75%
+Worst Prediction: 1206: Och salt of the
+ -> ' earth', predicted: ' present'
+Best Prediction: -260: All spared dead
+ -> ' wood', predicted: ' and'
+Correct2False Prediction: Ablated rank 1: Sadly, the thief who leaves no clues and is careful disposing of his ill-gotten
+ -> ' gains', ablation predicted: ' goods'
+False2Correct Prediction: Original rank 1: The phenomenon of light scattering by small particles is familiar to us all ; the blue colour of the sky or the varied colours of a sunset, the poor penetration of car headlights in a
+ -> ' fog', originally predicted: ' dark'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L3H4
+Accuracy: 71.13%
+Mean Rank Difference: -0.04237595200538635
+Total Changed Predictions: 17.46%
+Correct2False Changed Predictions: 1.30%
+False2Correct Changed Predictions: 1.38%
+Ablation has negative effect on rank of the correct token: 8.26%
+Ablation has positive effect on rank of the correct token: 9.20%
+Worst Prediction: 321: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Best Prediction: -170: Och salt of the
+ -> ' earth', predicted: ' earth'
+Correct2False Prediction: Ablated rank 1: safety in
+ -> ' numbers', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: Cut meat into chunks, discarding skin and
+ -> ' bones', originally predicted: ' fat'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L23H9
+Accuracy: 69.72%
+Mean Rank Difference: 0.28576603531837463
+Total Changed Predictions: 14.38%
+Correct2False Changed Predictions: 1.56%
+False2Correct Changed Predictions: 0.22%
+Ablation has negative effect on rank of the correct token: 9.56%
+Ablation has positive effect on rank of the correct token: 4.82%
+Worst Prediction: 127: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Best Prediction: -145: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Correct2False Prediction: Ablated rank 1: Lift out the fish, remove the skin and
+ -> ' bones', ablation predicted: ' cut'
+False2Correct Prediction: Original rank 1: The whole thing kicked off with a state of the
+ -> ' art', originally predicted: ' union'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L12H12
+Accuracy: 70.84%
+Mean Rank Difference: -0.21586382389068604
+Total Changed Predictions: 15.94%
+Correct2False Changed Predictions: 1.09%
+False2Correct Changed Predictions: 0.87%
+Ablation has negative effect on rank of the correct token: 7.57%
+Ablation has positive effect on rank of the correct token: 8.37%
+Worst Prediction: 128: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Best Prediction: -262: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Correct2False Prediction: Ablated rank 1: Not merely poetry in
+ -> ' motion', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: Those in the know — the core group of researchers in any field who spend a lot of time at conferences and seminars chatting about the state of the
+ -> ' art', originally predicted: ' field'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L17H2
+Accuracy: 69.83%
+Mean Rank Difference: 0.2636725902557373
+Total Changed Predictions: 19.88%
+Correct2False Changed Predictions: 2.43%
+False2Correct Changed Predictions: 1.20%
+Ablation has negative effect on rank of the correct token: 11.92%
+Ablation has positive effect on rank of the correct token: 7.97%
+Worst Prediction: 261: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Best Prediction: -118: Dimitri Volkov was in a
+ -> ' fog', predicted: ' bad'
+Correct2False Prediction: Ablated rank 1: Possible Worlds, Artificial Intelligence and Narrative Theory provides an interesting and accessible account of the state of the
+ -> ' art', ablation predicted: ' field'
+False2Correct Prediction: Original rank 4: In the past, anything neatly encapsulated was said to be ‘like The Iliad in a
+ -> ' nutshell', originally predicted: ' bottle'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L1H13
+Accuracy: 69.54%
+Mean Rank Difference: 0.4530967175960541
+Total Changed Predictions: 19.49%
+Correct2False Changed Predictions: 2.64%
+False2Correct Changed Predictions: 1.12%
+Ablation has negative effect on rank of the correct token: 11.16%
+Ablation has positive effect on rank of the correct token: 8.33%
+Worst Prediction: 397: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Best Prediction: -250: Amdahl Corp, Fujitsu Ltd and Hitachi Ltd are devastatingly exposed to the new perception that the mainframe is dead
+ -> ' meat', predicted: '.'
+Correct2False Prediction: Ablated rank 1: YOU CAN usually spot a UK rap production a mile off — strapped for
+ -> ' cash', ablation predicted: ' a'
+False2Correct Prediction: Original rank 1: The whole thing kicked off with a state of the
+ -> ' art', originally predicted: ' union'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L2H15
+Accuracy: 70.95%
+Mean Rank Difference: 0.1350959837436676
+Total Changed Predictions: 15.50%
+Correct2False Changed Predictions: 1.01%
+False2Correct Changed Predictions: 0.91%
+Ablation has negative effect on rank of the correct token: 8.11%
+Ablation has positive effect on rank of the correct token: 7.39%
+Worst Prediction: 231: Almost zero
+ -> ' hour', predicted: '-'
+Best Prediction: -142: And police were drafted in to control the traffic which was brought to a standstill by the
+ -> ' numbers', predicted: ' protest'
+Correct2False Prediction: Ablated rank 1: I am describing only the current reality : the state of the
+ -> ' art', ablation predicted: ' world'
+False2Correct Prediction: Original rank 1: My lack of means is extreme, granted, and I look bad, skin white, mouth chapped, body apparently even shorter than usual, eye roaming and I daresay a bit fretful, trousers in bad
+ -> ' shape', originally predicted: ' condition'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L3H4_L2H15_L0H10
+Accuracy: 70.12%
+Mean Rank Difference: -0.4324520230293274
+Total Changed Predictions: 20.03%
+Correct2False Changed Predictions: 2.17%
+False2Correct Changed Predictions: 1.23%
+Ablation has negative effect on rank of the correct token: 10.47%
+Ablation has positive effect on rank of the correct token: 9.56%
+Worst Prediction: 371: Russian industry is going for a
+ -> ' song', predicted: ' new'
+Best Prediction: -292: All spared dead
+ -> ' wood', predicted: ' bodies'
+Correct2False Prediction: Ablated rank 1: For some prey, it becomes a matter of safety in
+ -> ' numbers', ablation predicted: ' the'
+False2Correct Prediction: Original rank 1: The whole thing kicked off with a state of the
+ -> ' art', originally predicted: ' union'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L19H14_L13H4_L17H2
+Accuracy: 69.50%
+Mean Rank Difference: 0.6023179888725281
+Total Changed Predictions: 23.11%
+Correct2False Changed Predictions: 3.37%
+False2Correct Changed Predictions: 1.81%
+Ablation has negative effect on rank of the correct token: 14.13%
+Ablation has positive effect on rank of the correct token: 8.98%
+Worst Prediction: 358: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Best Prediction: -265: Frith in a
+ -> ' fog', predicted: ' nut'
+Correct2False Prediction: Ablated rank 1: The ‘state of the
+ -> ' art', ablation predicted: ' union'
+False2Correct Prediction: Original rank 4: In the past, anything neatly encapsulated was said to be ‘like The Iliad in a
+ -> ' nutshell', originally predicted: ' bottle'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L18H4_L23H9_L12H12
+Accuracy: 69.65%
+Mean Rank Difference: 0.24773633480072021
+Total Changed Predictions: 18.11%
+Correct2False Changed Predictions: 2.14%
+False2Correct Changed Predictions: 0.72%
+Ablation has negative effect on rank of the correct token: 9.82%
+Ablation has positive effect on rank of the correct token: 8.29%
+Worst Prediction: 356: Cyrus Vance, the US secretary of state, the Iranian foreign minister, and other senior officials were well below the
+ -> ' salt', predicted: ' line'
+Best Prediction: -161: All spared dead
+ -> ' wood', predicted: ' in'
+Correct2False Prediction: Ablated rank 1: While consumer demand is for ‘natural’ and ‘additive-free’ products, manufacturers have to seek out ways of making food last as long as possible, so irradiation is being promoted as a more viable alternative for prolonging shelf
+ -> ' life', ablation predicted: '-'
+False2Correct Prediction: Original rank 1: The whole thing kicked off with a state of the
+ -> ' art', originally predicted: ' union'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L19H14_L1H13_L23H9
+Accuracy: 69.07%
+Mean Rank Difference: 0.47374141216278076
+Total Changed Predictions: 22.17%
+Correct2False Changed Predictions: 3.26%
+False2Correct Changed Predictions: 1.27%
+Ablation has negative effect on rank of the correct token: 13.04%
+Ablation has positive effect on rank of the correct token: 9.13%
+Worst Prediction: 421: Och salt of the
+ -> ' earth', predicted: ' formula'
+Best Prediction: -239: Amdahl Corp, Fujitsu Ltd and Hitachi Ltd are devastatingly exposed to the new perception that the mainframe is dead
+ -> ' meat', predicted: '.'
+Correct2False Prediction: Ablated rank 1: YOU CAN usually spot a UK rap production a mile off — strapped for
+ -> ' cash', ablation predicted: ' a'
+False2Correct Prediction: Original rank 2: That's it is not it in a
+ -> ' nutshell', originally predicted: ' way'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L3H4_L19H14_L18H4_L19H14
+Accuracy: 72.00%
+Mean Rank Difference: -0.20101413130760193
+Total Changed Predictions: 18.98%
+Correct2False Changed Predictions: 1.20%
+False2Correct Changed Predictions: 2.14%
+Ablation has negative effect on rank of the correct token: 8.08%
+Ablation has positive effect on rank of the correct token: 10.90%
+Worst Prediction: 465: Solly Adam, who first alerted Yorkshire that Tendulkar was keen to play in England, is convinced that prejudice is dead and
+ -> ' buried', predicted: ' that'
+Best Prediction: -318: Home-produced building materials, such as bricks and other refractories, adjust themselves to the prospective demand indicated by the
+ -> ' numbers', predicted: ' building'
+Correct2False Prediction: Ablated rank 1: ‘Now we have got irradiation to worry about, too,’ points out Francesca Annis, shaking her head in disbelief that later this year it will become legal to ‘zap’ food with radiation, to kill off bacteria and prolong its safe shelf
+ -> ' life', ablation predicted: '-'
+False2Correct Prediction: Original rank 1: I mean suddenly we had the example of a women's support group from the miner's strike th that we had the idea you know fr from that erm and Yona really put it in a
+ -> ' nutshell', originally predicted: ' way'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
+
+L2H15_L13H4_L23H9_L1H13
+Accuracy: 67.62%
+Mean Rank Difference: 1.3140166997909546
+Total Changed Predictions: 22.20%
+Correct2False Changed Predictions: 4.20%
+False2Correct Changed Predictions: 0.76%
+Ablation has negative effect on rank of the correct token: 15.28%
+Ablation has positive effect on rank of the correct token: 6.92%
+Worst Prediction: 708: Och salt of the
+ -> ' earth', predicted: ' formula'
+Best Prediction: -304: There's this picturesque white elephant development on the Costa del Sol, apparently going for a
+ -> ' song', predicted: ' new'
+Correct2False Prediction: Ablated rank 25: strapped for
+ -> ' cash', ablation predicted: ' the'
+False2Correct Prediction: Original rank 2: That's it is not it in a
+ -> ' nutshell', originally predicted: ' way'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: .\n", 'It was zero\n ->  hour, predicted:  degrees\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'We want everybody to be ready to fall into their places five minutes before zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n']
+
+L0H10_L17H2_L12H12_L23H9
+Accuracy: 67.37%
+Mean Rank Difference: 0.5179283022880554
+Total Changed Predictions: 23.72%
+Correct2False Changed Predictions: 4.89%
+False2Correct Changed Predictions: 1.20%
+Ablation has negative effect on rank of the correct token: 15.28%
+Ablation has positive effect on rank of the correct token: 8.44%
+Worst Prediction: 1556: Och salt of the
+ -> ' earth', predicted: ' present'
+Best Prediction: -318: All spared dead
+ -> ' wood', predicted: '-'
+Correct2False Prediction: Ablated rank 1: In any discussion of ‘the state of the
+ -> ' art', ablation predicted: ' union'
+False2Correct Prediction: Original rank 1: I mean suddenly we had the example of a women's support group from the miner's strike th that we had the idea you know fr from that erm and Yona really put it in a
+ -> ' nutshell', originally predicted: ' way'
+Wrong Predictions: ["When we're ready, that is at zero\n ->  hour, predicted: ,\n", 'It was zero\n ->  hour, predicted: -\n', 'Grant watched them go, chatting amiably and swapping friendly banter as they went, easing their inner tensions as they moved nearer to zero\n ->  hour, predicted: .\n', 'Similarly any prerecorded voices, sound effects and incidental music needed to be prepared and in the hands of the Grams Operator, in order of cueing, before zero\n ->  hour, predicted: ing\n', 'As zero\n ->  hour, predicted: -\n']
