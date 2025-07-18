@@ -402,8 +402,14 @@ def plot_idiom_scores(tensor, filename: str = None, model_name: str = None, scat
     if filename:
         if "idiom" in filename: 
             path = f"./plots/{model_name}/idiom_scores"
+
+            if "static" in filename:
+                path = f"./future_work/plots/{model_name}/idiom_scores"
         elif "literal" in filename:
             path = f"./plots/{model_name}/literal_scores"
+
+            if "static" in filename:
+                path = f"./future_work/plots/{model_name}/literal_scores"
         elif "attr" in filename:
             path = f"./plots/{model_name}/logit_attribution"
         else:
@@ -430,7 +436,7 @@ def plot_idiom_scores(tensor, filename: str = None, model_name: str = None, scat
             print(f"Loaded tensor with size: {scatter_tensor.size()}")
 
             if filename and model_name:
-                plot_scatter(tensor, scatter_tensor, f"plots/{model_name}/scatter_{filename}_literal_{model_name}.png")
+                plot_scatter(tensor, scatter_tensor, f"{path}/scatter_{filename}_literal_{model_name}.png")
             else:
                 plot_scatter(tensor, scatter_tensor)
         elif "attr" in scatter_file and model_name:
@@ -808,9 +814,10 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
     This function plots the Ablation Logit Scores per sentence. The plot has been improved by Chat-GPT (ordering the sentences).
     """
     ablation_heads = {
-        "pythia-14m": ["L0H0", "L5H3"],
+        "Pythia-14M": ["L0H0", "L5H3"],
         "Pythia-1.4B": [[(11, 7)], [(19, 14)], [(13, 4)], [(16, 10)], [(3, 4)], [(18, 4)], [(19, 1)], [(0, 13)], [(15, 13)], [(18, 9)], [(2, 15)], [(14, 5)], [(2, 15), (3, 4), (0, 13)], [(16, 10), (11, 7), (18, 9)], [(19, 14), (19, 1), (13, 4)], [(15, 13), (19, 1), (18, 4)], [(15, 13), (19, 1), (14, 5)], [(2, 15), (16, 10), (19, 14), (15, 13), (15, 13)], [(3, 4), (11, 7), (19, 1), (19, 1), (19, 1)], [(0, 13), (18, 9), (13, 4), (18, 4), (14, 5)]], # top heads identified by idiom score and dla
-        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]]
+        "Llama-3.2-1B-Instruct": [[(13, 30)], [(9, 13)], [(15, 8)], [(15, 14)], [(0, 0)], [(12, 30)], [(15, 10)], [(10, 29)], [(0, 21)], [(10, 3)], [(15, 12)], [(12, 8)], [(0, 17)], [(0, 0), (0, 17), (9, 13)], [(12, 8), (10, 29), (15, 12)], [(15, 8), (15, 10), (15, 14)], [(0, 21), (10, 3), (13, 30)], [(10, 3), (12, 30), (13, 30)], [(0, 0), (12, 8), (15, 8), (0, 21), (10, 3)], [(0, 17), (10, 29), (15, 10), (10, 3), (12, 30)], [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)]],
+        #"Pythia-1.4B_static": [[(3, 4)], [(2, 15)], [(0, 10)], [(19, 14)], [(13, 4)], [(17, 2)], [(18, 4)], [(23, 9)], [(12, 12)], [(19, 14)], [(1, 13)], [(23, 9)]],
     }
 
     custom_order = {
@@ -885,8 +892,8 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Llama-3.2-1B-Instruct")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/idiom_components/Llama-3.2-1B-Instruct/idiom_trans_0_None_comp.pt", type=str)
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B")
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
@@ -902,10 +909,16 @@ if __name__ == "__main__":
         if tensor_file.endswith(".json"):
             # Ablation
             if img_file != None:
-                os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
-                txt_file = f"./plots/{model_name}/ablation/{img_file}.txt"
-                png_file = f"./plots/{model_name}/ablation/{img_file}.png"
-                heat_file = f"./plots/{model_name}/ablation/heat_{img_file}.png"
+                if "static" in img_file:
+                    os.makedirs(f"./future_work/plots/{model_name}/ablation", exist_ok=True)
+                    txt_file = f"./future_work/plots/{model_name}/ablation/{img_file}.txt"
+                    png_file = f"./future_work/plots/{model_name}/ablation/{img_file}.png"
+                    heat_file = f"./future_work/plots/{model_name}/ablation/heat_{img_file}.png"
+                else:
+                    os.makedirs(f"./plots/{model_name}/ablation", exist_ok=True)
+                    txt_file = f"./plots/{model_name}/ablation/{img_file}.txt"
+                    png_file = f"./plots/{model_name}/ablation/{img_file}.png"
+                    heat_file = f"./plots/{model_name}/ablation/heat_{img_file}.png"
             else:
                 filename = None
                 heat_file = None
@@ -915,8 +928,13 @@ if __name__ == "__main__":
             compute_accuracy(tensor_file, txt_file)
 
             split = tensor_file.split('_')[1]
-            logit_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_logit.pt"
-            loss_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_loss.pt"
+
+            if "static" in tensor_file:
+                logit_file = f"future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761_logit.pt"
+                loss_file = f"future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761_loss.pt"
+            else:
+                logit_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_logit.pt"
+                loss_file = f"scores/ablation/{model_name}/ablation_{split}_0_None_loss.pt"
 
             plot_logit_diff_per_sent(logit_file, tensor_file, outfile=heat_file, model_name=model_name)
             plot_ablation(logit_file, loss_file, png_file, model_name)
@@ -927,9 +945,16 @@ if __name__ == "__main__":
             if tensor_file.endswith("_comp.pt"):
                 if "idiom" in tensor_file:
                     path = f"./plots/{model_name}/idiom_components"
+
+                    if "static" in tensor_file:
+                        path = f"./future_work/plots/{model_name}/idiom_components"
                 elif "literal" in tensor_file:
                     path = f"./plots/{model_name}/literal_components"
+
+                    if "static" in tensor_file:
+                        path = f"./future_work/plots/{model_name}/literal_components"
                 os.makedirs(path, exist_ok=True)
+
                 plot_all_components(loaded_tensor, img_file, model_name, path = path)
             elif "grouped" in tensor_file:
                 if "contr" in tensor_file:
