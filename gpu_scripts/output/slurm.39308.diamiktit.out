@@ -1,0 +1,17 @@
+slurmstepd-diamiktit: error: Unable to create TMPDIR [/tmp/user/32202]: Permission denied
+slurmstepd-diamiktit: error: Setting TMPDIR to /tmp
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+Loaded pretrained model EleutherAI/Pythia-1.4B into HookedTransformer
+
+Running compute_ablation on device cuda.
+Ablation Heads:  [[(10, 5)], [(15, 12)], [(12, 7)], [(12, 7), (15, 12), (10, 5)], [(12, 7)], [(15, 12)], [(10, 5)]]
+
+Processing split formal:
+Traceback (most recent call last):
+  File "/home/g/grimmj/IdiomHeads/compute_ablation.py", line 37, in <module>
+    epie = EPIE_Data(experiment="ablation", model_id=cli.model_name, split=split)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/g/grimmj/IdiomHeads/data.py", line 43, in __init__
+    for sent_idx in excluded_ids:
+                    ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'excluded_ids' where it is not associated with a value
