@@ -735,7 +735,7 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
             [(9, 13), (15, 12), (15, 14), (13, 30), (13, 30)],
         ],
         "Pythia-1.4B_static": [[(18, 4)], [(19, 14)], [(13, 4)], [(0, 10)], [(3, 4)], [(23, 9)], [(12, 12)], [(17, 2)], [(1, 13)], [(2, 15)], [(3, 4), (2, 15), (0, 10)], [(19, 14), (13, 4), (17, 2)], [(18, 4), (23, 9), (12, 12)], [(19, 14), (1, 13), (23, 9)], [(3, 4), (19, 14), (18, 4), (19, 14)], [(2, 15), (13, 4), (23, 9), (1, 13)], [(0, 10), (17, 2), (12, 12), (23, 9)]],
-        "Pythia-1.4B_neg_DLA": [[(10, 5)], [(15, 12)], [(12, 7)], [(12, 7), (15, 12), (10, 5)], [(12, 7)], [(15, 12)], [(10, 5)]]
+        "Pythia-1.4B_neg_DLA": [[(10, 5)], [(15, 12)], [(12, 7)], [(12, 7), (15, 12), (10, 5)]]
     }
 
     custom_order = {
@@ -775,7 +775,7 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
         "Pythia-1.4B": ["L0H13", "L18H9", "L13H4", "L18H4", "L14H5", "L15H13\nL19H1\nL14H5"],
         "Llama-3.2-1B-Instruct": ["L9H13", "L15H12", "L15H14", "L13H30", "L12H30", "L10H3\nL12H30\nL13H30"],
         "Pythia-1.4B_static": ["L0H10", "L17H2", "L12H12", "L1H13", "L19H14\nL1H13\nL23H9"],
-        "Pythia-1.4B_neg_DLA": ["L10H5", "L12H7\nL15H12\nL10H5"]
+        "Pythia-1.4B_neg_DLA": ["L10H5"]
     }
 
     if "static" in logit_file:
@@ -798,11 +798,16 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
             name += f"\nL{layer_head[0]}H{layer_head[1]}"
         abl_heads.append(name[1:])  # strip first newline
 
+
     logit_tensor = t.load(logit_file, map_location=t.device(device))
     loss_tensor = t.load(loss_file, map_location=t.device(device))
 
-    mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)
-    mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)
+    if "neg_DLA" in model_name:
+        mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)[:-3]
+        mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)[:-3]
+    else:
+        mean_logit_tensor = get_mean_sentence_tensor(logit_tensor)
+        mean_loss_tensor = get_mean_sentence_tensor(loss_tensor)
 
     df = pd.DataFrame({
         "layer.head": abl_heads,
@@ -935,8 +940,8 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
-    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B_neg_DLA")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Pythia-1.4B_neg_DLA/ablation_trans_0_None.json", type=str)
+    parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B")
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="scores/ablation/Pythia-1.4B/ablation_formal_0_None.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
