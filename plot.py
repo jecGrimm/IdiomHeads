@@ -780,7 +780,7 @@ def plot_ablation(logit_file: str, loss_file: str, outfile: str = None, model_na
 
     if "static" in logit_file:
         section_titles = [
-            "Idiom Score", "Idiom Diff", "DLA", "DLA Idiom",
+            "Idiom Score", "Idiom Diff", "DLA", "DLA Static",
             "Top Per Experiment", "Top All Experiments"
         ]
     elif "neg_DLA" in model_name:
@@ -941,7 +941,7 @@ def plot_logit_diff_per_sent(logit_file, pred_file, outfile = None, model_name =
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='idiom head detector')
     parser.add_argument('--model_name', '-m', help='model to run the experiment with', default="Pythia-1.4B")
-    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="future_work/scores/idiom_scores/Pythia-1.4B/idiom_static_0_None.pt", type=str)
+    parser.add_argument('--tensor_file', '-t', help='file with the tensor scores', default="future_work/scores/ablation/Pythia-1.4B_static/ablation_static_0_2761.json", type=str)
     parser.add_argument('--image_file', '-i', help='output file for the plot', default=None, type=str)
     parser.add_argument('--scatter_file', '-s', help='file with tensor scores for the scatter plot', default=None, type=str)
 
