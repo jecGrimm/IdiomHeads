@@ -71,5 +71,5 @@ def get_logit_component(num: int, model_name: str):
                 return comp
 
 if __name__ == "__main__":
-    comp_file = "future_work/scores/idiom_components/Pythia-1.4B/idiom_only_static_0_None_comp.pt"
-    tranform_comp2score(comp_file, "future_work/scores/idiom_scores/Pythia-1.4B/idiom_static_0_None.pt")
+    comp_file = "future_work/scores/literal_scores/Pythia-1.4B/literal_only_static_0_2761_comp.pt"
+    tranform_comp2score(comp_file, "future_work/scores/literal_scores/Pythia-1.4B/literal_static_0_2761.pt")
